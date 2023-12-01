@@ -5,15 +5,17 @@ const app = require("./app");
 
 dotenv.config({ path: './config.env' });
 
-
-mongoose.connect("mongodb://127.0.0.1:27017/sport_school", {
+// const urlTest = 'mongodb+srv://vadym:GrJNFNfPmVLX2c8l@cluster0.lcigfwu.mongodb.net/?retryWrites=true&w=majority'
+const url = "mongodb+srv://vadym:GrJNFNfPmVLX2c8l@cluster0.lcigfwu.mongodb.net/sport_school?retryWrites=true&w=majority"
+const connParams = {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
     useUnifiedTopology: true
-}, () => console.log("MongoDB connection successful!"));
+};
+mongoose.connect(url, connParams).then(() => console.log("Mongo connections"))
 
 
 app.listen(8000, () => {
-    console.log(`App running on port 8000...`);
+    console.log("App running on port 8000...");
 });
