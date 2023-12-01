@@ -26,7 +26,10 @@ const groupSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: "Price"
     },
-    currentMembers: Number,
+    currentMembers: {
+        type: Number,
+        default: 0
+    }
 });
 
 groupSchema.virtual("schedule", {

@@ -1,6 +1,5 @@
 const Group = require("../models/groupModel");
 const Price = require("../models/priceModel");
-const Schedule = require("../models/scheduleModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 

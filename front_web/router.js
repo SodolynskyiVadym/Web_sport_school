@@ -20,7 +20,7 @@ const routes = [
     {
         path: '/login',
         name: 'LoginPage',
-        component: () => import('./src/components/LoginPage.vue')
+        component: () => import('./src/components/LoginPage.vue'),
     },
     {
         path: '/coaches',
@@ -38,12 +38,12 @@ const routes = [
         component: () => import('./src/components/ReviewPage.vue')
     },
     {
-        path: '/overview/:id',
-        name: 'OverviewPage',
-        component: () => import('./src/components/OverviewPage.vue')
+        path: '/overviewGroup/:id',
+        name: 'OverviewGroup',
+        component: () => import('@/components/OverviewGroup.vue')
     },
     {
-        path: '/getCoach/:id',
+        path: '/overviewCoach/:id',
         name: 'OverviewCoach',
         component: () => import('./src/components/OverviewCoach.vue')
     },
@@ -73,6 +73,15 @@ const routes = [
             requiresAuth: true,
             roles: ["coach"]
         }
+    },
+    {
+        path: '/settingsAccount',
+        name: 'settingsAccount',
+        component: () => import('./src/components/SettingsAccount.vue'),
+        meta: {
+            requiresAuth: true,
+            roles: ["coach", "admin", "user"]
+        }
     }
 ];
 
@@ -87,23 +96,18 @@ router.beforeEach(async (to, from, next) => {
     if (to.meta.requiresAuth) {
         const token = localStorage.getItem('token');
         if (token) {
-            try {
-                const res = await axios.post("http://localhost:8000/users/getRoleUser", {token: token});
-                const role = res.data.role;
+            const res = await axios.post("http://localhost:8000/users/getRoleUser", {token: token});
+            const role = res.data.role;
 
-                if (to.meta.roles.includes(role)) {
-                    next();
-                } else {
-                    next("login");
-                }
-            } catch (error) {
-                console.error("Error getting role:", error);
-                next("login");
+            if (to.meta.roles.includes(role)) {
+                next();
+            } else {
+                next("/login");
             }
         } else {
             next('/login');
         }
-    } else {
+    }else {
         next();
     }
 });

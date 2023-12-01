@@ -8,7 +8,7 @@
         <span>Email: {{ coach.email }}</span>
         <span>Phone: {{ coach.phone }}</span>
         <span>Gender: {{ coach.gender }}</span>
-        <a :href="`http://localhost:8080/getCoach/${coach._id}`">
+        <a :href="`http://localhost:8080/overviewCoach/${coach._id}`">
           <button>JOIN</button>
         </a>
       </div>

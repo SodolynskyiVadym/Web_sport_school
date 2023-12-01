@@ -22,6 +22,9 @@ const userSchema = new mongoose.Schema({
         minlength: 8,
         select: false
     },
+    descriptionCoach: {
+        type: String
+    },
     birth: {
         type: Date,
         require: [true, "Please, enter your birth"],

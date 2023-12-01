@@ -5,7 +5,7 @@
     <th>Time</th>
     <th>Date</th>
   </tr>
-  <tr v-for="schedule in shedules" :key="schedule._id">
+  <tr v-for="schedule in schedules" :key="schedule._id">
     <td>{{schedule.groupID.name}}</td>
     <td>{{schedule.time}}</td>
     <td>{{schedule.date}}</td>
@@ -20,8 +20,8 @@ import {getUserByToken} from "@/js/getterByValue";
 export default {
   data() {
     return {
-      userID: "",
-      shedules: []
+      schedules: [],
+      userID: ""
     }
   },
   async mounted() {
@@ -30,7 +30,8 @@ export default {
     });
 
     await axios.post("http://localhost:8000/groups/schedule/getScheduleUser", {userID: this.userID}).then(res => {
-      this.shedules = res.data.schedules
+      console.log(res.data)
+      this.schedules = res.data.schedules
     });
   }
 }

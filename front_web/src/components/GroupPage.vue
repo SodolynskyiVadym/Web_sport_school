@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     async enterGroupPage(groupID) {
-      this.$router.push(`/overview/${groupID}`)
+      this.$router.push(`/overviewGroup/${groupID}`)
     }
   },
   async mounted() {

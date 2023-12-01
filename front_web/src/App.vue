@@ -7,9 +7,10 @@
     </div>
     <div class="header-text">
       <a href="/admin" class="text">Admin Page</a>
+      <a href="/settingsAccount" class="text">Setting account</a>
       <a href="/createGroup" class="text">Create group</a>
       <a href="/createSchedule" class="text">Create schedule</a>
-      <a href="/main" class="text">Main page</a>
+      <a href="/" class="text">Main page</a>
       <a href="/login" v-if="isLogin" class="text">Log in</a>
       <a href="/" @click="logout" v-else class="text">Log out</a>
       <a href="/register" class="text">Register</a>
