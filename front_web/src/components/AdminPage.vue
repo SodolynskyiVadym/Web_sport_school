@@ -12,7 +12,7 @@
         <th>Last Name</th>
         <th>Patronymic</th>
         <th>Birthday</th>
-        <th>Email</th>
+        <th>Email inva</th>
         <th>Phone</th>
         <th>Gender</th>
         <th>Role</th>
