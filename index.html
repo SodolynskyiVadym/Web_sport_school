@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CRM for sports school with group and training management</title>
+  <link rel="stylesheet" href="styles/style.css">
+  <script src="https://kit.fontawesome.com/12b11a9f58.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+
+</head>
+<body>
+<header class="header">
+  <img src="content/logo.png" alt="Header Image" class="header-logo">
+  <div class="stripe"></div>
+  <nav class="navigation">
+    <a href="index.html">About us</a>
+    <a href="login.html">Authentication</a>
+    <a href="faq.html">FAQ</a>
+    <a href="contacts.html">Contacts</a>
+    <a href="#">Pricing</a>
+    <a href="#">Apply now</a>
+  </nav>
+</header>
+<div class="welcome-text">
+  <h1>Welcome to our Sport school</h1>
+</div>
+<div class="swiper mySwiper">
+  <div class="swiper-wrapper">
+    <div class="swiper-slide"><img src="content/logo2.png" alt=""></div>
+    <div class="swiper-slide"><img src="content/football.jpeg" alt=""></div>
+    <div class="swiper-slide"><img src="content/volleyball.jpeg" alt=""></div>
+    <div class="swiper-slide"><img src="content/basketball.jpeg" alt=""></div>
+    <div class="swiper-slide"><img src="content/icehockey.jpeg" alt=""></div>
+    <div class="swiper-slide"><img src="content/athletics.jpeg" alt=""></div>
+  </div>
+  <div class="swiper-pagination"></div>
+</div>
+
+<script>
+  var swiper = new Swiper(".mySwiper", {
+    spaceBetween: 30,
+    pagination: {
+      el: ".swiper-pagination",
+    },
+    keyboard: true,
+    autoplay: {
+      delay: 2000,
+    },
+  });
+</script>
+
+<h2>About Us</h2>
+<div class="about-us">
+  <div class="image-about">
+    <img src="content/about.png" alt="Опис зображення">
+  </div>
+  <div class="text-about">
+    <p>At our sports school, we're dedicated to nurturing the next generation of athletes and providing a holistic approach to sports education. Whether your passion lies in soccer, volleyball, basketball, hockey, or athletics, we offer comprehensive training programs that cater to various sports disciplines.</p>
+    <p>We offer programs for athletes of all ages and skill levels. Whether you're a young aspiring athlete looking to get started or a seasoned player aiming to reach the professional level, we have a program tailored just for you. Our curriculum includes skill development, tactical training, physical conditioning, and mental resilience.</p>
+    <p>If you're ready to embark on a journey of athletic excellence and personal growth, we invite you to join our sports school. Please fill the registration form. Contact us to learn more about our programs and enrollment options. Our experienced coaching staff comprises former athletes and seasoned professionals.</p>
+  </div>
+</div>
+
+
+
+<div class="services-section">
+  <h2>Learn more</h2>
+  <div class="service-card">
+    <img src="content/schedule.png" alt="Service 1">
+    <h3>Schedule</h3>
+    <p>Hear you can watch our training management</p>
+    <a href="schedule.html" class="service-button">Learn More</a>
+  </div>
+  <div class="service-card">
+    <img src="content/trainers.jpeg" alt="Service 2">
+    <h3>Coaches team</h3>
+    <p>Hear you can watch our coaches team</p>
+    <a href="#" class="service-button">Learn More</a>
+  </div>
+  <div class="service-card">
+    <img src="content/price.jpeg" alt="Service 3">
+    <h3>Price</h3>
+    <p>Hear you can watch our prices for school</p>
+    <a href="#" class="service-button">Learn More</a>
+  </div>
+  <div class="service-card">
+    <img src="content/groups.jpeg" alt="Service 4">
+    <h3>Groups</h3>
+    <p>Hear you can watch our ages groups</p>
+    <a href="#" class="service-button">Learn More</a>
+  </div>
+</div>
+<div class="stripe-footer"></div>
+
+<footer>
+  <a href="mailto:vadimsodolinskij@gmail.com"><i class="fa-solid fa-envelope fa-5x" style="color: black;"></i></a>
+  <a href="tel:+380977447508"><i class="fa-solid fa-phone fa-5x" style="color: black;"></i></a>
+  <a href="https://t.me/DeepStateUA"><i class="fa-brands fa-telegram fa-5x" style="color: black;"></i></a>
+  <a href="https://wa.me/0977447508"><i class="fa-brands fa-whatsapp fa-5x" style="color: black;"></i></a>
+</footer>
+
+</body>
+</html>
