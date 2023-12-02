@@ -6,13 +6,14 @@
   <input type="text" v-model="email" placeholder="EMAIL">
   <input type="date" v-model="birth" placeholder="BIRTH">
   <input type="text" v-model="gender" placeholder="GENDER">
-  <input type="text" v-model="phone" placeholder="PHONE">
+  <input type="text" v-model="phone" ref="phone" placeholder="PHONE">
   <button @click="sendDate">Register</button>
 
 </template>
 
 <script>
 import axios from "axios";
+import inputMask from "@/js/initInputMask";
 export default {
   data() {
     return {
@@ -41,6 +42,9 @@ export default {
         role: "user"
       })
     }
+  },
+  mounted() {
+    inputMask(this.$refs.phone)
   }
 }
 </script>
