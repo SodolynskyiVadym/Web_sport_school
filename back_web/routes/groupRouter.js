@@ -11,7 +11,8 @@ router
     .get("/getGroup/:id", groupController.getGroup)
     .get("/getAllGroup", groupController.getAllGroups)
     .post("/createGroup", groupController.createGroup)
-    .post("/updateGroup", groupController.updateGroup)
+    .patch("/updateGroup", groupController.updateGroup)
     .post("/getGroupByName", groupController.getGroupByName)
+    .delete("/deleteGroup/:groupID", groupController.deleteGroup)
 
 module.exports = router;

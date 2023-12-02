@@ -88,6 +88,11 @@ const routes = [
         name: 'TestPage',
         component: () => import('./src/components/TestPage.vue')
     },
+    {
+        path: '/updateGroup/:groupID',
+        name: 'UpdateGroup',
+        component: () => import('./src/components/UpdateGroup.vue')
+    }
 ];
 
 

@@ -2,6 +2,7 @@ const Group = require("../models/groupModel");
 const Price = require("../models/priceModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
+const User = require("../models/userModel");
 
 
 exports.getGroup = catchAsync(async (req, res, next) => {
@@ -86,11 +87,16 @@ exports.getGroupByName = catchAsync(async (req, res, next) => {
 });
 
 exports.updateGroup = catchAsync(async (req, res, next) => {
-    const group = await Group.findById(req.body.id, req.body, {new: true});
+    const group = await Group.findById(req.body.id);
     const price = await Price.findById(group.priceID);
+    console.log(group)
+    console.log(price)
 
-    if (group.currentMembers < req.body.currentMembers) return next(new AppError("Limit members can't be less than current members"), 400);
+    console.log(group.currentMembers)
+    console.log(req.body.limitMembers)
+    if (group.currentMembers > req.body.limitMembers) return next(new AppError("Limit members can't be less than current members"), 400);
 
+    console.log("code work this")
     if (!group) return next(new AppError("Group not found"), 400);
 
     group.limitMembers = req.body.limitMembers;
@@ -113,20 +119,24 @@ exports.updateGroup = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteGroup = catchAsync(async (req, res, next) => {
-    const group = await Group.findByIdAndDelete(req.body.groupID);
+    const group = await Group.findById(req.params.groupID)
 
-    const users = await User.find(user => user.groupsID.includes(group._id));
+    if (!group) return next(new AppError("Group not found"), 401)
 
-    for(let user of users){
-        user.groupsID = user.groupsID.filter(e => !e===group._id);
-        user.update();
+    await Group.deleteOne(group);
+
+    const users = await User.find({ groupsID: group1._id });
+
+    for (let user of users) {
+        user.groupsID.pull(group1._id);
+        await user.save();
     }
 
-    res.status(200)
-        .json({
-            success: "success",
-        });
+    res.status(200).json({
+        success: true,
+    });
 });
+
 
 // exports.getAllGroupsCoach = catchAsync(async (req, res, next) => {
 //     const groups = await Group.find({coachID: req.params.coachID});

@@ -12,10 +12,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         require: [true, "Please, enter your last name"]
     },
-    patronymic: {
-        type: String,
-        require: [true, "Please, enter your patronymic"]
-    },
     password: {
         type: String,
         require: [true, "Please, enter your password"],
