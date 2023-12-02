@@ -5,15 +5,16 @@ const app = require("./app");
 
 dotenv.config({ path: './config.env' });
 
-
-const url = "mongodb+srv://tester:8MfbCPJO22Vb1hgI@cluster0.lcigfwu.mongodb.net/sport_school?retryWrites=true&w=majority"
+// const urlTest = "mongodb+srv://vadym:3QMI9VE2gEDQ8nAS@cluster0.lcigfwu.mongodb.net/?retryWrites=true&w=majority"
+const url = process.env.MONGO_DB_URL
 const connParams = {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
     useUnifiedTopology: true
 };
-mongoose.connect(url, connParams).then(() => console.log("Mongo connections"))
+mongoose.connect(url, connParams)
+    .then(() => console.log("Mongo connections"))
 
 
 app.listen(8000, () => {

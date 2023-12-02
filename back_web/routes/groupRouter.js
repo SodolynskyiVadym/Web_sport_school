@@ -11,6 +11,7 @@ router
     .get("/getGroup/:id", groupController.getGroup)
     .get("/getAllGroup", groupController.getAllGroups)
     .post("/createGroup", groupController.createGroup)
+    .post("/updateGroup", groupController.updateGroup)
     .post("/getGroupIDByName", groupController.getGroupIDByName)
 
 module.exports = router;

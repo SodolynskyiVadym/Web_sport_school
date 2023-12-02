@@ -12,7 +12,7 @@
   <button @click="setPassword">Change password</button>
 
   <h1>My groups</h1>
-  <table>
+  <table v-show="userRole === 'user'">
     <tr>
       <th>Name</th>
       <th>Kind of sport</th>
@@ -27,6 +27,25 @@
     </tr>
   </table>
 
+  <table v-show="userRole === 'coach'">
+    <tr>
+      <th>Name</th>
+      <th>Kind of sport</th>
+      <th>Coach id</th>
+      <th>Limit members</th>
+      <th>Action1</th>
+      <th>Action2</th>
+    </tr>
+    <tr v-for="group in groups" :key="group._id">
+      <th>{{group.name}}</th>
+      <th>{{group.kindSport}}</th>
+      <th>{{group.coachID}}</th>
+      <th>{{group.limitMembers}}</th>
+      <th><button>DELETE</button></th>
+      <th><button>UPDATE</button></th>
+    </tr>
+  </table>
+
 </template>
 
 <script>
@@ -36,6 +55,7 @@ export default {
   data() {
     return {
       userID: "",
+      userRole: "",
       name: "",
       lastName: "",
       patronymic: "",
@@ -71,11 +91,22 @@ export default {
   async mounted() {
     await getUserByToken(localStorage.getItem("token")).then(res => {
       this.userID = res.data.id
+      this.userRole = res.data.role;
     });
 
-    await axios.get(`http://localhost:8000/users/getUserGroups/${this.userID}`).then(res => {
-      this.groups = res.data.user.groupsID
-    })
+    if (this.userRole === "user"){
+      await axios.get(`http://localhost:8000/users/getUserGroups/${this.userID}`).then(res => {
+        this.groups = res.data.user.groupsID
+      })
+    }
+
+    if (this.userRole === "coach"){
+      await axios.get(`http://localhost:8000/users/getCoachGroups/${this.userID}`).then(res => {
+        this.groups = res.data.groups
+      })
+    }
+
+
 
 
     await axios.get(`http://localhost:8000/users/getUser/${this.userID}`).then(res => {

@@ -73,19 +73,25 @@ exports.getGroup = catchAsync(async (req, res, next) => {
 });
 
 exports.getGroupIDByName = catchAsync(async (req, res, next) => {
-    console.log(req.body.name)
     const group = await Group.findOne({name: req.body.name});
 
     if (!group) return next(new AppError("Group not found"), 400);
-
-    console.log("---------------------------------")
-    console.log(group)
-    console.log(group._id)
 
     const id = group._id
     res.status(200)
         .json({
             success: "success",
             id
+        });
+});
+
+exports.updateGroup = catchAsync(async (req, res, next) => {
+    const group = await Group.findByIdAndUpdate(req.body.id, req.body, {new: true});
+
+    if (!group) return next(new AppError("Group not found"), 400);
+
+    res.status(200)
+        .json({
+            success: "success",
         });
 });

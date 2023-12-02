@@ -10,7 +10,7 @@
         <p class="info"><strong>Type:</strong> {{ group.kindSport.toUpperCase() }}</p>
         <p class="info"><strong>Description:</strong> {{ group.description }}</p>
         <p class="info"><strong>Coach:</strong> {{ group.coachID.name }} {{ group.coachID.lastName }} {{ group.coachID.patronymic }}</p>
-        <button @click="enterCoachPage(group.coachID._id)">Read about coach</button>
+
         <p class="info"><strong>Members:</strong> {{ group.limitMembers }}</p>
         <p class="info"><strong>Price:</strong> {{ group.priceID.price }}</p>
         <p class="info"><strong>Discount:</strong> {{ group.priceID.discount }}</p>
@@ -24,6 +24,8 @@
   <div v-else>
     Loading...
   </div>
+  <button @click="enterCoachPage(group.coachID._id)">Read about coach</button><br>
+
   <button @click="joinGroup">Join to group</button>
 
 </template>

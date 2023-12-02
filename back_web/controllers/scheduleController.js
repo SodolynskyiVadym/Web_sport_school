@@ -5,14 +5,14 @@ const User = require("../models/userModel");
 
 
 exports.getSchedule = catchAsync(async (req, res, next) => {
-    const schedulesGroup = await Schedule.find({groupID: req.params.groupID});
+    const schedules = await Schedule.find({groupID: req.params.groupID});
 
-    if (!schedulesGroup) return next(new AppError("Schedule not found"), 401);
+    if (!schedules) return next(new AppError("Schedule not found"), 401);
 
     res.status(200)
         .json({
             success: "success",
-            schedulesGroup
+            schedules
         });
 });
 
@@ -66,5 +66,32 @@ exports.getScheduleUser = catchAsync(async (req, res, next) => {
     res.status(200).json({
         success: "success",
         schedules
+    });
+});
+
+
+exports.getScheduleByName = catchAsync(async (req, res, next) => {
+    const allSchedules = await Schedule.find().populate({
+        path: "groupID",
+        select: "name"
+    });
+    const schedules = await allSchedules.filter(schedule => schedule.groupID.name === req.params.nameGroup)
+
+    console.log(schedules)
+    if (!schedules) return next(new AppError("Schedule not found"), 401);
+
+    res.status(200)
+        .json({
+            success: "success",
+            schedules
+        });
+});
+
+exports.deleteSchedule = catchAsync(async (req, res, next) => {
+    const user = await User.findByIdAndDelete(req.params.scheduleID);
+
+
+    res.status(200).json({
+        success: "success"
     });
 });
