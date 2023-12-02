@@ -82,7 +82,12 @@ const routes = [
             requiresAuth: true,
             roles: ["coach", "admin", "user"]
         }
-    }
+    },
+    {
+        path: '/test',
+        name: 'TestPage',
+        component: () => import('./src/components/TestPage.vue')
+    },
 ];
 
 

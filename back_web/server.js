@@ -5,8 +5,8 @@ const app = require("./app");
 
 dotenv.config({ path: './config.env' });
 
-// const urlTest = 'mongodb+srv://vadym:GrJNFNfPmVLX2c8l@cluster0.lcigfwu.mongodb.net/?retryWrites=true&w=majority'
-const url = "mongodb+srv://vadym:GrJNFNfPmVLX2c8l@cluster0.lcigfwu.mongodb.net/sport_school?retryWrites=true&w=majority"
+
+const url = "mongodb+srv://tester:8MfbCPJO22Vb1hgI@cluster0.lcigfwu.mongodb.net/sport_school?retryWrites=true&w=majority"
 const connParams = {
     useNewUrlParser: true,
     useCreateIndex: true,
