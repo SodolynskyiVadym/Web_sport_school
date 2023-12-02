@@ -119,12 +119,21 @@ exports.getScheduleUser = catchAsync(async (req, res, next) => {
 exports.joinGroup = catchAsync(async (req, res, next) => {
     const user = await User.findById(req.body.userID);
 
+    const group = await Group.findById(req.body.groupID);
+
+    if (!user || !group) return next(new AppError("User or group not found"), 404)
     if (user.groupsID.includes(req.body.groupID)) return next(new AppError("You already register oin this group"), 403)
+    if (group.limitMembers === group.currentMembers) return next(new AppError("This group is full"), 403)
 
     await user.update({
         $push: { groupsID: req.body.groupID },
         new: true
     });
+
+    group.currentMembers += 1;
+
+    group.markModified("currentMembers");
+    group.save()
 
     res.status(201).json({
         success: "success",
@@ -168,7 +177,11 @@ exports.getGroupsUser = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllGroupsCoach = catchAsync(async (req, res, next) => {
-    const groups = await Group.find({coachID: req.params.coachID});
+    const groups = await Group.find({coachID: req.params.coachID})
+        .populate({
+            path: "priceID",
+            select: "price discount"
+        });
 
     if (!groups) return next(new AppError("Group not found"), 400);
 

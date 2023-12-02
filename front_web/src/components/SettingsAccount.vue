@@ -31,16 +31,18 @@
     <tr>
       <th>Name</th>
       <th>Kind of sport</th>
-      <th>Coach id</th>
       <th>Limit members</th>
+      <th>Price</th>
+      <th>Discount</th>
       <th>Action1</th>
       <th>Action2</th>
     </tr>
     <tr v-for="group in groups" :key="group._id">
       <th>{{group.name}}</th>
       <th>{{group.kindSport}}</th>
-      <th>{{group.coachID}}</th>
       <th>{{group.limitMembers}}</th>
+      <th>{{group.priceID.price}}</th>
+      <th>{{group.priceID.discount}}</th>
       <th><button>DELETE</button></th>
       <th><button>UPDATE</button></th>
     </tr>
@@ -103,10 +105,9 @@ export default {
     if (this.userRole === "coach"){
       await axios.get(`http://localhost:8000/users/getCoachGroups/${this.userID}`).then(res => {
         this.groups = res.data.groups
+        console.log(res.data.groups)
       })
     }
-
-
 
 
     await axios.get(`http://localhost:8000/users/getUser/${this.userID}`).then(res => {
