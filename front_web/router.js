@@ -4,7 +4,7 @@ import axios from "axios";
 const routes = [
     {
         path: '/',
-        name: 'MainPage',
+        name: 'HomePage',
         component: () => import('./src/components/HomePage.vue')
     },
     {
