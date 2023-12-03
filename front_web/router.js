@@ -4,18 +4,8 @@ import axios from "axios";
 const routes = [
     {
         path: '/',
-        name: 'HomePage',
-        component: () => import('@/components/HomePage.vue')
-    },
-    {
-        path: '/main',
         name: 'MainPage',
-        component: () => import('@/components/MainPage/MainPage.vue')
-    },
-    {
-        path: '/sportinfo',
-        name: 'SportInfoPage',
-        component: () => import('@/components/MainPage/SportInfoPage.vue')
+        component: () => import('./src/components/MainPage.vue')
     },
     {
         path: '/schedule',
@@ -99,15 +89,10 @@ const routes = [
         component: () => import('./src/components/TestPage.vue')
     },
     {
-        path: '/tester',
-        name: 'TesterPage',
-        component: () => import('./src/components/TesterPage.vue')
-    },
-    {
-        path: '/testing',
-        name: 'TestingPage',
-        component: () => import('./src/components/TestingPage.vue')
-    },
+        path: '/updateGroup/:groupID',
+        name: 'UpdateGroup',
+        component: () => import('./src/components/UpdateGroup.vue')
+    }
 ];
 
 

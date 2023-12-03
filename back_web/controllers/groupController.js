@@ -2,6 +2,32 @@ const Group = require("../models/groupModel");
 const Price = require("../models/priceModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
+const User = require("../models/userModel");
+
+
+exports.getGroup = catchAsync(async (req, res, next) => {
+    const group = await Group.findById(req.params.id)
+        .populate({
+            path: "coachID",
+            select: "name lastName patronymic _id"
+        })
+        .populate({
+            path: "priceID",
+            select: "price discount -_id"
+        });
+
+
+    if (!group) return next(new AppError("Group not found"), 400);
+
+
+    res.status(200)
+        .json({
+            success: "success",
+            group,
+            schedule: group.schedule
+        });
+});
+
 
 exports.createGroup =  catchAsync(async (req, res, next) => {
     const price = await Price.create({
@@ -48,50 +74,78 @@ exports.getAllGroups = catchAsync(async (req, res, next) => {
         });
 });
 
-
-exports.getGroup = catchAsync(async (req, res, next) => {
-    const group = await Group.findById(req.params.id)
-        .populate({
-            path: "coachID",
-            select: "name lastName patronymic _id"
-        })
-        .populate({
-            path: "priceID",
-            select: "price discount -_id"
-        });
-
-
-    if (!group) return next(new AppError("Group not found"), 400);
-
-
-    res.status(200)
-        .json({
-            success: "success",
-            group,
-            schedule: group.schedule
-        });
-});
-
-exports.getGroupIDByName = catchAsync(async (req, res, next) => {
+exports.getGroupByName = catchAsync(async (req, res, next) => {
     const group = await Group.findOne({name: req.body.name});
 
     if (!group) return next(new AppError("Group not found"), 400);
 
-    const id = group._id
     res.status(200)
         .json({
             success: "success",
-            id
+            group
         });
 });
 
 exports.updateGroup = catchAsync(async (req, res, next) => {
-    const group = await Group.findByIdAndUpdate(req.body.id, req.body, {new: true});
+    const group = await Group.findById(req.body.id);
+    const price = await Price.findById(group.priceID);
+    console.log(group)
+    console.log(price)
 
+    console.log(group.currentMembers)
+    console.log(req.body.limitMembers)
+    if (group.currentMembers > req.body.limitMembers) return next(new AppError("Limit members can't be less than current members"), 400);
+
+    console.log("code work this")
     if (!group) return next(new AppError("Group not found"), 400);
+
+    group.limitMembers = req.body.limitMembers;
+    group.name = req.body.name;
+    group.description = req.body.description;
+    group.kindSport = req.body.kindSport;
+    price.price = req.body.price;
+    price.discount = req.body.discount;
+
+    price.markModified("price");
+    group.markModified("name");
+
+    group.save();
+    price.save();
 
     res.status(200)
         .json({
             success: "success",
         });
 });
+
+exports.deleteGroup = catchAsync(async (req, res, next) => {
+    const group = await Group.findById(req.params.groupID)
+
+    if (!group) return next(new AppError("Group not found"), 401)
+
+    await Group.deleteOne(group);
+
+    const users = await User.find({ groupsID: group1._id });
+
+    for (let user of users) {
+        user.groupsID.pull(group1._id);
+        await user.save();
+    }
+
+    res.status(200).json({
+        success: true,
+    });
+});
+
+
+// exports.getAllGroupsCoach = catchAsync(async (req, res, next) => {
+//     const groups = await Group.find({coachID: req.params.coachID});
+//
+//     if (!groups) return next(new AppError("Group not found"), 400);
+//
+//     res.status(200)
+//         .json({
+//             success: "success",
+//             groups
+//         });
+// });

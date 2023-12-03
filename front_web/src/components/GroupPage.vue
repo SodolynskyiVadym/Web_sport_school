@@ -36,10 +36,7 @@ export default {
         .then(response => {
           this.groups = response.data.groups;
           console.log(response.data.groups)
-        })
-    // .catch(error => {
-    //   info.value = error;
-    // });
+        });
   }
 }
 </script>

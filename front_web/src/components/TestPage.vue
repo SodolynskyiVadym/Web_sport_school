@@ -4,29 +4,29 @@
       <input type="checkbox" id="chk" aria-hidden="true" v-model="showRegistrationForm">
 
       <div class="login" :class="{ 'hidden-form': showRegistrationForm }">
-        <form class="form">
+        <div class="form">
           <label for="chk" aria-hidden="true">Log in</label>
-          <input type="text" v-model="email" placeholder="Email" class="input-field" @input="validateEmail">
+          <input type="text" v-model="emailLog" placeholder="Email" class="input-field" @input="validateEmail">
           <div v-if="invalidEmail" class="error-message">Please enter a valid email address example@gmail.com</div>
-          <input type="password" v-model="password" placeholder="Password" class="input-field" @input="validatePassword">
+          <input type="password" v-model="passwordLog" placeholder="Password" class="input-field" @input="validatePassword">
           <div v-if="invalidPassword" class="error-message">Password should be at least 8 characters long</div>
-          <button @click="sendData" class="btn-login">Log in</button>
+          <button @click="sendDataLogin" class="btn-login">Log in</button>
           <div v-if="loggedIn" class="success-message">You have successfully logged in!</div>
-        </form>
+        </div>
       </div>
 
       <div class="register" :class="{ 'hidden-form': !showRegistrationForm }">
-        <form class="form">
+        <div class="form">
           <label for="chk" aria-hidden="true">Register</label>
           <input class="input" type="text" name="txt" v-model="name" placeholder="NAME">
           <input class="input" type="text" name="txt" v-model="lastName" placeholder="LASTNAME">
-          <input class="input" type="password" name="pswd" v-model="password" placeholder="PASSWORD">
-          <input class="input" type="email" name="email" v-model="email" placeholder="EMAIL">
+          <input class="input" type="password" name="pswd" v-model="passwordReg" placeholder="PASSWORD">
+          <input class="input" type="email" name="email" v-model="emailReg" placeholder="EMAIL">
           <input class="input" type="date" name="date" v-model="birth" placeholder="BIRTH">
           <input class="input" type="text" name="gender" v-model="gender" placeholder="GENDER">
           <input class="input" type="text" name="phone" v-model="phone" ref="phone" placeholder="PHONE">
-          <button @click="sendDate">Register</button>
-        </form>
+          <button @click="sendDateRegistration">Register</button>
+        </div>
       </div>
     </div>
   </div>
@@ -41,55 +41,57 @@ export default {
     return {
       name: "",
       lastName: "",
-      patronymic: "",
-      password: "",
-      email: "",
+      passwordLog: "",
+      passwordReg: "",
+      emailLog: "",
+      emailReg: "",
       birth: Date.now(),
       gender: "",
       phone: "",
       token: "",
       invalidEmail: false,
       invalidPassword: false,
-      loggedIn: false
+      loggedIn: false,
+      showRegistrationForm: false
     };
   },
   methods: {
-    async sendDate() {
-      await axios.post("http://localhost:8000/users/createUser", {
+    async sendDateRegistration() {
+      const response = await axios.post("http://localhost:8000/users/createUser", {
         name: this.name,
         lastName: this.lastName,
-        patronymic: this.patronymic,
-        password: this.password,
-        email: this.email,
+        password: this.passwordReg,
+        email: this.emailReg,
         birth: this.birth,
         gender: this.gender,
         phone: this.phone,
         role: "user"
       });
+
+      localStorage.token = response.data.token;
     },
-    async sendData() {
+    async sendDataLogin() {
       if (this.invalidEmail || this.invalidPassword) {
         return;
       }
 
       const response = await axios.post("http://localhost:8000/users/login", {
-        email: this.email,
-        password: this.password
+        email: this.emailLog,
+        password: this.passwordLog
       });
 
       localStorage.token = response.data.token;
 
-      this.email = "";
-      this.password = "";
-
+      this.emailLog = "";
+      this.passwordLog = "";
       this.loggedIn = true;
     },
     validateEmail() {
       const re = /\S+@\S+\.\S+/;
-      this.invalidEmail = !re.test(this.email);
+      this.invalidEmail = !re.test(this.emailLog);
     },
     validatePassword() {
-      this.invalidPassword = this.password.length < 8;
+      this.invalidPassword = this.passwordLog.length < 8;
     }
   },
   mounted() {

@@ -42,7 +42,6 @@ exports.updateUser = catchAsync(async (req, res, next) => {
 
     user.name = req.body.name;
     user.lastName = req.body.lastName;
-    user.patronymic = req.body.patronymic;
     user.gender = req.body.gender;
     user.phone = req.body.phone;
     user.birth = req.body.birth;
@@ -119,12 +118,21 @@ exports.getScheduleUser = catchAsync(async (req, res, next) => {
 exports.joinGroup = catchAsync(async (req, res, next) => {
     const user = await User.findById(req.body.userID);
 
+    const group = await Group.findById(req.body.groupID);
+
+    if (!user || !group) return next(new AppError("User or group not found"), 404)
     if (user.groupsID.includes(req.body.groupID)) return next(new AppError("You already register oin this group"), 403)
+    if (group.limitMembers === group.currentMembers) return next(new AppError("This group is full"), 403)
 
     await user.update({
         $push: { groupsID: req.body.groupID },
         new: true
     });
+
+    group.currentMembers += 1;
+
+    group.markModified("currentMembers");
+    group.save()
 
     res.status(201).json({
         success: "success",
@@ -161,14 +169,19 @@ exports.getGroupsUser = catchAsync(async (req, res, next) => {
             select: "_id name limitMembers kindSport coachID"
         });
 
+    const groups = user.groupsID
     res.status(201).json({
         success: "success",
-        user
+        groups
     });
 });
 
 exports.getAllGroupsCoach = catchAsync(async (req, res, next) => {
-    const groups = await Group.find({coachID: req.params.coachID});
+    const groups = await Group.find({coachID: req.params.coachID})
+        .populate({
+            path: "priceID",
+            select: "price discount"
+        });
 
     if (!groups) return next(new AppError("Group not found"), 400);
 
@@ -178,6 +191,43 @@ exports.getAllGroupsCoach = catchAsync(async (req, res, next) => {
             groups
         });
 });
+
+exports.deleteUser = catchAsync(async (req, res, next) => {
+    const user = await User.findById(req.params.id)
+
+    if (!user) return next(new AppError("User nit found"), 401);
+
+    if (user.role === "user"){
+        const groups = await Group.find({_id: user.groupsID});
+
+        for (let group of groups){
+            group.currentMembers -= 1;
+            group.markModified("currentMembers");
+            group.save();
+        }
+    }else if(user.role === "coach"){
+        console.log(user._id);
+        const groups = await Group.find({coachID: user._id});
+
+        const groupsID = groups.map(group => group._id);
+        const users = await User.find({groupsID: groupsID});
+        console.log(users);
+        for (let client of users){
+            client.groupsID.pull(groupsID)
+        }
+
+        await Group.deleteMany(group => groups.includes(group));
+    }
+
+    await User.deleteOne(user);
+
+    res.status(200)
+        .json({
+            success: "success",
+            groups
+        });
+
+})
 
 
 
