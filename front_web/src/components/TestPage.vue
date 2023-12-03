@@ -117,6 +117,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: rgba(238, 238, 238, 0.99);
 
 }
 
