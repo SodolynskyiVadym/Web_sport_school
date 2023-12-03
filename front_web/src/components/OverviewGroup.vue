@@ -65,6 +65,13 @@
       Loading...
     </div>
   </div>
+  <button @click="enterCoachPage(group.coachID._id)">Read about coach</button><br>
+
+  <div v-if="userRole === 'user'">
+    <button @click="joinGroup">Join to group</button>
+  </div>
+
+
 </section>
 </template>
 
@@ -76,7 +83,8 @@ export default {
   data() {
     return {
       group: null,
-      userID: ""
+      userID: "",
+      userRole: "",
     };
   },
   methods: {
@@ -94,13 +102,16 @@ export default {
   },
 
   async mounted() {
+    if (localStorage.getItem("token")){
+      await getUserByToken(localStorage.getItem("token")).then(res => {
+        this.userID = res.data.id
+        this.userRole = res.data.role
+      })
+    }
+
     await axios.get(`http://localhost:8000/groups/getGroup/${this.$route.params.id}`).then(res => {
       this.group = res.data.group;
     });
-
-    await getUserByToken(localStorage.getItem("token")).then(res => {
-      this.userID = res.data.id
-    })
   }
 };
 </script>

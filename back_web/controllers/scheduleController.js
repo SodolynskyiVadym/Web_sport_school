@@ -19,9 +19,7 @@ exports.getSchedule = catchAsync(async (req, res, next) => {
 
 
 exports.createSchedule = catchAsync(async (req, res, next) => {
-    console.log(req.body)
     const group = await Group.findOne({name: req.body.nameGroup});
-    console.log(group)
 
     if (!group) return next(new AppError("Group not found"));
 

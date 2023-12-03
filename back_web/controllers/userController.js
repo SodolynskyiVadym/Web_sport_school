@@ -19,11 +19,8 @@ exports.getUser = catchAsync(async (req, res, next) => {
 exports.getCoach = catchAsync(async (req, res, next) => {
     const user = await User.findById(req.params.id);
 
-    console.log(user)
-
     const groups = await Group.find({coachID: req.params.id})
 
-    console.log(groups)
     if (!user) return next(new AppError("User not found"), 403);
 
     res.status(201)
@@ -36,8 +33,6 @@ exports.getCoach = catchAsync(async (req, res, next) => {
 
 
 exports.createCoach = catchAsync(async (req, res, next) => {
-    console.log(req.body.email)
-    console.log("code work")
     const coach = await User.create({
         name: "",
         lastName: "",
@@ -48,9 +43,6 @@ exports.createCoach = catchAsync(async (req, res, next) => {
         gender: "male",
         password: "12345678"
     });
-
-    console.log("code work")
-
 
     res.status(201)
         .json({
@@ -195,8 +187,6 @@ exports.leaveFromGroup = catchAsync(async (req, res, next) => {
 exports.getGroupsUser = catchAsync(async (req, res, next) => {
     const user = await User.findById(req.params.userID)
 
-    console.log(user)
-
     let groups = await Group.find().populate({
         path: "coachID",
         select: "_id name lastName"
@@ -204,7 +194,6 @@ exports.getGroupsUser = catchAsync(async (req, res, next) => {
 
     groups = groups.filter(group => user.groupsID.includes(group._id));
 
-    console.log(groups)
     res.status(201).json({
         success: "success",
         groups

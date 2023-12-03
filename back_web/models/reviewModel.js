@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const reviewSchema = new mongoose.Schema({
-    // userID: {
-    //     type: mongoose.Schema.ObjectId,
-    //     ref: "User",
-    // },
+    userID: {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+    },
 
     coachID: {
         type: mongoose.Schema.ObjectId,
