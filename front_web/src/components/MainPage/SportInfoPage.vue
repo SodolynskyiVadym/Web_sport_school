@@ -244,7 +244,7 @@ body #scene #left-zone .list li.item input[type=radio] ~ label.label_athletic:be
 }
 body #scene #left-zone .list li.item input[type=radio] ~ .content {
   position: absolute;
-  left: 270px;
+  left: 370px;
   top: -400px;
   width: 650px;
   height: 400px;
