@@ -1,5 +1,5 @@
 <template>
-  <section class="home">
+  <section class="home" id="home">
     <div class="content">
       <div class="textBox">
         <h2>That's who<br><span>we are</span></h2>
@@ -83,13 +83,6 @@ section{
   justify-content: space-between;
   align-items: center;
   transition: 0.5s;
-}
-.h3{
-  color: rgba(0, 0, 0, 0.99);
-  font-size: 1.5em;
-  line-height: 1.7em;
-  font-weight: 900;
-  text-transform: uppercase;
 }
 
 .content{

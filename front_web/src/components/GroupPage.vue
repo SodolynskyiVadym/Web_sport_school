@@ -1,19 +1,20 @@
 <template>
+  <section>
   <div class="container-groups">
     <div class="group" v-for="group in groups" :key="group._id">
-      <img :src="require(`@/assets/${group.kindSport}.jpeg`)" :alt="`${group.kindSport}`">
+      <div class="image-animation"><img :src="require(`@/assets/${group.kindSport}.jpeg`)" :alt="`${group.kindSport}`"></div>
       <div class="group-info">
-        <span class="group-name">{{ group.name }}</span>
+        <div class="group-info-title">
+          <span class="info">${{ group.priceID.price }}</span>
+          <span class="group-name">{{ group.name }}</span>
+        </div>
         <span class="info">{{ group.kindSport.toUpperCase() }}</span>
-        <span class="info">{{ group.description }}</span>
-        <span class="info">{{ group.coachID.name }} {{ group.coachID.lastName }} {{ group.coachID.patronymic }}</span>
-        <span class="info">Members: {{ group.limitMembers }}</span>
-        <span class="info">Price: {{ group.priceID.price }}</span>
-        <span class="info">Discount: {{ group.priceID.discount }}</span>
+        <span class="info-coach">{{ group.coachID.name }} {{ group.coachID.lastName }}</span>
       </div>
       <button @click="enterGroupPage(group._id)">BUY</button>
     </div>
   </div>
+  </section>
 </template>
 
 <script>
@@ -35,34 +36,57 @@ export default {
         .get('http://localhost:8000/groups/getAllGroup')
         .then(response => {
           this.groups = response.data.groups;
-          console.log(response.data.groups)
+          console.log(response.data.groups);
+          // Додавання класу анімації до зображень при завантаженні сторінки
+          this.$nextTick(() => {
+            const images = document.querySelectorAll('.group img');
+            images.forEach(image => {
+              image.classList.add('image-animation');
+            });
+          });
         });
   }
+
 }
 </script>
 <style>
+section{
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.5s;
+  background-color: rgba(238,238,238,0.99);
+}
+
 .container-groups {
   margin-left: 10%;
   margin-right: 10%;
   width: 80%;
   height: auto;
-  background-color: #fff;
+  background-color: rgba(238,238,238,0.99);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  padding-bottom: 80px;
+  margin-top: 80px;
 }
 
 .group {
   flex: 0 0 calc(33.33% - 32px);
-  margin: 16px;
-  padding-bottom: 20px;
-  background-color: #000;
+  margin:16px;
+  margin-bottom: 46px;
+  padding-top: 60px;
+  height: auto;
+  background-color: white;
   border-radius: 12px;
-  color: #fff;
+  color: black;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: rgba(0, 0, 0, 0.76) 0px 10px 30px;
   transition: transform 0.3s ease;
   position: relative;
 }
@@ -73,15 +97,49 @@ export default {
 
 .group img {
   height: 120px;
-  width: 190px;
+  width: 170px;
   margin-top: -20px;
   border-radius: 12px 12px 0 0;
 }
+.image-animation {
+  animation-name: slideUp;
+  animation-duration: 1s;
+  animation-timing-function: ease;
+  animation-fill-mode: forwards;
+}
+
+@keyframes slideUp {
+  from {
+    margin-top: 40px; /* Початкове значення відступу картинки */
+    opacity: 0; /* Початкова прозорість */
+  }
+  to {
+    margin-top: -40px; /* Змінене значення відступу картинки */
+    opacity: 1; /* Кінцева прозорість */
+  }
+}
+
+/* Застосувати анімацію тільки під час завантаження сторінки */
+.group img:not(.image-animation) {
+  margin-top: -20px;
+}
+
+
 
 .group-info {
   padding: 20px;
   width: 100%;
   text-align: left;
+}
+
+.group-info-title .group-name {
+  flex: 1;
+}
+
+.group-info-title .info {
+  margin-left: 280px;
+  margin-bottom: -33px;/* Простір між ціною та рештою інформації */
+  font-size: 20px;
 }
 
 .group-info span {
@@ -97,8 +155,8 @@ export default {
 
 button {
   position: absolute;
-  bottom: 10px;
-  left: 50%;
+  bottom: 20px;
+  left: 85%;
   transform: translateX(-50%);
   padding: 8px 16px;
   border-radius: 6px;

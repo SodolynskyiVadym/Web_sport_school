@@ -61,12 +61,11 @@
 }
 
 .service-card {
-  flex: 0 0 calc(30% - 20px); /* Зміна ширини блоків */
-  max-width: 400px; /* Максимальна ширина блоків */
-  height: 550px; /* Фіксована висота блоків */
+  flex: 0 0 calc(30% - 20px);
+  max-width: 400px;
+  height: 550px;
   box-shadow: rgba(0, 0, 0, 0.76) 0px 20px 70px;
   border-radius: 15px;
-  /* Інші параметри */
 }
 
 .service-card:hover {
@@ -83,7 +82,7 @@
 
 .service-image img {
   width: 100%;
-  height: auto; /* Змінити фіксовану висоту на auto */
+  height: auto;
   object-fit: cover;
 }
 
@@ -111,8 +110,8 @@ h3 {
   text-decoration: none;
   transition: background-color 0.3s ease-in-out;
   display: block;
-  width: fit-content; /* Кнопка розширюється відповідно до змісту */
-  margin: 10px auto; /* Відступи на кожній стороні кнопки */
+  width: fit-content;
+  margin: 10px auto;
 }
 
 
