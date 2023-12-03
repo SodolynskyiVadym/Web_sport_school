@@ -11,7 +11,7 @@
           <span class="info">{{ group.kindSport.toUpperCase() }}</span>
           <span class="info-coach">{{ group.coachID.name }} {{ group.coachID.lastName }}</span>
         </div>
-        <button @click="enterGroupPage(group._id)">BUY</button>
+        <button class="button-group-page" @click="enterGroupPage(group._id)">BUY</button>
       </div>
     </div>
   </section>
@@ -152,7 +152,7 @@ export default {
   margin-bottom: 10px;
 }
 
-button {
+.button-group-page {
   position: absolute;
   bottom: 20px;
   left: 85%;

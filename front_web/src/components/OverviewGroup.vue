@@ -1,6 +1,6 @@
 <template>
-  <section class="overview-group">
-  <div style="background-color: rgba(238,238,238,0.99);">
+  <section class="overview-group-page">
+  <div style="background-color: rgba(238,238,238,0.99); height: auto;">
     <div class="group-details-overview" v-if="group">
       <div class="wrapper-overview pre">
       </div>
@@ -39,7 +39,7 @@
                 </p>
                 <p class="info-overview-sport"><strong>Name:</strong> {{ group.coachID.name }}</p>
                 <p class="info-overview-sport"><strong>Last Name:</strong> {{ group.coachID.lastName }}</p>
-                <button class="button-overview" @click="enterCoachPage(group.coachID._id)">Read about coach</button>
+                <button class="button-overview join-button" @click="enterCoachPage(group.coachID._id)">Read about coach</button>
               </div>
               <div class="item-overview" id="content-3">
                 <h2 class="tab-title tab-default">Price</h2>
@@ -54,7 +54,7 @@
                 <p>
                   <span class="numit-overview"></span>  Would you like to join this group?
                 </p>
-                <p><button class="button-overview" @click="joinGroup">BUY</button></p>
+                <p><button class="button-overview join-button" @click="joinGroup">BUY</button></p>
               </div>
             </section>
           </div>
@@ -121,7 +121,7 @@ export default {
   opacity: 1;
 }
 
-.button-overview {
+.button-overview.join-button {
   background-color: rgba(232,232,232,0.99) !important;
   width: 140px !important;
   border-radius: 15px !important;
@@ -140,9 +140,7 @@ export default {
   background-color: black;
 }
 
-.tabs {
-  text-align: left;
-}
+
 
 
 .tabs input + label:hover {
@@ -187,7 +185,7 @@ export default {
   margin: 0px auto;
   text-align: left;
   line-height: 20px;
-  height: 300px;
+  height: 200px;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.76) 0px 20px 70px;
   padding: 1.25rem;
