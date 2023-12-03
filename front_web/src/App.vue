@@ -8,9 +8,8 @@
       <li><a href="/createGroup" class="text">Create group</a></li>
       <li><a href="/createSchedule" class="text">Create schedule</a></li>
       <li><a href="/" class="text">Home</a></li>
-      <li v-if="isLogin"><a href="/login"  class="text">Log in</a></li>
+      <li v-if="isLogin"><a href="/login"  class="text">Authentication</a></li>
       <li v-else><a href="/" @click="logout" class="text">Log out</a></li>
-      <li><a href="/register" class="text">Register</a></li>
     </ul>
 
   </header>
