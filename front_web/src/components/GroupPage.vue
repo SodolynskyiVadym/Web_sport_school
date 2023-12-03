@@ -1,19 +1,19 @@
 <template>
-  <section>
-  <div class="container-groups">
-    <div class="group" v-for="group in groups" :key="group._id">
-      <div class="image-animation"><img :src="require(`@/assets/${group.kindSport}.jpeg`)" :alt="`${group.kindSport}`"></div>
-      <div class="group-info">
-        <div class="group-info-title">
-          <span class="info">${{ group.priceID.price }}</span>
-          <span class="group-name">{{ group.name }}</span>
+  <section class="group-page">
+    <div class="container-groups">
+      <div class="group" v-for="group in groups" :key="group._id">
+        <div class="image-animation"><img :src="require(`@/assets/${group.kindSport}.jpeg`)" :alt="`${group.kindSport}`"></div>
+        <div class="group-info">
+          <div class="group-info-title">
+            <span class="info">${{ group.priceID.price }}</span>
+            <span class="group-name">{{ group.name }}</span>
+          </div>
+          <span class="info">{{ group.kindSport.toUpperCase() }}</span>
+          <span class="info-coach">{{ group.coachID.name }} {{ group.coachID.lastName }}</span>
         </div>
-        <span class="info">{{ group.kindSport.toUpperCase() }}</span>
-        <span class="info-coach">{{ group.coachID.name }} {{ group.coachID.lastName }}</span>
+        <button class="button-group-page" @click="enterGroupPage(group._id)">BUY</button>
       </div>
-      <button @click="enterGroupPage(group._id)">BUY</button>
     </div>
-  </div>
   </section>
 </template>
 
@@ -37,7 +37,6 @@ export default {
         .then(response => {
           this.groups = response.data.groups;
           console.log(response.data.groups);
-          // Додавання класу анімації до зображень при завантаженні сторінки
           this.$nextTick(() => {
             const images = document.querySelectorAll('.group img');
             images.forEach(image => {
@@ -50,10 +49,10 @@ export default {
 }
 </script>
 <style>
-section{
+.group-page{
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  min-height: 80vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -153,7 +152,7 @@ section{
   margin-bottom: 10px;
 }
 
-button {
+.button-group-page {
   position: absolute;
   bottom: 20px;
   left: 85%;

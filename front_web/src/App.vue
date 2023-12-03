@@ -1,6 +1,5 @@
 <template>
   <header>
-
     <a class="logo">Sport school</a>
     <ul>
       <li><a href="/admin" class="text">Admin Page</a></li>

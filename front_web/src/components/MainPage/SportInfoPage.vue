@@ -1,58 +1,58 @@
 <template>
-  <section class="info">
+  <section class="info-sports">
     <div class="textBoxingSport">
       <h1>Sport Info</h1>
     </div>
-  <body>
-  <div id="scene">
-    <div id="left-zone">
-      <ul class="list">
-        <li class="item">
-          <input type="radio" id="radio_The garden strawberry (or simply strawberry /ˈstrɔːbᵊri/; Fragaria × ananassa) is a widely grown hybrid species of the genus Fragaria (collectively known as the strawberries)" name="basic_carousel" value="The garden strawberry (or simply strawberry /ˈstrɔːbᵊri/; Fragaria × ananassa) is a widely grown hybrid species of the genus Fragaria (collectively known as the strawberries)" checked="checked"/>
-          <label class="label_football" for="radio_The garden strawberry (or simply strawberry /ˈstrɔːbᵊri/; Fragaria × ananassa) is a widely grown hybrid species of the genus Fragaria (collectively known as the strawberries)">football</label>
-          <div class="content content_football"><span class="picto"></span>
-            <h1>Football</h1>
-            <p>Football, or soccer, stands as one of the most popular team sports globally. It unites millions of people around the world, inspiring them with its simplicity and emotional richness. It's a game that requires agility, strategy, and the ability to work as a team.</p>
-          </div>
-        </li>
-        <li class="item">
-          <input type="radio" id="radio_A banana is an edible fruit, botanically a berry, produced by several kinds of large herbaceous flowering plants in the genus Musa." name="basic_carousel" value="A banana is an edible fruit, botanically a berry, produced by several kinds of large herbaceous flowering plants in the genus Musa."/>
-          <label class="label_volleyball" for="radio_A banana is an edible fruit, botanically a berry, produced by several kinds of large herbaceous flowering plants in the genus Musa.">voleyball</label>
-          <div class="content content_volleyball"><span class="picto"></span>
-            <h1>Volleyball</h1>
-            <p>Volleyball, a dynamic and captivating sport. It's a game that demands teamwork, precision, and quick reflexes.</p>
-          </div>
-        </li>
-        <li class="item">
-          <input type="radio" id="radio_The apple tree (Malus domestica) is a deciduous tree in the rose family best known for its sweet, pomaceous fruit, the apple. It is cultivated worldwide as a fruit tree, and is the most widely grown species in the genus Malus." name="basic_carousel" value="The apple tree (Malus domestica) is a deciduous tree in the rose family best known for its sweet, pomaceous fruit, the apple. It is cultivated worldwide as a fruit tree, and is the most widely grown species in the genus Malus."/>
-          <label class="label_basketball" for="radio_The apple tree (Malus domestica) is a deciduous tree in the rose family best known for its sweet, pomaceous fruit, the apple. It is cultivated worldwide as a fruit tree, and is the most widely grown species in the genus Malus.">basketball</label>
-          <div class="content content_basketball"><span class="picto"></span>
-            <h1>Basketball</h1>
-            <p>Basketball is a sport that combines energy, grace, and strategy on the court. It's a game that demands high physical fitness, teamwork, and precision in every move.</p>
-          </div>
-        </li>
-        <li class="item">
-          <input type="radio" id="radio_The orange (specifically, the sweet orange) is the fruit of the citrus species Citrus × sinensis in the family Rutaceae." name="basic_carousel" value="The orange (specifically, the sweet orange) is the fruit of the citrus species Citrus × sinensis in the family Rutaceae."/>
-          <label class="label_hockey" for="radio_The orange (specifically, the sweet orange) is the fruit of the citrus species Citrus × sinensis in the family Rutaceae.">Ice hockey</label>
-          <div class="content content_hockey"><span class="picto"></span>
-            <h1>Ice hockey</h1>
-            <p>Ice hockey is an exhilarating sport played on ice, combining speed, skill, and physicality. It's a game that demands agility, precision, and teamwork as players glide across the ice, maneuvering the puck with swift and calculated movements.</p>
-          </div>
-        </li>
-        <li class="item">
-          <input type="radio" id="radio_The_grapefruit_is_a_tropical_citrus_fruit_known_for_its_sour_to_semisweet_taste." name="basic_carousel" value="The grapefruit is a tropical citrus fruit known for its sour to semisweet taste."/>
-          <label class="label_athletic" for="radio_The_grapefruit_is_a_tropical_citrus_fruit_known_for_its_sour_to_semisweet_taste.">Athletic</label>
-          <div class="content content_athletic"><span class="picto"></span>
-            <h1>Athletic</h1>
-            <p>Athletics encompasses a diverse range of individual and team sporting events that test physical strength, agility, speed, and endurance. From track and field competitions to cross-country running and race walking, athletics celebrate the human body's capabilities and competitive spirit.</p>
-          </div>
-        </li>
-      </ul>
+    <body>
+    <div id="scene">
+      <div id="left-zone">
+        <ul class="list">
+          <li class="item">
+            <input type="radio" id="radio_The garden strawberry (or simply strawberry /ˈstrɔːbᵊri/; Fragaria × ananassa) is a widely grown hybrid species of the genus Fragaria (collectively known as the strawberries)" name="basic_carousel" value="The garden strawberry (or simply strawberry /ˈstrɔːbᵊri/; Fragaria × ananassa) is a widely grown hybrid species of the genus Fragaria (collectively known as the strawberries)" checked="checked"/>
+            <label class="label_football" for="radio_The garden strawberry (or simply strawberry /ˈstrɔːbᵊri/; Fragaria × ananassa) is a widely grown hybrid species of the genus Fragaria (collectively known as the strawberries)">football</label>
+            <div class="content content_football"><span class="picto"></span>
+              <h1>Football</h1>
+              <p>Football, or soccer, stands as one of the most popular team sports globally. It unites millions of people around the world, inspiring them with its simplicity and emotional richness. It's a game that requires agility, strategy, and the ability to work as a team.</p>
+            </div>
+          </li>
+          <li class="item">
+            <input type="radio" id="radio_A banana is an edible fruit, botanically a berry, produced by several kinds of large herbaceous flowering plants in the genus Musa." name="basic_carousel" value="A banana is an edible fruit, botanically a berry, produced by several kinds of large herbaceous flowering plants in the genus Musa."/>
+            <label class="label_volleyball" for="radio_A banana is an edible fruit, botanically a berry, produced by several kinds of large herbaceous flowering plants in the genus Musa.">voleyball</label>
+            <div class="content content_volleyball"><span class="picto"></span>
+              <h1>Volleyball</h1>
+              <p>Volleyball, a dynamic and captivating sport. It's a game that demands teamwork, precision, and quick reflexes.</p>
+            </div>
+          </li>
+          <li class="item">
+            <input type="radio" id="radio_The apple tree (Malus domestica) is a deciduous tree in the rose family best known for its sweet, pomaceous fruit, the apple. It is cultivated worldwide as a fruit tree, and is the most widely grown species in the genus Malus." name="basic_carousel" value="The apple tree (Malus domestica) is a deciduous tree in the rose family best known for its sweet, pomaceous fruit, the apple. It is cultivated worldwide as a fruit tree, and is the most widely grown species in the genus Malus."/>
+            <label class="label_basketball" for="radio_The apple tree (Malus domestica) is a deciduous tree in the rose family best known for its sweet, pomaceous fruit, the apple. It is cultivated worldwide as a fruit tree, and is the most widely grown species in the genus Malus.">basketball</label>
+            <div class="content content_basketball"><span class="picto"></span>
+              <h1>Basketball</h1>
+              <p>Basketball is a sport that combines energy, grace, and strategy on the court. It's a game that demands high physical fitness, teamwork, and precision in every move.</p>
+            </div>
+          </li>
+          <li class="item">
+            <input type="radio" id="radio_The orange (specifically, the sweet orange) is the fruit of the citrus species Citrus × sinensis in the family Rutaceae." name="basic_carousel" value="The orange (specifically, the sweet orange) is the fruit of the citrus species Citrus × sinensis in the family Rutaceae."/>
+            <label class="label_hockey" for="radio_The orange (specifically, the sweet orange) is the fruit of the citrus species Citrus × sinensis in the family Rutaceae.">Ice hockey</label>
+            <div class="content content_hockey"><span class="picto"></span>
+              <h1>Ice hockey</h1>
+              <p>Ice hockey is an exhilarating sport played on ice, combining speed, skill, and physicality. It's a game that demands agility, precision, and teamwork as players glide across the ice, maneuvering the puck with swift and calculated movements.</p>
+            </div>
+          </li>
+          <li class="item">
+            <input type="radio" id="radio_The_grapefruit_is_a_tropical_citrus_fruit_known_for_its_sour_to_semisweet_taste." name="basic_carousel" value="The grapefruit is a tropical citrus fruit known for its sour to semisweet taste."/>
+            <label class="label_athletic" for="radio_The_grapefruit_is_a_tropical_citrus_fruit_known_for_its_sour_to_semisweet_taste.">Athletic</label>
+            <div class="content content_athletic"><span class="picto"></span>
+              <h1>Athletic</h1>
+              <p>Athletics encompasses a diverse range of individual and team sporting events that test physical strength, agility, speed, and endurance. From track and field competitions to cross-country running and race walking, athletics celebrate the human body's capabilities and competitive spirit.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div id="middle-border"></div>
+      <div id="right-zone"></div>
     </div>
-    <div id="middle-border"></div>
-    <div id="right-zone"></div>
-  </div>
-  </body>
+    </body>
   </section>
 
 </template>
