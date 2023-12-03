@@ -34,10 +34,6 @@ export default {
 }
 </script>
 <style >
-@font-face {
-  font-family: 'iran_sans_bold';
-  src: url('@/assets/iran_sans_bold.woff') format('woff');
-}
 
 @font-face {
   font-family: 'iran_sans_light';
