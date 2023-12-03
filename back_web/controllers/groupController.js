@@ -89,14 +89,9 @@ exports.getGroupByName = catchAsync(async (req, res, next) => {
 exports.updateGroup = catchAsync(async (req, res, next) => {
     const group = await Group.findById(req.body.id);
     const price = await Price.findById(group.priceID);
-    console.log(group)
-    console.log(price)
 
-    console.log(group.currentMembers)
-    console.log(req.body.limitMembers)
     if (group.currentMembers > req.body.limitMembers) return next(new AppError("Limit members can't be less than current members"), 400);
 
-    console.log("code work this")
     if (!group) return next(new AppError("Group not found"), 400);
 
     group.limitMembers = req.body.limitMembers;
