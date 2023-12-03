@@ -1,6 +1,6 @@
 <template>
   <section class="home" id="home">
-    <div class="content">
+    <div class="content-verview">
       <div class="textBox">
         <h2>That's who<br><span>we are</span></h2>
         <p>
@@ -85,7 +85,7 @@ section{
   transition: 0.5s;
 }
 
-.content{
+.content-verview{
   position: relative;
   width: 100%;
   display: flex;
@@ -93,24 +93,24 @@ section{
   align-items: center;
   margin-left: 100px;
 }
-.content .textBox{
+.content-verview .textBox{
   position: relative;
   max-width: 600px;
 }
-.content .textBox h2{
+.content-verview .textBox h2{
   color: rgba(0, 0, 0, 0.99);
   font-size: 4em;
   line-height: 1.7em;
   font-weight: 900;
   text-transform: uppercase;
 }
-.content .textBox h2 span{
+.content-verview .textBox h2 span{
   font-size: 2em;
 }
-.content .textBox p{
+.content-verview .textBox p{
   color: rgba(0, 0, 0, 0.99);
 }
-.content .textBox a{
+.content-verview .textBox a{
   display: inline-block;
   margin-top: 20px;
   padding: 8px 20px;
@@ -122,14 +122,14 @@ section{
   text-decoration: none;
   text-transform: uppercase;
 }
-.content .imgBox{
+.content-verview .imgBox{
   width: 600px;
   display: flex;
   padding-right: 75px;
   margin-top: 20px;
   justify-content: flex-end;
 }
-.content .imgBox img{
+.content-verview .imgBox img{
   max-width: 500px;
 }
 .thumb{
