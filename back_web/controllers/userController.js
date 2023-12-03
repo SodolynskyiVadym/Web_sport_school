@@ -1,6 +1,5 @@
 const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
-const checkSame = require("../utils/checkSame");
 const AppError = require("../utils/appError");
 const Group = require("../models/groupModel");
 
