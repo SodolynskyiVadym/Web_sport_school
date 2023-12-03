@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
+const checkSame = require("../utils/checkSame");
 const AppError = require("../utils/appError");
 const Group = require("../models/groupModel");
 
@@ -34,8 +35,32 @@ exports.getCoach = catchAsync(async (req, res, next) => {
         });
 });
 
+
+exports.createCoach = catchAsync(async (req, res, next) => {
+    console.log(req.body.email)
+    console.log("code work")
+    const coach = await User.create({
+        name: "",
+        lastName: "",
+        birth: Date.now(),
+        phone: "",
+        email: req.body.email,
+        role: "coach",
+        gender: "male",
+        password: "12345678"
+    });
+
+    console.log("code work")
+
+
+    res.status(201)
+        .json({
+            success: "success",
+            user: coach
+        });
+});
+
 exports.updateUser = catchAsync(async (req, res, next) => {
-    console.log(req.body)
     const user = await User.findById(req.params.id);
 
     if (!user) return next(new AppError("User not found"), 403);
@@ -198,22 +223,30 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
     if (!user) return next(new AppError("User nit found"), 401);
 
     if (user.role === "user"){
-        const groups = await Group.find({_id: user.groupsID});
+        let groups = await Group.find({_id: user.groupsID});
+
+        groups = groups.filter(group => user.groupsID.includes(group._id));
 
         for (let group of groups){
             group.currentMembers -= 1;
             group.markModified("currentMembers");
             group.save();
         }
+
     }else if(user.role === "coach"){
-        console.log(user._id);
         const groups = await Group.find({coachID: user._id});
 
-        const groupsID = groups.map(group => group._id);
-        const users = await User.find({groupsID: groupsID});
-        console.log(users);
-        for (let client of users){
-            client.groupsID.pull(groupsID)
+        let groupsID = []
+        for (let group of groups){
+            groupsID.push(group._id)
+        }
+        let users = await User.find();
+
+        for (let user of users){
+            for (let groupID of groupsID){
+                await user.groupsID.pull(groupID)
+            }
+            await user.save();
         }
 
         await Group.deleteMany(group => groups.includes(group));
@@ -223,26 +256,7 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
 
     res.status(200)
         .json({
-            success: "success",
-            groups
+            success: "success"
         });
 
-})
-
-
-
-
-// exports.deleteUsers = catchAsync(async (req, res, next) => {
-//     const deletedUsers = User.deleteMany()
-//
-//     const group = userSchedule.groupsID[0];
-//
-//     if (!userSchedule) return next(new AppError("User not found"), 403);
-//
-//     res.status(201)
-//         .json({
-//             success: "success",
-//             userSchedule,
-//             group
-//         });
-// });
+});

@@ -3,7 +3,7 @@
     <h3>Enter email to register coach:</h3>
     <div class="email-input">
       <input type="text" v-model="email" placeholder="Enter email">
-      <button @click="registerCoach">Register</button>
+      <button @click="createCoach">Register</button>
     </div>
 
     <table id="tableUsers" class="table-users-data">
@@ -16,7 +16,7 @@
         <th>Phone</th>
         <th>Gender</th>
         <th>Role</th>
-        <th>Checkbox</th>
+        <th>Action</th>
       </tr>
       <tr v-for="user in users" :key="user._id">
         <td>{{ user.name }}</td>
@@ -27,6 +27,7 @@
         <td>{{ user.phone }}</td>
         <td>{{ user.gender }}</td>
         <td>{{ user.role }}</td>
+        <td><button @click="deleteUser(user._id)">DELETE</button></td>
       </tr>
     </table>
 
@@ -47,33 +48,20 @@ export default {
     }
   },
   methods: {
-    async registerCoach(){
-      await axios.post('http://localhost:8000/users/createUser', {
-        email: this.email,
-        role: "coach",
-        lastName: "",
-        lastname: "",
-        patronymic: "",
-        gender: "",
-        phone: "",
-        password: "12345678",
-        birth: "",
-      })
+    async deleteUser(userID){
+      await axios.delete(`http://localhost:8000/users/deleteUser/${userID}`)
+      location.reload();
     },
-    async getUsers() {
-      await axios.get(`http://localhost:8000/users/getAllUsers`).then(response => {
-        this.users = response.data.users
-      })
-    },
-    deleteRows() {
-      // Your deleteRows function logic here
-    },
-    dublicateRow() {
-      // Your dublicateRow function logic here
+
+    async createCoach(){
+      await axios.post("http://localhost:8000/users/createCoach", {email: this.email});
+      location.reload()
     }
   },
   async mounted() {
-    await this.getUsers();
+    await axios.get(`http://localhost:8000/users/getAllUsers`).then(response => {
+      this.users = response.data.users
+    })
   }
 }
 </script>

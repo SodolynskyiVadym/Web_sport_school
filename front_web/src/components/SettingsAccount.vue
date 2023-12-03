@@ -1,7 +1,6 @@
 <template>
   <input type="text" v-model="name" placeholder="NAME">
   <input type="text" v-model="lastName" placeholder="LASTNAME">
-  <input type="text" v-model="patronymic" placeholder="PATRONYMIC">
   <input type="text" v-model="email" readonly placeholder="EMAIL">
   <input type="date" v-model="birth" placeholder="BIRTH">
   <input type="text" v-model="gender" placeholder="GENDER">
@@ -60,7 +59,6 @@ export default {
       userRole: "",
       name: "",
       lastName: "",
-      patronymic: "",
       password: "",
       email: "",
       birth: Date.now(),
@@ -75,7 +73,6 @@ export default {
       await axios.post(`http://localhost:8000/users/updateUser/${this.userID}`, {
         name: this.name,
         lastName: this.lastName,
-        patronymic: this.patronymic,
         password: this.password,
         email: this.email,
         birth: this.birth,
@@ -120,7 +117,6 @@ export default {
     await axios.get(`http://localhost:8000/users/getUser/${this.userID}`).then(res => {
        this.name = res.data.user.name;
        this.lastName = res.data.user.lastName;
-       this.patronymic = res.data.user.patronymic;
        this.password = res.data.user.password;
        this.email = res.data.user.email;
        this.birth = res.data.user.birth;

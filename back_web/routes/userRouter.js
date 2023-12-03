@@ -19,6 +19,7 @@ router
     .post("/joinGroup", userController.joinGroup)
     .post("/leaveGroup", userController.leaveFromGroup)
     .post("/createUser", authController.signup)
+    .post("/createCoach", userController.createCoach)
     .post("/login", authController.login)
     .patch("/updateUser/:id", userController.updateUser)
     .delete("/deleteUser/:id", userController.deleteUser)
