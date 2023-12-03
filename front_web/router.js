@@ -13,14 +13,14 @@ const routes = [
         component: () => import('./src/components/SchedulePage.vue')
     },
     {
-        path: '/register',
-        name: 'RegisterPage',
-        component: () => import('./src/components/RegisterPage.vue')
+        path: '/registerOld',
+        name: 'RegisterPageOld',
+        component: () => import('@/components/RegisterOldVersion.vue')
     },
     {
-        path: '/login',
-        name: 'LoginPage',
-        component: () => import('./src/components/LoginPage.vue'),
+        path: '/loginOld',
+        name: 'LoginPageOld',
+        component: () => import('@/components/LoginOldVersion.vue'),
     },
     {
         path: '/coaches',
@@ -84,9 +84,14 @@ const routes = [
         }
     },
     {
-        path: '/test',
-        name: 'TestPage',
-        component: () => import('./src/components/TestPage.vue')
+        path: '/login',
+        name: 'Login',
+        component: () => import('@/components/LoginRegistration.vue')
+    },
+    {
+        path: '/register',
+        name: 'Registration',
+        component: () => import('@/components/LoginRegistration.vue')
     },
     {
         path: '/updateGroup/:groupID',
