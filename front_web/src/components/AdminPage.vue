@@ -30,11 +30,6 @@
         <td><button @click="deleteUser(user._id)">DELETE</button></td>
       </tr>
     </table>
-
-    <div class="button-container">
-      <button id="deleteRows" @click="deleteRows">DELETE</button>
-      <button id="duplicateRows" @click="dublicateRow">DUPLICATE</button>
-    </div>
   </div>
 </template>
 

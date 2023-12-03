@@ -7,6 +7,7 @@ router
     .get("/getSchedule/:groupID", scheduleController.getSchedule)
     .get("/getSchedules/:groupName", scheduleController.getSchedulesGroup)
     .post("/getScheduleUser", scheduleController.getScheduleUser)
+    .post("/getScheduleCoach", scheduleController.getScheduleCoach)
     .post("/createSchedule", scheduleController.createSchedule)
     .delete("/deleteSchedule/:scheduleID", scheduleController.deleteSchedule)
 

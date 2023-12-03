@@ -112,8 +112,8 @@ exports.getAllCoaches = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
-    const users = await User.find();
-
+    let users = await User.find();
+    users = users.filter(user => user.role != "admin");
     res.status(201)
         .json({
             success: "success",
@@ -166,12 +166,18 @@ exports.joinGroup = catchAsync(async (req, res, next) => {
 
 exports.leaveFromGroup = catchAsync(async (req, res, next) => {
     const user = await User.findById(req.body.userID);
+    const group = await Group.findById(req.body.groupID)
 
-    if (!user) {
-        return next(new AppError("User not found", 404));
+
+    if (!user || !group) {
+        return next(new AppError("User or group not found", 404));
     }
 
     if (!user.groupsID.includes(req.body.groupID)) return next(new AppError("You are not registered in this group", 403));
+
+    group.currentMembers -= 1;
+    group.markModified("currentMembers");
+    await group.save()
 
     user.groupsID.pull(req.body.groupID);
 
@@ -187,13 +193,18 @@ exports.leaveFromGroup = catchAsync(async (req, res, next) => {
 
 
 exports.getGroupsUser = catchAsync(async (req, res, next) => {
-    const user = await User.findById(req.params.userID).populate(
-        {
-            path: "groupsID",
-            select: "_id name limitMembers kindSport coachID"
-        });
+    const user = await User.findById(req.params.userID)
 
-    const groups = user.groupsID
+    console.log(user)
+
+    let groups = await Group.find().populate({
+        path: "coachID",
+        select: "_id name lastName"
+    });
+
+    groups = groups.filter(group => user.groupsID.includes(group._id));
+
+    console.log(groups)
     res.status(201).json({
         success: "success",
         groups

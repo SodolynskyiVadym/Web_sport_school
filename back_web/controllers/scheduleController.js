@@ -42,19 +42,13 @@ exports.createSchedule = catchAsync(async (req, res, next) => {
 exports.getScheduleUser = catchAsync(async (req, res, next) => {
     const user = await User.findById(req.body.userID);
 
-    console.log(user);
-
     if (!user) return next(new AppError("User not found"), 401);
 
-    const schedulePromises = user.groupsID.map(async (groupID) => await Schedule.findOne({ groupID: groupID })
-        .populate({
-            path: "groupID",
-            select: "name"
-        }));
-
-    const schedules = await Promise.all(schedulePromises);
-
-    console.log(schedules);
+    let schedules = await Schedule.find().populate({
+        path: "groupID",
+        select: "name _id"
+    });
+    schedules = schedules.filter(schedule => user.groupsID.includes(schedule.groupID._id));
 
     res.status(200).json({
         success: "success",
@@ -70,13 +64,37 @@ exports.getSchedulesGroup = catchAsync(async (req, res, next) => {
 
     const schedules = await Schedule.find({groupID: group._id});
 
-    // console.log(schedules)
 
     res.status(200)
         .json({
             success: "success",
             schedules
         });
+});
+
+exports.getScheduleCoach = catchAsync(async (req, res, next) => {
+    const coach = await User.findById(req.body.userID);
+
+    if (!coach) return next(new AppError("User not found"), 401);
+
+    const groups = await Group.find({coachID: coach._id})
+
+    let groupsID = [];
+    for (let group of groups){
+        groupsID.push(group._id.toString())
+    }
+
+    let schedules = await Schedule.find().populate({
+        path: "groupID",
+        select: "name _id"
+    });
+
+    schedules = schedules.filter(schedule => groupsID.includes(schedule.groupID._id.toString()));
+
+    res.status(200).json({
+        success: "success",
+        schedules
+    });
 });
 
 exports.deleteSchedule = catchAsync(async (req, res, next) => {

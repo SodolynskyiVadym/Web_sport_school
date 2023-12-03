@@ -17,11 +17,11 @@ router
     .post("/updateUser/:id", userController.updateUser)
     .post("/setPassword", userController.setPassword)
     .post("/joinGroup", userController.joinGroup)
-    .post("/leaveGroup", userController.leaveFromGroup)
     .post("/createUser", authController.signup)
     .post("/createCoach", userController.createCoach)
     .post("/login", authController.login)
     .patch("/updateUser/:id", userController.updateUser)
+    .patch("/leaveGroup", userController.leaveFromGroup)
     .delete("/deleteUser/:id", userController.deleteUser)
 
 module.exports = router;

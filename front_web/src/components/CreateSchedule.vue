@@ -56,7 +56,7 @@ export default {
 
     async deleteSchedule(scheduleID){
       await axios.delete(`http://localhost:8000/groups/schedule/deleteSchedule/${scheduleID}`)
-      location.reload();
+      await this.findScheduleGroup()
     },
 
     async createSchedule(){

@@ -15,14 +15,16 @@
     <tr>
       <th>Name</th>
       <th>Kind of sport</th>
-      <th>Coach id</th>
+      <th>Coach</th>
       <th>Limit members</th>
+      <th>Action</th>
     </tr>
     <tr v-for="group in groups" :key="group._id">
       <th>{{group.name}}</th>
       <th>{{group.kindSport}}</th>
-      <th>{{group.coachID}}</th>
+      <th @click="readMoreCoach(group.coachID._id)" style="color: cornflowerblue; cursor: pointer ">{{group.coachID.name + " " + group.coachID.lastName}}</th>
       <th>{{group.limitMembers}}</th>
+      <th><button @click="leaveGroup(group._id)">Leave</button></th>
     </tr>
   </table>
 
@@ -81,10 +83,11 @@ export default {
       })
     },
     async setPassword(){
-      await axios.post(`http://localhost:8000/users/setPassword`, {
+      await axios.post("http://localhost:8000/users/setPassword", {
         userID: this.userID,
         password: this.password,
       });
+      this.password = "";
     },
 
     async enterUpdateGroupPage(groupID){
@@ -93,6 +96,18 @@ export default {
 
     async deleteGroup(groupID){
       await axios.delete(`http://localhost:8000/groups/deleteGroup/${groupID}`);
+    },
+
+    async leaveGroup(groupID){
+      await axios.patch(`http://localhost:8000/users/leaveGroup`, {
+        groupID: groupID,
+        userID: this.userID
+      });
+
+      location.reload();
+    },
+    async readMoreCoach(coachID){
+      this.$router.push(`/overviewCoach/${coachID}`);
     }
   },
   async mounted() {
@@ -105,6 +120,8 @@ export default {
       await axios.get(`http://localhost:8000/users/getUserGroups/${this.userID}`).then(res => {
         this.groups = res.data.groups
       });
+      console.log("user")
+      console.log(this.groups)
     }
 
     if (this.userRole === "coach"){
