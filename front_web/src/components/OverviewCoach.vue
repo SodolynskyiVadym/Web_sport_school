@@ -70,9 +70,11 @@ export default {
     },
 
     async deleteReview(){
-      await axios.get(`http://localhost:8000/reviews/getReview/${this.userID}/${this.$route.params.id}`)
+      await axios.delete(`http://localhost:8000/reviews/deleteReview/${this.userID}/${this.$route.params.id}`)
+      this.isReview = false;
+      this.myReview = "";
+      this.myRating = 0;
       await this.getReviews()
-      this.isReview = false
     },
 
     async updateReview(){
