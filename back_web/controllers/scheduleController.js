@@ -2,6 +2,7 @@ const Schedule = require("../models/scheduleModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const User = require("../models/userModel");
+const Group = require("../models/groupModel");
 
 
 exports.getSchedule = catchAsync(async (req, res, next) => {
@@ -16,24 +17,16 @@ exports.getSchedule = catchAsync(async (req, res, next) => {
         });
 });
 
-exports.updateSchedule = catchAsync(async (req, res, next) => {
-    const updatedSchedule = await Schedule.findByIdAndUpdate(req.params.scheduleID, req.body, {new: true});
-
-    if (!updatedSchedule) return next(new AppError("Schedule not found"), 401);
-
-    res.status(201)
-        .json({
-            success: "success",
-            updatedSchedule
-        });
-});
-
 
 exports.createSchedule = catchAsync(async (req, res, next) => {
-    console.log(req.body.groupID + " GroupID")
-    console.log(req.body.coachID + " CoachID")
+    console.log(req.body)
+    const group = await Group.findOne({name: req.body.nameGroup});
+    console.log(group)
+
+    if (!group) return next(new AppError("Group not found"));
+
     const schedule = await Schedule.create({
-        groupID: req.body.groupID,
+        groupID: group._id,
         coachID: req.body.coachID,
         date: req.body.date,
         time: req.body.timeLesson
@@ -70,15 +63,14 @@ exports.getScheduleUser = catchAsync(async (req, res, next) => {
 });
 
 
-exports.getScheduleByName = catchAsync(async (req, res, next) => {
-    const allSchedules = await Schedule.find().populate({
-        path: "groupID",
-        select: "name"
-    });
-    const schedules = await allSchedules.filter(schedule => schedule.groupID.name === req.params.nameGroup)
+exports.getSchedulesGroup = catchAsync(async (req, res, next) => {
+    const group = await Group.findOne({name: req.params.groupName});
 
-    console.log(schedules)
-    if (!schedules) return next(new AppError("Schedule not found"), 401);
+    if (!group) return next(new AppError("Group not found"));
+
+    const schedules = await Schedule.find({groupID: group._id});
+
+    // console.log(schedules)
 
     res.status(200)
         .json({
@@ -88,10 +80,10 @@ exports.getScheduleByName = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteSchedule = catchAsync(async (req, res, next) => {
-    const user = await User.findByIdAndDelete(req.params.scheduleID);
-
+    const schedule = await Schedule.findByIdAndDelete(req.params.scheduleID);
 
     res.status(200).json({
-        success: "success"
+        success: "success",
+        schedule
     });
 });

@@ -138,14 +138,14 @@ exports.deleteGroup = catchAsync(async (req, res, next) => {
 });
 
 
-// exports.getAllGroupsCoach = catchAsync(async (req, res, next) => {
-//     const groups = await Group.find({coachID: req.params.coachID});
-//
-//     if (!groups) return next(new AppError("Group not found"), 400);
-//
-//     res.status(200)
-//         .json({
-//             success: "success",
-//             groups
-//         });
-// });
+exports.getCoachGroups = catchAsync(async (req, res, next) => {
+    const groups = await Group.find({coachID: req.params.coachID});
+
+    if (!groups) return next(new AppError("Group not found"), 400);
+
+    res.status(200)
+        .json({
+            success: "success",
+            groups
+        });
+});

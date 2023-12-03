@@ -8,10 +8,27 @@
     <input type="time" v-model="time" id="time" class="input-field">
 
     <label for="nameGroup" class="label-field">Name of group</label>
-    <input type="text" v-model="nameGroup" id="nameGroup" class="input-field">
+    <select v-model="nameGroup">
+      <option v-for="group in groups" :key="group._id" v-text="group.name"></option>
+    </select>
+    <p v-if="groups.length === 0">You don't have groups</p>
 
     <button @click="createSchedule" class="btn-create">Create schedule</button>
+    <button @click="findScheduleGroup" class="btn-create">Find schedule</button>
   </div>
+
+  <table v-if="schedules">
+    <tr>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Action</th>
+    </tr>
+    <tr v-for="schedule in schedules" :key="schedule._id">
+      <td>{{schedule.date}}</td>
+      <td>{{schedule.time}}</td>
+      <td><button @click="deleteSchedule(schedule._id)">DELETE</button></td>
+    </tr>
+  </table>
 </template>
 
 <script>
@@ -23,30 +40,48 @@ export default {
       date: Date.now(),
       time: "",
       nameGroup: "",
-      dataInfo: ""
+      coachID: "",
+      schedules: [],
+      groups: []
     }
   },
   methods: {
+
+
+    async findScheduleGroup(){
+      await axios.get(`http://localhost:8000/groups/schedule/getSchedules/${this.nameGroup}`).then(res => {
+        this.schedules = res.data.schedules;
+      })
+    },
+
+    async deleteSchedule(scheduleID){
+      await axios.delete(`http://localhost:8000/groups/schedule/deleteSchedule/${scheduleID}`)
+      location.reload();
+    },
+
     async createSchedule(){
-
-      let id = ""
-      await axios.post("http://localhost:8000/groups/getGroupIDByName", { name: this.nameGroup }).then(res => {
-        id = res.data.id
-      });
-
-
       await axios.post("http://localhost:8000/groups/schedule/createSchedule", {
+        nameGroup: this.nameGroup,
         date: this.date,
         timeLesson: this.time,
-        coachID: this.dataInfo,
-        groupID: id
+        coachID: this.coachID
       });
+
+      this.date = Date.now();
+      this.time = ""
+      await this.findScheduleGroup()
     }
   },
   async mounted() {
     await getUserByToken(localStorage.getItem("token")).then(res => {
-      this.dataInfo = res.data.id
+      this.coachID = res.data.id
+    });
+
+    await axios.get(`http://localhost:8000/groups/getCoachGroups/${this.coachID}`).then(res => {
+      this.groups = res.data.groups;
     })
+
+
   }
 }
 </script>

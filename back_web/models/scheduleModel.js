@@ -3,8 +3,7 @@ const mongoose = require("mongoose");
 const scheduleSchema = new mongoose.Schema({
     groupID: {
         type: mongoose.Schema.ObjectId,
-        ref: "Group",
-        unique: true
+        ref: "Group"
     },
     coachID: {
         type: mongoose.Schema.ObjectId,
