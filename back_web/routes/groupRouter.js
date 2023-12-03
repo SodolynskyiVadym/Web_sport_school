@@ -10,6 +10,7 @@ router.use("/schedule", scheduleRouter);
 router
     .get("/getGroup/:id", groupController.getGroup)
     .get("/getAllGroup", groupController.getAllGroups)
+    .get("/getCoachGroups/:coachID", groupController.getCoachGroups)
     .post("/createGroup", groupController.createGroup)
     .patch("/updateGroup", groupController.updateGroup)
     .post("/getGroupByName", groupController.getGroupByName)

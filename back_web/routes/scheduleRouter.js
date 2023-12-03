@@ -5,10 +5,10 @@ const router = express.Router();
 
 router
     .get("/getSchedule/:groupID", scheduleController.getSchedule)
-    .get("/getScheduleByNameGroup/:nameGroup", scheduleController.getSchedule)
+    .get("/getSchedules/:groupName", scheduleController.getSchedulesGroup)
     .post("/getScheduleUser", scheduleController.getScheduleUser)
-    .patch("/updateSchedule/:scheduleID", scheduleController.updateSchedule)
+    .post("/getScheduleCoach", scheduleController.getScheduleCoach)
     .post("/createSchedule", scheduleController.createSchedule)
-    .delete("/deleteSchedule/scheduleID", scheduleController.deleteSchedule)
+    .delete("/deleteSchedule/:scheduleID", scheduleController.deleteSchedule)
 
 module.exports = router;

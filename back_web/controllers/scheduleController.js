@@ -2,6 +2,7 @@ const Schedule = require("../models/scheduleModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const User = require("../models/userModel");
+const Group = require("../models/groupModel");
 
 
 exports.getSchedule = catchAsync(async (req, res, next) => {
@@ -16,24 +17,16 @@ exports.getSchedule = catchAsync(async (req, res, next) => {
         });
 });
 
-exports.updateSchedule = catchAsync(async (req, res, next) => {
-    const updatedSchedule = await Schedule.findByIdAndUpdate(req.params.scheduleID, req.body, {new: true});
-
-    if (!updatedSchedule) return next(new AppError("Schedule not found"), 401);
-
-    res.status(201)
-        .json({
-            success: "success",
-            updatedSchedule
-        });
-});
-
 
 exports.createSchedule = catchAsync(async (req, res, next) => {
-    console.log(req.body.groupID + " GroupID")
-    console.log(req.body.coachID + " CoachID")
+    console.log(req.body)
+    const group = await Group.findOne({name: req.body.nameGroup});
+    console.log(group)
+
+    if (!group) return next(new AppError("Group not found"));
+
     const schedule = await Schedule.create({
-        groupID: req.body.groupID,
+        groupID: group._id,
         coachID: req.body.coachID,
         date: req.body.date,
         time: req.body.timeLesson
@@ -49,19 +42,13 @@ exports.createSchedule = catchAsync(async (req, res, next) => {
 exports.getScheduleUser = catchAsync(async (req, res, next) => {
     const user = await User.findById(req.body.userID);
 
-    console.log(user);
-
     if (!user) return next(new AppError("User not found"), 401);
 
-    const schedulePromises = user.groupsID.map(async (groupID) => await Schedule.findOne({ groupID: groupID })
-        .populate({
-            path: "groupID",
-            select: "name"
-        }));
-
-    const schedules = await Promise.all(schedulePromises);
-
-    console.log(schedules);
+    let schedules = await Schedule.find().populate({
+        path: "groupID",
+        select: "name _id"
+    });
+    schedules = schedules.filter(schedule => user.groupsID.includes(schedule.groupID._id));
 
     res.status(200).json({
         success: "success",
@@ -70,15 +57,13 @@ exports.getScheduleUser = catchAsync(async (req, res, next) => {
 });
 
 
-exports.getScheduleByName = catchAsync(async (req, res, next) => {
-    const allSchedules = await Schedule.find().populate({
-        path: "groupID",
-        select: "name"
-    });
-    const schedules = await allSchedules.filter(schedule => schedule.groupID.name === req.params.nameGroup)
+exports.getSchedulesGroup = catchAsync(async (req, res, next) => {
+    const group = await Group.findOne({name: req.params.groupName});
 
-    console.log(schedules)
-    if (!schedules) return next(new AppError("Schedule not found"), 401);
+    if (!group) return next(new AppError("Group not found"));
+
+    const schedules = await Schedule.find({groupID: group._id});
+
 
     res.status(200)
         .json({
@@ -87,11 +72,36 @@ exports.getScheduleByName = catchAsync(async (req, res, next) => {
         });
 });
 
-exports.deleteSchedule = catchAsync(async (req, res, next) => {
-    const user = await User.findByIdAndDelete(req.params.scheduleID);
+exports.getScheduleCoach = catchAsync(async (req, res, next) => {
+    const coach = await User.findById(req.body.userID);
 
+    if (!coach) return next(new AppError("User not found"), 401);
+
+    const groups = await Group.find({coachID: coach._id})
+
+    let groupsID = [];
+    for (let group of groups){
+        groupsID.push(group._id.toString())
+    }
+
+    let schedules = await Schedule.find().populate({
+        path: "groupID",
+        select: "name _id"
+    });
+
+    schedules = schedules.filter(schedule => groupsID.includes(schedule.groupID._id.toString()));
 
     res.status(200).json({
-        success: "success"
+        success: "success",
+        schedules
+    });
+});
+
+exports.deleteSchedule = catchAsync(async (req, res, next) => {
+    const schedule = await Schedule.findByIdAndDelete(req.params.scheduleID);
+
+    res.status(200).json({
+        success: "success",
+        schedule
     });
 });

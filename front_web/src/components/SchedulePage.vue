@@ -21,18 +21,26 @@ export default {
   data() {
     return {
       schedules: [],
-      userID: ""
+      userID: "",
+      userRole: ""
     }
   },
   async mounted() {
     await getUserByToken(localStorage.getItem("token")).then(res => {
       this.userID = res.data.id
+      this.userRole = res.data.role
     });
 
-    await axios.post("http://localhost:8000/groups/schedule/getScheduleUser", {userID: this.userID}).then(res => {
-      console.log(res.data)
-      this.schedules = res.data.schedules
-    });
+    if (this.userRole === "user"){
+      await axios.post("http://localhost:8000/groups/schedule/getScheduleUser", {userID: this.userID}).then(res => {
+        this.schedules = res.data.schedules
+      });
+    }
+    if (this.userRole === "coach"){
+      await axios.post("http://localhost:8000/groups/schedule/getScheduleCoach", {userID: this.userID}).then(res => {
+        this.schedules = res.data.schedules
+      });
+    }
   }
 }
 </script>
