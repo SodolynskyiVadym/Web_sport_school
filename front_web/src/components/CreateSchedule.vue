@@ -148,15 +148,13 @@ body{
   position: absolute;
   width: 50%;
   height: 470px;
-  top: 90px;
-  margin-bottom: 30px;
+  top: 85px;
+  margin-bottom: 20px;
   right: 445px;
   border-radius: 15px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
   overflow-y: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
   transform: translateX(50%);
 }
 
