@@ -1,78 +1,78 @@
 <template>
   <section class="overview-group-page">
-  <div style="background-color: rgba(238,238,238,0.99); height: auto;">
-    <div class="group-details-overview" v-if="group">
-      <div class="wrapper-overview pre">
-      </div>
-      <div class="wrapper-overview">
-        <div class="title-overview">
-          <div class="group-name-overview">{{ group.name }}</div>
-          <div class="line-overview"></div>
+    <div style="background-color: rgba(238,238,238,0.99); height: auto;">
+      <div class="group-details-overview" v-if="group">
+        <div class="wrapper-overview pre">
         </div>
-        <div class="container-overview">
-          <div class="card tabs">
-            <input id="tab-1" type="radio" class="tab tab-selector" checked="checked" name="tab" />
-            <label for="tab-1" class="tab tab-primary">Group</label>
-            <input id="tab-2" type="radio" class="tab tab-selector" name="tab" />
-            <label for="tab-2" class="tab tab-success">Coach</label>
-            <input id="tab-3" type="radio" class="tab tab-selector" name="tab" />
-            <label for="tab-3" class="tab tab-default">Price</label>
-            <input id="tab-4" type="radio" class="tab tab-selector" name="tab" />
-            <label for="tab-4" class="tab tab-warning">Join</label>
-            <div class="tabsShadow"></div>
-            <div class="glider"></div>
-            <section class="content-overview">
-              <div class="item-overview" id="content-1">
-                <h2 class="tab-title tab-primary"><div class="group-name-overview">{{ group.name }}</div>
-                </h2>
-                <p>
-                  <span class="numit-overview"> </span>
-                </p>
-                <p class="info-overview-sport"><strong>Type:</strong> {{ group.kindSport.toUpperCase() }}</p>
-                <p class="info-overview-sport"><strong>Description:</strong> {{ group.description }}</p>
-                <p class="info-overview-sport"><strong>Members:</strong> {{ group.limitMembers }}</p>
-              </div>
-              <div class="item-overview" id="content-2">
-                <h2 class="tab-title tab-success">Group coach</h2>
-                <p>
-                  <span class="numit-overview"></span>
-                </p>
-                <p class="info-overview-sport"><strong>Name:</strong> {{ group.coachID.name }}</p>
-                <p class="info-overview-sport"><strong>Last Name:</strong> {{ group.coachID.lastName }}</p>
-                <button class="button-overview join-button" @click="enterCoachPage(group.coachID._id)">Read about coach</button>
-              </div>
-              <div class="item-overview" id="content-3">
-                <h2 class="tab-title tab-default">Price</h2>
-                <p>
-                  <span class="numit-overview"></span>
-                </p>
-                <p class="info-overview-sport"><strong>Price:</strong> ${{ group.priceID.price }}</p>
-                <p class="info-overview-sport"><strong>Discount:</strong> {{ group.priceID.discount }}%</p>
-              </div>
-              <div class="item-overview" id="content-4">
-                <h2 class="tab-title tab-warning"></h2>
-                <p>
-                  <span class="numit-overview"></span>  Would you like to join this group?
-                </p>
-                <p><button class="button-overview join-button" @click="joinGroup">BUY</button></p>
-              </div>
-            </section>
+        <div class="wrapper-overview">
+          <div class="title-overview">
+            <div class="group-name-overview">{{ group.name }}</div>
+            <div class="line-overview"></div>
+          </div>
+          <div class="container-overview">
+            <div class="card tabs">
+              <input id="tab-1" type="radio" class="tab tab-selector" checked="checked" name="tab" />
+              <label for="tab-1" class="tab tab-primary">Group</label>
+              <input id="tab-2" type="radio" class="tab tab-selector" name="tab" />
+              <label for="tab-2" class="tab tab-success">Coach</label>
+              <input id="tab-3" type="radio" class="tab tab-selector" name="tab" />
+              <label for="tab-3" class="tab tab-default">Price</label>
+              <input id="tab-4" type="radio" class="tab tab-selector" name="tab" />
+              <label for="tab-4" class="tab tab-warning">Join</label>
+              <div class="tabsShadow"></div>
+              <div class="glider"></div>
+              <section class="content-overview">
+                <div class="item-overview" id="content-1">
+                  <h2 class="tab-title tab-primary"><div class="group-name-overview">{{ group.name }}</div>
+                  </h2>
+                  <p>
+                    <span class="numit-overview"> </span>
+                  </p>
+                  <p class="info-overview-sport"><strong>Type:</strong> {{ group.kindSport.toUpperCase() }}</p>
+                  <p class="info-overview-sport"><strong>Description:</strong> {{ group.description }}</p>
+                  <p class="info-overview-sport"><strong>Members:</strong> {{ group.limitMembers }}</p>
+                </div>
+                <div class="item-overview" id="content-2">
+                  <h2 class="tab-title tab-success">Group coach</h2>
+                  <p>
+                    <span class="numit-overview"></span>
+                  </p>
+                  <p class="info-overview-sport"><strong>Name:</strong> {{ group.coachID.name }}</p>
+                  <p class="info-overview-sport"><strong>Last Name:</strong> {{ group.coachID.lastName }}</p>
+                  <button class="button-overview join-button" @click="enterCoachPage(group.coachID._id)">Read about coach</button>
+                </div>
+                <div class="item-overview" id="content-3">
+                  <h2 class="tab-title tab-default">Price</h2>
+                  <p>
+                    <span class="numit-overview"></span>
+                  </p>
+                  <p class="info-overview-sport"><strong>Price:</strong> ${{ group.priceID.price }}</p>
+                  <p class="info-overview-sport"><strong>Discount:</strong> {{ group.priceID.discount }}%</p>
+                </div>
+                <div class="item-overview" id="content-4">
+                  <h2 class="tab-title tab-warning"></h2>
+                  <p>
+                    <span class="numit-overview"></span>  Would you like to join this group?
+                  </p>
+                  <p><button class="button-overview join-button" @click="joinGroup">BUY</button></p>
+                </div>
+              </section>
+            </div>
           </div>
         </div>
       </div>
+      <div v-else>
+        Loading...
+      </div>
     </div>
-    <div v-else>
-      Loading...
+    <button @click="enterCoachPage(group.coachID._id)">Read about coach</button><br>
+
+    <div v-if="userRole === 'user'">
+      <button @click="joinGroup">Join to group</button>
     </div>
-  </div>
-  <button @click="enterCoachPage(group.coachID._id)">Read about coach</button><br>
-
-  <div v-if="userRole === 'user'">
-    <button @click="joinGroup">Join to group</button>
-  </div>
 
 
-</section>
+  </section>
 </template>
 
 <script>
