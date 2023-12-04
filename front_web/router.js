@@ -39,8 +39,13 @@ const routes = [
     },
     {
         path: '/tester',
-        name: 'ReviewPage',
+        name: 'TesterPage',
         component: () => import('./src/components/TesterPage.vue')
+    },
+    {
+        path: '/testing',
+        name: 'ReviewPage',
+        component: () => import('./src/components/TestingPage.vue')
     },
     {
         path: '/overviewGroup/:id',
