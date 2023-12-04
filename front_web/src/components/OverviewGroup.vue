@@ -52,9 +52,11 @@
                 <div class="item-overview" id="content-4">
                   <h2 class="tab-title tab-warning"></h2>
                   <p>
-                    <span class="numit-overview"></span>  Would you like to join this group?
+                    <span class="numit-overview"></span>  Would you like to join this group? Click join and pay
                   </p>
-                  <p><button class="button-overview join-button" @click="joinGroup">BUY</button></p>
+                  <div v-if="userRole === 'user'">
+                    <button class="button-overview join-button" @click="joinGroup">JOIN</button>
+                  </div>
                 </div>
               </section>
             </div>
@@ -65,13 +67,6 @@
         Loading...
       </div>
     </div>
-    <button @click="enterCoachPage(group.coachID._id)">Read about coach</button><br>
-
-    <div v-if="userRole === 'user'">
-      <button @click="joinGroup">Join to group</button>
-    </div>
-
-
   </section>
 </template>
 
@@ -167,9 +162,6 @@ export default {
   padding: 10px 20px;
   color: black;
 }
-
-
-
 
 #tab-1:checked ~ section #content-1,
 #tab-2:checked ~ section #content-2,

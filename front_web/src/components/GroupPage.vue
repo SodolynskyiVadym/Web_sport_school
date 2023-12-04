@@ -11,7 +11,7 @@
           <span class="info">{{ group.kindSport.toUpperCase() }}</span>
           <span class="info-coach">{{ group.coachID.name }} {{ group.coachID.lastName }}</span>
         </div>
-        <button class="button-group-page" @click="enterGroupPage(group._id)">BUY</button>
+        <button class="button-group-page" @click="enterGroupPage(group._id)">INFO</button>
       </div>
     </div>
   </section>
@@ -109,21 +109,18 @@ export default {
 
 @keyframes slideUp {
   from {
-    margin-top: 40px; /* Початкове значення відступу картинки */
-    opacity: 0; /* Початкова прозорість */
+    margin-top: 40px;
+    opacity: 0;
   }
   to {
-    margin-top: -40px; /* Змінене значення відступу картинки */
-    opacity: 1; /* Кінцева прозорість */
+    margin-top: -40px;
+    opacity: 1;
   }
 }
 
-/* Застосувати анімацію тільки під час завантаження сторінки */
 .group img:not(.image-animation) {
   margin-top: -20px;
 }
-
-
 
 .group-info {
   padding: 20px;
@@ -137,7 +134,7 @@ export default {
 
 .group-info-title .info {
   margin-left: 280px;
-  margin-bottom: -33px;/* Простір між ціною та рештою інформації */
+  margin-bottom: -33px;
   font-size: 20px;
 }
 
@@ -170,17 +167,5 @@ export default {
 button:hover {
   background-color: darkgray;
   color: #fff;
-}
-
-@media screen and (max-width: 768px) {
-  .group {
-    flex: 0 0 calc(50% - 32px);
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .group {
-    flex: 0 0 calc(100% - 32px);
-  }
 }
 </style>
