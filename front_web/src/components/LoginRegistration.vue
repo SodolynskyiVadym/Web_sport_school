@@ -2,6 +2,8 @@
   <div v-if="error" role="alert">
     {{error}}
   </div>
+  <p style="cursor: pointer" @click="this.$router.push('/forgotPassword')">Forgot password</p>
+
   <div class="container">
     <div class="main">
       <input type="checkbox" id="chk" aria-hidden="true" v-model="showRegistrationForm">
@@ -13,7 +15,9 @@
           <div v-if="invalidEmail" class="error-message">Please enter a valid email address example@gmail.com</div>
           <input type="password" v-model="passwordLog" placeholder="Password" class="input-field" @input="validatePassword">
           <div v-if="invalidPassword" class="error-message">Password should be at least 8 characters long</div>
-          <button @click="sendDataLogin" class="btn-login">Log in</button>
+          <button v-else @click="sendDataLogin" class="btn-login">Log in</button>
+
+
           <div v-if="loggedIn" class="success-message">You have successfully logged in!</div>
         </div>
       </div>
@@ -56,6 +60,7 @@ export default {
       invalidPassword: false,
       loggedIn: false,
       showRegistrationForm: false,
+      checkPassword: "",
       error: ""
     };
   },

@@ -58,16 +58,6 @@ export default {
     this.description = groupData.group.description;
     this.price = groupData.group.priceID.price;
     this.discount = groupData.group.priceID.discount;
-    //
-    // await axios.get(`http://localhost:8000/groups/getGroup/${this.$route.params.groupID}`).then(res => {
-    //   console.log(res.data.group)
-    //   this.name = res.data.group.name;
-    //   this.limitMembers = res.data.group.limitMembers;
-    //   this.kindSport = res.data.group.kindSport;
-    //   this.description = res.data.group.description;
-    //   this.price = res.data.group.priceID.price;
-    //   this.discount = res.data.group.priceID.discount;
-    // });
   }
 }
 </script>

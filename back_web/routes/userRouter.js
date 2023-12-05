@@ -20,6 +20,8 @@ router
     .post("/createUser", authController.signup)
     .post("/createCoach", userController.createCoach)
     .post("/login", authController.login)
+    .post("/createReservePassword", authController.createReservePassword)
+    .post("/loginViaReservePassword", authController.loginViaReservePassword)
     .patch("/updateUser/:id", userController.updateUser)
     .patch("/leaveGroup", userController.leaveFromGroup)
     .delete("/deleteUser/:id", userController.deleteUser)

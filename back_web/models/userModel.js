@@ -53,9 +53,7 @@ const userSchema = new mongoose.Schema({
         default: 'user'
     },
 
-    passwordChangedAt: Date,
-    passwordResetToken: String,
-    passwordResetExpires: Date,
+    reservePassword: String
 });
 
 userSchema.virtual("schedule", {
@@ -68,10 +66,15 @@ userSchema.pre('save', async function(next) {
     if (!this.isModified('password')) return next();
 
     this.password = await bcrypt.hash(this.password, 12);
-
-    this.passwordConfirm = undefined;
     next();
 });
+
+userSchema.pre("save", async function(next){
+    if (!this.reservePassword) return next();
+
+    this.reservePassword = await bcrypt.hash(this.reservePassword, 12);
+    next();
+})
 
 
 userSchema.methods.correctPassword = async function(candidatePassword, userPassword) {

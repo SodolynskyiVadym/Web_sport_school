@@ -39,7 +39,7 @@
                   </p>
                   <p class="info-overview-sport"><strong>Name:</strong> {{ group.coachID.name }}</p>
                   <p class="info-overview-sport"><strong>Last Name:</strong> {{ group.coachID.lastName }}</p>
-                  <button class="button-overview join-button" @click="enterCoachPage(group.coachID._id)">Read about coach</button>
+                  <button class="button-overview join-button;" style="cursor: pointer" @click="enterCoachPage(group.coachID._id)">Read about coach</button>
                 </div>
                 <div class="item-overview" id="content-3">
                   <h2 class="tab-title tab-default">Price</h2>

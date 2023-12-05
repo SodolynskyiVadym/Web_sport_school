@@ -28,11 +28,6 @@ const routes = [
         component: () => import('./src/components/TesterPage.vue')
     },
     {
-        path: '/error',
-        name: 'ErrorPage',
-        component: () => import('./src/components/ErrorPage.vue')
-    },
-    {
         path: '/testing',
         name: 'ReviewPage',
         component: () => import('./src/components/TestingPage.vue')
@@ -87,6 +82,11 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: () => import('@/components/LoginRegistration.vue')
+    },
+    {
+        path: '/forgotPassword',
+        name: 'ForgotPasswordPage',
+        component: () => import('@/components/ForgotPasswordPage.vue')
     },
     {
         path: '/updateGroup/:groupID',
