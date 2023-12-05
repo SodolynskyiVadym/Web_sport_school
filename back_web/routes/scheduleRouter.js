@@ -6,8 +6,8 @@ const router = express.Router();
 router
     .get("/getSchedule/:groupID", scheduleController.getSchedule)
     .get("/getSchedules/:groupName", scheduleController.getSchedulesGroup)
-    .post("/getScheduleUser", scheduleController.getScheduleUser)
-    .post("/getScheduleCoach", scheduleController.getScheduleCoach)
+    .get("/getScheduleUser/:userID", scheduleController.getScheduleUser)
+    .get("/getScheduleCoach/:coachID", scheduleController.getScheduleCoach)
     .post("/createSchedule", scheduleController.createSchedule)
     .delete("/deleteSchedule/:scheduleID", scheduleController.deleteSchedule)
 

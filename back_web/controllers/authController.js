@@ -64,7 +64,7 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.getUserByName = catchAsync(async (req, res, next) => {
-    const token = req.body.token;
+    const token = req.params.token;
     if (!token) return next(new AppError('Not found token', 401));
 
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);

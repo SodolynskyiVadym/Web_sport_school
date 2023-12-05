@@ -72,7 +72,7 @@
 
 <script>
 import axios from "axios";
-import {getUserByToken} from "@/js/getterByValue";
+import * as listURL from "@/js/listURL";
 
 export default {
   data() {
@@ -97,16 +97,12 @@ export default {
   },
 
   async mounted() {
-    if (localStorage.getItem("token")){
-      await getUserByToken(localStorage.getItem("token")).then(res => {
-        this.userID = res.data.id
-        this.userRole = res.data.role
-      })
-    }
+    const userData = await listURL.getUserByToken(localStorage.getItem("token"));
+    this.userID = userData.id
+    this.userRole = userData.role
 
-    await axios.get(`http://localhost:8000/groups/getGroup/${this.$route.params.id}`).then(res => {
-      this.group = res.data.group;
-    });
+    const groupData = await listURL.requestGroupsGet(`/getGroup/${this.$route.params.id}`);
+    this.group = groupData.group
   }
 };
 </script>

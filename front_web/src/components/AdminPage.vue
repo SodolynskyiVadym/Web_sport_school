@@ -35,6 +35,7 @@
 
 <script>
 import axios from "axios";
+import * as listURL from "../js/listURL";
 export default {
   data() {
     return {
@@ -54,9 +55,8 @@ export default {
     }
   },
   async mounted() {
-    await axios.get(`http://localhost:8000/users/getAllUsers`).then(response => {
-      this.users = response.data.users
-    })
+    const userData = await listURL.requestUsersGet("/getAllUsers");
+    this.users = userData.users
   }
 }
 </script>

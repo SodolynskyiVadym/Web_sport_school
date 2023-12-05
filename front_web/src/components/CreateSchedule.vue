@@ -57,7 +57,8 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import axios from "axios";
-import {getUserByToken} from "@/js/getterByValue";
+import * as listURL from "@/js/listURL";
+
 export default {
   data() {
     return {
@@ -70,6 +71,16 @@ export default {
     }
   },
   methods: {
+    async findScheduleGroup(){
+      const scheduleData = await listURL.requestSchedulesGet(`/getSchedules/${this.nameGroup}`);
+      this.schedules = scheduleData.schedules;
+    },
+
+    async deleteSchedule(scheduleID){
+      await axios.delete(`http://localhost:8000/groups/schedule/deleteSchedule/${scheduleID}`)
+      await this.findScheduleGroup()
+    },
+
     formatDate(date) {
       const d = new Date(date);
       const day = d.getDate().toString().padStart(2, '0');
@@ -77,16 +88,7 @@ export default {
       const year = d.getFullYear();
       return `${day}-${month}-${year}`;
     },
-    async findScheduleGroup(){
-      await axios.get(`http://localhost:8000/groups/schedule/getSchedules/${this.nameGroup}`).then(res => {
-        this.schedules = res.data.schedules;
-      })
-    },
 
-    async deleteSchedule(scheduleID){
-      await axios.delete(`http://localhost:8000/groups/schedule/deleteSchedule/${scheduleID}`)
-      await this.findScheduleGroup()
-    },
 
     async createSchedule(){
       await axios.post("http://localhost:8000/groups/schedule/createSchedule", {
@@ -119,15 +121,11 @@ export default {
       maxTime: '19:00'
     });
 
-    await getUserByToken(localStorage.getItem("token")).then(res => {
-      this.coachID = res.data.id
-    });
+    const userData = await listURL.getUserByToken(localStorage.getItem("token"));
+    this.coachID = userData.id
 
-    await axios.get(`http://localhost:8000/groups/getCoachGroups/${this.coachID}`).then(res => {
-      this.groups = res.data.groups;
-    })
-
-
+    const coachData = await listURL.requestGroupsGet(`/getCoachGroups/${this.coachID}`);
+    this.groups = coachData.groups
   }
 }
 </script>

@@ -6,10 +6,6 @@
     <About />
     <Service />
     <Footer />
-
-
-
-
   </div>
 </template>
 

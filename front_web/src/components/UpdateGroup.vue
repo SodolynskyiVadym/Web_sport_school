@@ -13,6 +13,8 @@
 
 <script>
 import axios from "axios";
+import * as listURL from "@/js/listURL";
+
 export default {
   data(){
     return{
@@ -42,6 +44,14 @@ export default {
   },
 
   async mounted() {
+    const groupData = await listURL.requestGroupsGet(`/getGroup/${this.$route.params.groupID}`);
+    this.name = groupData.group.name;
+    this.limitMembers = groupData.group.limitMembers;
+    this.kindSport = groupData.group.kindSport;
+    this.description = groupData.group.description;
+    this.price = groupData.group.priceID.price;
+    this.discount = groupData.group.priceID.discount;
+
     await axios.get(`http://localhost:8000/groups/getGroup/${this.$route.params.groupID}`).then(res => {
       console.log(res.data.group)
       this.name = res.data.group.name;

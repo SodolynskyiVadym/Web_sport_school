@@ -50,7 +50,7 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import axios from "axios";
-import {getUserByToken} from "@/js/getterByValue";
+import * as listURL from "@/js/listURL";
 export default {
   data() {
     return {
@@ -107,9 +107,8 @@ export default {
       maxTime: '19:00'
     });
 
-    await getUserByToken(localStorage.getItem("token")).then(res => {
-      this.coachID = res.data.id
-    });
+    const userData = await listURL.getUserByToken(localStorage.getItem("token"));
+    this.coachID = userData.id
 
     await axios.get(`http://localhost:8000/groups/getCoachGroups/${this.coachID}`).then(res => {
       this.groups = res.data.groups;

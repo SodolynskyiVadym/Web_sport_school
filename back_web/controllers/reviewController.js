@@ -1,16 +1,18 @@
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const Review = require("../models/reviewModel");
+const User = require("../models/userModel");
 
 
 exports.writeReview = catchAsync(async (req, res, next) => {
+    console.log(req.body)
     const review = await Review.create({
         userID: req.body.userID,
         coachID: req.body.coachID,
         description: req.body.description,
         rating: req.body.rating
     });
-
+    console.log("code work")
     res.status(201)
         .json({
             success: "success",
@@ -35,12 +37,16 @@ exports.updateReview = catchAsync(async (req, res, next) => {
 exports.getOneReview = catchAsync(async (req, res, next) => {
     let review = await Review.findOne({coachID: req.params.coachID, userID: req.params.userID});
 
+    console.log(await User.findById(req.params.userID));
+    console.log(review)
+
     let isReview = true
     if (!review){
         review = "";
         isReview = false
     }
 
+    console.log(isReview)
     res.status(201)
         .json({
             success: "success",

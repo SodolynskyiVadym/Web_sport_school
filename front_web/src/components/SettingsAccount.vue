@@ -53,7 +53,7 @@
 
 <script>
 import axios from "axios";
-import {getUserByToken} from "@/js/getterByValue";
+import * as listURL from "@/js/listURL";
 export default {
   data() {
     return {
@@ -111,17 +111,15 @@ export default {
     }
   },
   async mounted() {
-    await getUserByToken(localStorage.getItem("token")).then(res => {
-      this.userID = res.data.id
-      this.userRole = res.data.role;
-    });
+    const userData = await listURL.getUserByToken(localStorage.getItem("token"));
+    this.userID = userData.id
+    this.userRole = userData.role;
+
 
     if (this.userRole === "user"){
       await axios.get(`http://localhost:8000/users/getUserGroups/${this.userID}`).then(res => {
         this.groups = res.data.groups
       });
-      console.log("user")
-      console.log(this.groups)
     }
 
     if (this.userRole === "coach"){

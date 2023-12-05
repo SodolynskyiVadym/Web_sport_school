@@ -13,7 +13,7 @@ router
     .get("/getAllCoaches", userController.getAllCoaches)
     .get("/getUserGroups/:userID", userController.getGroupsUser)
     .get("/getCoachGroups/:coachID", userController.getAllGroupsCoach)
-    .post("/getRoleUser", authController.getUserByName)
+    .get("/getRoleUser/:token", authController.getUserByName)
     .post("/updateUser/:id", userController.updateUser)
     .post("/setPassword", userController.setPassword)
     .post("/joinGroup", userController.joinGroup)

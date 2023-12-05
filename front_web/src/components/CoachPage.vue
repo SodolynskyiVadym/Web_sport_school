@@ -29,23 +29,22 @@
   </section>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue'
-import axios from "axios";
+<script>
+import * as listURL from "../js/listURL";
 
-const coaches = ref();
 
-onMounted(() => {
-  axios
-      .get('http://localhost:8000/users/getAllCoaches')
-      .then(response => {
-        coaches.value = response.data.coaches;
-      })
-      .catch(error => {
-        coaches.value = error;
-      });
-});
+export default {
+  data(){
+    return {
+      coaches: []
+    }
+  },
 
+  async mounted(){
+    const coachData = await listURL.requestUsersGet("/getAllCoaches");
+    this.coaches = coachData.coaches
+  }
+}
 </script>
 
 <style>

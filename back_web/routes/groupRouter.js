@@ -5,7 +5,7 @@ const scheduleRouter = require("../routes/scheduleRouter");
 
 const router = express.Router();
 
-router.use("/schedule", scheduleRouter);
+router.use("/schedules", scheduleRouter);
 
 router
     .get("/getGroup/:id", groupController.getGroup)

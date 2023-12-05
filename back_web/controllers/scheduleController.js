@@ -38,7 +38,7 @@ exports.createSchedule = catchAsync(async (req, res, next) => {
 });
 
 exports.getScheduleUser = catchAsync(async (req, res, next) => {
-    const user = await User.findById(req.body.userID);
+    const user = await User.findById(req.params.userID);
 
     if (!user) return next(new AppError("User not found"), 401);
 
@@ -71,7 +71,7 @@ exports.getSchedulesGroup = catchAsync(async (req, res, next) => {
 });
 
 exports.getScheduleCoach = catchAsync(async (req, res, next) => {
-    const coach = await User.findById(req.body.userID);
+    const coach = await User.findById(req.params.coachID);
 
     if (!coach) return next(new AppError("User not found"), 401);
 

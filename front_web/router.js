@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import axios from "axios";
+import * as listURL from "@/js/listURL";
 
 const routes = [
     {
@@ -13,16 +13,6 @@ const routes = [
         component: () => import('./src/components/SchedulePage.vue')
     },
     {
-        path: '/registerOld',
-        name: 'RegisterPageOld',
-        component: () => import('@/components/RegisterOldVersion.vue')
-    },
-    {
-        path: '/loginOld',
-        name: 'LoginPageOld',
-        component: () => import('@/components/LoginOldVersion.vue'),
-    },
-    {
         path: '/coaches',
         name: 'CoachPage',
         component: () => import('./src/components/CoachPage.vue')
@@ -31,11 +21,6 @@ const routes = [
         path: '/groups',
         name: 'GroupPage',
         component: () => import('./src/components/GroupPage.vue')
-    },
-    {
-        path: '/review',
-        name: 'ReviewPage',
-        component: () => import('./src/components/ReviewPage.vue')
     },
     {
         path: '/tester',
@@ -99,11 +84,6 @@ const routes = [
         component: () => import('@/components/LoginRegistration.vue')
     },
     {
-        path: '/register',
-        name: 'Registration',
-        component: () => import('@/components/LoginRegistration.vue')
-    },
-    {
         path: '/updateGroup/:groupID',
         name: 'UpdateGroup',
         component: () => import('./src/components/UpdateGroup.vue')
@@ -121,8 +101,8 @@ router.beforeEach(async (to, from, next) => {
     if (to.meta.requiresAuth) {
         const token = localStorage.getItem('token');
         if (token) {
-            const res = await axios.post("http://localhost:8000/users/getRoleUser", {token: token});
-            const role = res.data.role;
+            const userData = await listURL.getUserByToken(localStorage.getItem("token"));
+            const role = userData.role;
 
             if (to.meta.roles.includes(role)) {
                 next();

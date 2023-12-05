@@ -40,8 +40,7 @@
 
 <script>
 import axios from "axios";
-import {getUserByToken} from "@/js/getterByValue";
-
+import * as listURL from "../js/listURL";
 
 export default {
   data() {
@@ -79,9 +78,8 @@ export default {
     }
   },
   async mounted() {
-    await getUserByToken(localStorage.getItem("token")).then(res => {
-      this.coachID = res.data.id
-    })
+    const userData = await listURL.getUserByToken(localStorage.getItem("token"));
+    this.coachID = userData.id
   }
 }
 

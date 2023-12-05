@@ -18,7 +18,8 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
+import * as listURL from "@/js/listURL";
 
 export default {
   data() {
@@ -32,20 +33,16 @@ export default {
     }
   },
   async mounted() {
-    await axios
-        .get('http://localhost:8000/groups/getAllGroup')
-        .then(response => {
-          this.groups = response.data.groups;
-          console.log(response.data.groups);
-          this.$nextTick(() => {
-            const images = document.querySelectorAll('.group img');
-            images.forEach(image => {
-              image.classList.add('image-animation');
-            });
-          });
-        });
-  }
+    const groupsData = await listURL.requestGroupsGet('/getAllGroup');
+    this.groups = groupsData.groups;
 
+    await this.$nextTick();
+
+    const images = document.querySelectorAll('.group img');
+    images.forEach(image => {
+      image.classList.add('image-animation');
+    });
+  }
 }
 </script>
 <style>

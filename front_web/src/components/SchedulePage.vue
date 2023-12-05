@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import {getUserByToken} from "@/js/getterByValue";
+// import axios from "axios";
+import * as listURL from "../js/listURL";
 
 export default {
   data() {
@@ -26,20 +26,18 @@ export default {
     }
   },
   async mounted() {
-    await getUserByToken(localStorage.getItem("token")).then(res => {
-      this.userID = res.data.id
-      this.userRole = res.data.role
-    });
+    const userData = await listURL.getUserByToken(localStorage.getItem("token"));
+    this.userID = userData.id
+    this.userRole = userData.role;
 
     if (this.userRole === "user"){
-      await axios.post("http://localhost:8000/groups/schedule/getScheduleUser", {userID: this.userID}).then(res => {
-        this.schedules = res.data.schedules
-      });
+      const scheduleData = await listURL.requestSchedulesGet(`/getScheduleUser/${this.userID}`)
+      this.schedules = scheduleData.schedules
     }
+
     if (this.userRole === "coach"){
-      await axios.post("http://localhost:8000/groups/schedule/getScheduleCoach", {userID: this.userID}).then(res => {
-        this.schedules = res.data.schedules
-      });
+      const scheduleData = await listURL.requestSchedulesGet(`/getScheduleCoach/${this.userID}`)
+      this.schedules = scheduleData.schedules
     }
   }
 }

@@ -21,7 +21,7 @@
           <div class="box-title">Sport Sport Sport</div>
           <div class="box-image">
             <p><i class="fas fa-pencil-alt"></i> GROUP: {{ group.name }}</p>
-            <p><i class="fas fa-dumbbell"></i> SPORT: {{ group.kindSport }}</p>
+            <p><i class="fas fa-dumbbell"></i> SPORT: {{ group.kindSport.toUpperCase() }}</p>
             <p><i class="fas fa-user-friends"></i> MEMBERS: {{ group.currentMembers }}</p>
             <p><i class="fas fa-exclamation-triangle"></i> LIMIT: {{ group.limitMembers }}</p>
           </div>
@@ -88,7 +88,7 @@
 
 <script>
 import axios from "axios";
-import {getUserByToken} from "@/js/getterByValue";
+import * as listURL from "@/js/listURL";
 
 export default {
   data() {
@@ -121,16 +121,11 @@ export default {
     },
 
     async getReviews() {
-      await axios.get(`http://localhost:8000/reviews/getReviews/${this.$route.params.id}`)
-          .then(res => {
-            this.reviews = res.data.reviews.map(review => ({
-              ...review,
-              starRating: this.convertToStars(review.rating)
-            }));
-          })
-          .catch(error => {
-            console.error("Error fetching reviews:", error);
-          });
+      const reviewsData = await listURL.requestReviewsGet(`/getReviews/${this.$route.params.id}`);
+      this.reviews = reviewsData.reviews.map(review => ({
+        ...review,
+        starRating: this.convertToStars(review.rating)
+      }));
     },
 
 
@@ -166,18 +161,19 @@ export default {
   },
   async mounted() {
     if (localStorage.getItem("token")){
-      await getUserByToken(localStorage.getItem("token")).then(res => {
-        this.userID = res.data.id;
-        this.userRole = res.data.role;
-        this.isAuth = true
-      });
+      const userData = await listURL.getUserByToken(localStorage.getItem("token"));
+      this.userID = userData.id
+      this.isAuth = true;
+      this.userRole = userData.role
 
-      await axios.get(`http://localhost:8000/reviews/getReview/${this.userID}/${this.$route.params.id}`).then(res => {
-        this.myReview = res.data.review.description;
-        this.isReview = res.data.isReview
-      });
+
+      const reviewData = await listURL.requestReviewsGet(`/getReview/${this.userID}/${this.$route.params.id}`);
+      this.isReview = reviewData.isReview;
+      if (reviewData.isReview){
+        this.myReview = reviewData.review.description;
+        this.myRating = reviewData.review.rating;
+      }
     }
-
 
     await axios.get(`http://localhost:8000/users/getCoach/${this.$route.params.id}`).then(res => {
       this.coach = res.data.user;
