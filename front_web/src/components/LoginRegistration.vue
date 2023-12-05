@@ -1,4 +1,7 @@
 <template>
+  <div v-if="error" role="alert">
+    {{error}}
+  </div>
   <div class="container">
     <div class="main">
       <input type="checkbox" id="chk" aria-hidden="true" v-model="showRegistrationForm">
@@ -52,40 +55,53 @@ export default {
       invalidEmail: false,
       invalidPassword: false,
       loggedIn: false,
-      showRegistrationForm: false
+      showRegistrationForm: false,
+      error: ""
     };
   },
   methods: {
     async sendDateRegistration() {
-      const response = await axios.post("http://localhost:8000/users/createUser", {
-        name: this.name,
-        lastName: this.lastName,
-        password: this.passwordReg,
-        email: this.emailReg,
-        birth: this.birth,
-        gender: this.gender,
-        phone: this.phone,
-        role: "user"
-      });
+      try {
+        const response = await axios.post("http://localhost:8000/users/createUser", {
+          name: this.name,
+          lastName: this.lastName,
+          password: this.passwordReg,
+          email: this.emailReg,
+          birth: this.birth,
+          gender: this.gender,
+          phone: this.phone,
+          role: "user"
+        });
 
-      localStorage.token = response.data.token;
+        localStorage.token = response.data.token;
+        this.$router.push("/")
+
+      }catch (err){
+        this.error = "This email already exist"
+      }
     },
+
     async sendDataLogin() {
       if (this.invalidEmail || this.invalidPassword) {
         return;
       }
 
-      const response = await axios.post("http://localhost:8000/users/login", {
-        email: this.emailLog,
-        password: this.passwordLog
-      });
+      try {
+        const response = await axios.post("http://localhost:8000/users/login", {
+          email: this.emailLog,
+          password: this.passwordLog
+        });
 
-      localStorage.token = response.data.token;
+        localStorage.token = response.data.token;
+        this.emailLog = "";
+        this.passwordLog = "";
+        this.loggedIn = true;
 
-      this.emailLog = "";
-      this.passwordLog = "";
-      this.loggedIn = true;
+      }catch (err) {
+        this.error = err.response.data.message
+      }
     },
+
     validateEmail() {
       const re = /\S+@\S+\.\S+/;
       this.invalidEmail = !re.test(this.emailLog);

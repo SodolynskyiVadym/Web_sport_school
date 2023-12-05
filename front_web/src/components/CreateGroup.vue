@@ -1,5 +1,6 @@
 <template>
   <h1>Create Group</h1>
+  <div v-if="error" role="alert">{{error}}</div>
   <div class="container">
     <div class="form">
       <div class="input-group">
@@ -51,21 +52,28 @@ export default {
       kindSport: "",
       price: "",
       discount: "",
-      coachID: ""
+      coachID: "",
+      error: ""
     }
   },
   methods: {
     async registerGroup() {
-      await axios.post('http://localhost:8000/groups/createGroup', {
-        name: this.name,
-        description: this.description,
-        limitMembers: this.limitMembers,
-        kindSport: this.kindSport,
-        price: this.price,
-        discount: this.discount,
-        coachID: this.coachID,
-      });
-      this.clearFields();
+      try {
+        await axios.post('http://localhost:8000/groups/createGroup', {
+          name: this.name,
+          description: this.description,
+          limitMembers: this.limitMembers,
+          kindSport: this.kindSport,
+          price: this.price,
+          discount: this.discount,
+          coachID: this.coachID,
+        });
+
+        this.clearFields();
+
+      }catch (err){
+        this.error = "This group already exist"
+      }
     },
 
     clearFields() {

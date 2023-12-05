@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <div v-if="error" role="alert">{{error}}</div>
     <h3>Enter email to register coach:</h3>
     <div class="email-input">
       <input type="text" v-model="email" placeholder="Enter email">
@@ -40,7 +41,8 @@ export default {
   data() {
     return {
       email: "",
-      users: []
+      users: [],
+      error: ""
     }
   },
   methods: {
@@ -50,8 +52,12 @@ export default {
     },
 
     async createCoach(){
-      await axios.post("http://localhost:8000/users/createCoach", {email: this.email});
-      location.reload()
+      try {
+        await axios.post("http://localhost:8000/users/createCoach", {email: this.email});
+        location.reload()
+      }catch (err){
+        this.error = "This email already exist"
+      }
     }
   },
   async mounted() {
