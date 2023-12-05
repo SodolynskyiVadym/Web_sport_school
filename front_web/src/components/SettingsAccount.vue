@@ -95,7 +95,7 @@ export default {
     },
 
     async deleteGroup(groupID){
-      await axios.delete(`http://localhost:8000/groups/deleteGroup/${groupID}`);
+      await listURL.requestDeleteGroup(groupID)
     },
 
     async leaveGroup(groupID){
@@ -117,27 +117,26 @@ export default {
 
 
     if (this.userRole === "user"){
-      await axios.get(`http://localhost:8000/users/getUserGroups/${this.userID}`).then(res => {
-        this.groups = res.data.groups
-      });
+      const userData = await listURL.requestUsersGet(`/getUserGroups/${this.userID}`);
+      this.groups = userData.groups
     }
 
     if (this.userRole === "coach"){
+      const userData = await listURL.requestUsersGet(`/getCoachGroups/${this.userID}`);
+      this.groups = userData.groups
       await axios.get(`http://localhost:8000/users/getCoachGroups/${this.userID}`).then(res => {
         this.groups = res.data.groups
       });
     }
 
-
-    await axios.get(`http://localhost:8000/users/getUser/${this.userID}`).then(res => {
-       this.name = res.data.user.name;
-       this.lastName = res.data.user.lastName;
-       this.password = res.data.user.password;
-       this.email = res.data.user.email;
-       this.birth = res.data.user.birth;
-       this.gender = res.data.user.gender;
-       this.phone = res.data.user.phone;
-    })
+    const userDataFull = await listURL.requestUsersGet(`/getUser/${this.userID}`);
+    this.name = userDataFull.user.name;
+    this.lastName = userDataFull.user.lastName;
+    this.password = userDataFull.user.password;
+    this.email = userDataFull.user.email;
+    this.birth = userDataFull.user.birth;
+    this.gender = userDataFull.user.gender;
+    this.phone = userDataFull.user.phone;
   }
 }
 </script>

@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     async deleteUser(userID){
-      await axios.delete(`http://localhost:8000/users/deleteUser/${userID}`)
+      await listURL.requestDeleteUser(userID)
       location.reload();
     },
 

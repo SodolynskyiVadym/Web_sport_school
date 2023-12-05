@@ -77,8 +77,8 @@ export default {
     },
 
     async deleteSchedule(scheduleID){
-      await axios.delete(`http://localhost:8000/groups/schedule/deleteSchedule/${scheduleID}`)
       await this.findScheduleGroup()
+      await listURL.requestDeleteSchedule(scheduleID);
     },
 
     formatDate(date) {

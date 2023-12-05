@@ -130,7 +130,7 @@ export default {
 
 
     async deleteReview(){
-      await axios.delete(`http://localhost:8000/reviews/deleteReview/${this.userID}/${this.$route.params.id}`)
+      await listURL.requestDeleteReview(this.userID, this.$route.params.id);
       this.isReview = false;
       this.myReview = "";
       this.myRating = 0;
@@ -144,7 +144,6 @@ export default {
         userID: this.userID,
         rating: this.myRating
       });
-      console.log(this.myReview)
       await this.getReviews()
     },
 

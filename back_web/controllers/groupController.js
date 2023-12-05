@@ -118,14 +118,14 @@ exports.deleteGroup = catchAsync(async (req, res, next) => {
 
     if (!group) return next(new AppError("Group not found"), 401)
 
-    await Group.deleteOne(group);
-
-    const users = await User.find({ groupsID: group1._id });
+    const users = await User.find({ groupsID: group._id });
 
     for (let user of users) {
-        user.groupsID.pull(group1._id);
+        user.groupsID.pull(group._id);
         await user.save();
     }
+
+    await Group.deleteOne(group);
 
     res.status(200).json({
         success: true,
