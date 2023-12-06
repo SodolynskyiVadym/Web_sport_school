@@ -55,8 +55,8 @@
                     <span class="numit-overview"></span>  Would you like to join this group? Click join and pay
                   </p>
                   <div v-if="userRole === 'user'">
-                    <button class="button-overview join-button" v-if="!userGroupsID.includes(this.$route.params.id) && !userID && userRole==='user'" @click="buy">Buy</button>
-                    <button class="button-overview join-button" v-if="userID" @click="login">Login</button>
+                    <button class="button-overview join-button" v-if="!userGroupsID.includes(this.$route.params.id) && userID && userRole==='user'" @click="buy">Buy</button>
+                    <button class="button-overview join-button" v-else @click="login">Login</button>
                   </div>
                 </div>
               </section>
@@ -109,9 +109,9 @@ export default {
     const groupData = await listURL.requestGroupsGet(`/getGroup/${this.$route.params.id}`);
     this.group = groupData.group
 
-    console.log(!this.userGroupsID.includes(this.$route.params.id) || !this.userID || this.userRole==='user')
+    console.log(!this.userGroupsID.includes(this.$route.params.id) && this.userID && this.userRole==='user')
     console.log(!this.userGroupsID.includes(this.$route.params.id))
-    console.log(!this.userID)
+    console.log(this.userID)
     console.log(this.userRole==='user')
   }
 };

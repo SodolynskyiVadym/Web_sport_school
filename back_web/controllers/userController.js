@@ -264,9 +264,9 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
             await user.save();
         }
 
-        const reviews = await Review.find({coachID: user._id});
+        // const reviews = await Review.find({coachID: user._id});
 
-        await Review.deleteMany(review => review);
+        // await Review.deleteMany(review => review.coachID === user._id);
         console.log("Code work")
 
 
