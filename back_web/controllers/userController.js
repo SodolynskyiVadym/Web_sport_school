@@ -4,6 +4,8 @@ const AppError = require("../utils/appError");
 const Group = require("../models/groupModel");
 const Review = require("../models/reviewModel");
 const Pay = require("../models/paymentsModel");
+const {removeItem} = require("../utils/mathCalculate");
+
 
 
 exports.getUser = catchAsync(async (req, res, next) => {
@@ -233,20 +235,18 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
 
     if (user.role === "user"){
         let groups = await Group.find({_id: user.groupsID});
-        console.log(groups);
 
-        // groups = groups.filter(group => user.groupsID.includes(group._id));
+        await Review.deleteMany({userID: user._id});
 
-        const reviews = await Review.find({userID: user._id});
-        await Review.deleteMany(reviews);
-
-        // for (let group of groups){
-        //     group.currentMembers -= 1;
-        //     group.markModified("currentMembers");
-        //     group.save();
-        // }
+        for (let group of groups){
+            group.currentMembers -= 1;
+            group.markModified("currentMembers");
+            group.save();
+        }
 
     }else if(user.role === "coach"){
+        const users = await User.find();
+
         const groups = await Group.find({coachID: user._id});
 
         console.log(groups)
@@ -256,21 +256,17 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
             groupsID.push(group._id)
         }
 
-        let users = await User.find();
         for (let user of users){
             for (let groupID of groupsID){
-                await user.groupsID.pull(groupID)
+                user.groupsID = await removeItem(user.groupsID, groupID);
             }
             await user.save();
         }
 
-        // const reviews = await Review.find({coachID: user._id});
-
-        // await Review.deleteMany(review => review.coachID === user._id);
-        console.log("Code work")
+        await Review.deleteMany({coachID: user._id});
 
 
-        await Group.deleteMany(group => groups.includes(group));
+        await Group.deleteMany({coachID: user._id});
     }
 
     await User.deleteOne(user);

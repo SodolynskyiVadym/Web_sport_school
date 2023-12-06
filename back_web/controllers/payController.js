@@ -1,6 +1,6 @@
 const Group = require("../models/groupModel");
 const catchAsync = require("../utils/catchAsync");
-const {calculateTotal} = require("../utils/calculateTotal");
+const {calculateTotal} = require("../utils/mathCalculate");
 const AppError = require("../utils/appError");
 const User = require("../models/userModel");
 const Pay = require("../models/paymentsModel");
