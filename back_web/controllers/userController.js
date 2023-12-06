@@ -3,6 +3,7 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const Group = require("../models/groupModel");
 const Review = require("../models/reviewModel");
+const Pay = require("../models/paymentsModel");
 
 
 exports.getUser = catchAsync(async (req, res, next) => {
@@ -137,6 +138,14 @@ exports.joinGroup = catchAsync(async (req, res, next) => {
 
     const group = await Group.findById(req.body.groupID);
 
+    const payment = await Pay.findOne({userID: user._id, groupID: group._id});
+    console.log(!payment || !payment.confirmed)
+    console.log(payment.confirmed && user.groupsID.includes(group._id))
+
+    // if (!payment || !payment.confirmed) return next(new AppError("You don't pay for group", 403));
+
+    if (payment.confirmed && user.groupsID.includes(group._id)) return next(new AppError("You are already in this group", 403));
+
     if (!user || !group) return next(new AppError("User or group not found"), 404)
     if (user.groupsID.includes(req.body.groupID)) return next(new AppError("You already register oin this group"), 403)
     if (group.limitMembers === group.currentMembers) return next(new AppError("This group is full"), 403)
@@ -150,7 +159,7 @@ exports.joinGroup = catchAsync(async (req, res, next) => {
 
     group.markModified("currentMembers");
     group.save()
-
+    payment.update({confirmed: true});
     res.status(201).json({
         success: "success",
         user
@@ -240,6 +249,8 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
     }else if(user.role === "coach"){
         const groups = await Group.find({coachID: user._id});
 
+        console.log(groups)
+
         let groupsID = []
         for (let group of groups){
             groupsID.push(group._id)
@@ -254,7 +265,10 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
         }
 
         const reviews = await Review.find({coachID: user._id});
-        await Review.deleteMany(reviews);
+
+        await Review.deleteMany(review => review);
+        console.log("Code work")
+
 
         await Group.deleteMany(group => groups.includes(group));
     }

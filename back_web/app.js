@@ -8,6 +8,7 @@ const hpp = require("hpp");
 const errorHandler = require("./controllers/errorController");
 const groupRouter = require("./routes/groupRouter");
 const userRouter = require("./routes/userRouter");
+const payRouter = require("./routes/payRouter");
 const reviewRouter = require("./routes/reviewRouter");
 const cors = require("cors");
 
@@ -46,6 +47,7 @@ app.use(cors());
 app.use("/groups", groupRouter);
 app.use("/users", userRouter);
 app.use("/reviews", reviewRouter);
+app.use("/pay", payRouter);
 
 
 app.use(errorHandler);

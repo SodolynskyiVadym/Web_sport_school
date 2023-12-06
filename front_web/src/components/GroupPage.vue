@@ -25,6 +25,8 @@ export default {
   data() {
     return {
       groups: [],
+      userID: "",
+      userGroupsID: []
     }
   },
   methods: {
@@ -33,8 +35,16 @@ export default {
     }
   },
   async mounted() {
-    const groupsData = await listURL.requestGroupsGet('/getAllGroup');
-    this.groups = groupsData.groups;
+    if (localStorage.getItem("token")){
+      const userData = await listURL.getUserByToken(localStorage.getItem("token"));
+      this.userID = userData.id
+      this.userRole = userData.role
+      this.userGroupsID = userData.user.groupsID
+    }
+
+
+    const groupsData = await listURL.requestGroupsGet(`/getAllGroup`);
+    this.groups = await groupsData.groups.filter(group => !this.userGroupsID.includes(group));
 
     await this.$nextTick();
 

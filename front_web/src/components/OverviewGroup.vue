@@ -55,7 +55,8 @@
                     <span class="numit-overview"></span>  Would you like to join this group? Click join and pay
                   </p>
                   <div v-if="userRole === 'user'">
-                    <button class="button-overview join-button" @click="joinGroup">JOIN</button>
+                    <button class="button-overview join-button" v-if="!userGroupsID.includes(this.$route.params.id) && !userID && userRole==='user'" @click="buy">Buy</button>
+                    <button class="button-overview join-button" v-if="userID" @click="login">Login</button>
                   </div>
                 </div>
               </section>
@@ -71,8 +72,8 @@
 </template>
 
 <script>
-import axios from "axios";
 import * as listURL from "@/js/listURL";
+import {bookGroup} from "@/js/stripe";
 
 export default {
   data() {
@@ -80,29 +81,38 @@ export default {
       group: null,
       userID: "",
       userRole: "",
+      userGroupsID: []
     };
   },
   methods: {
-    async joinGroup(){
-      await axios.post("http://localhost:8000/users/joinGroup",
-          {
-            groupID: this.$route.params.id,
-            userID: this.userID
-          });
+    async buy(){
+      await bookGroup(this.$route.params.id, this.userID);
     },
 
     async enterCoachPage(coachID) {
       this.$router.push(`/overviewCoach/${coachID}`)
+    },
+
+    async login(){
+      this.$router.push(`/login`)
     }
   },
 
   async mounted() {
-    const userData = await listURL.getUserByToken(localStorage.getItem("token"));
-    this.userID = userData.id
-    this.userRole = userData.role
+    if (localStorage.getItem("token")){
+      const userData = await listURL.getUserByToken(localStorage.getItem("token"));
+      this.userID = userData.id
+      this.userRole = userData.role
+      this.userGroupsID = userData.user.groupsID
+    }
 
     const groupData = await listURL.requestGroupsGet(`/getGroup/${this.$route.params.id}`);
     this.group = groupData.group
+
+    console.log(!this.userGroupsID.includes(this.$route.params.id) || !this.userID || this.userRole==='user')
+    console.log(!this.userGroupsID.includes(this.$route.params.id))
+    console.log(!this.userID)
+    console.log(this.userRole==='user')
   }
 };
 </script>

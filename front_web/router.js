@@ -92,6 +92,11 @@ const routes = [
         path: '/updateGroup/:groupID',
         name: 'UpdateGroup',
         component: () => import('./src/components/UpdateGroup.vue')
+    },
+    {
+        path: '/join/:groupID/:userID',
+        name: 'JoinGroup',
+        component: () => import('./src/components/JoinScript.vue')
     }
 ];
 
