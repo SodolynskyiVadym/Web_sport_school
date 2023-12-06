@@ -1,206 +1,289 @@
 <template>
-  <div class="container">
-    <div v-if="error" role="alert">{{error}}</div>
-    <h3>Enter email to register coach:</h3>
-    <div class="email-input">
-      <input type="text" v-model="email" placeholder="Enter email">
-      <button @click="createCoach">Register</button>
+  <section>
+    <div class="leftbox">
+      <div class="email-input">
+        <input type="text" v-model="email" placeholder="Enter email to register coach" @input="validateEmail">
+        <div v-if="invalidEmail" class="error-message-validate">Please enter a valid email address example@gmail.com</div>
+        <button class="register-coach" @click="createCoach">Register</button>
+      </div>
+    <div class="search-input">
+      <input type="text" v-model="emailFilter" placeholder="Search by email" @input="filterUsers">
     </div>
-
-    <table id="tableUsers" class="table-users-data">
+    <div v-if="error" class="error-message" role="alert">{{error}}</div>
+    </div>
+    <div class="rightbox">
+    <div class="table-container">
+    <table id="tableUsers" class="custom-table">
       <tr>
         <th>Name</th>
         <th>Last Name</th>
-        <th>Patronymic</th>
         <th>Birthday</th>
-        <th>Email inva</th>
+        <th>Email</th>
         <th>Phone</th>
         <th>Gender</th>
         <th>Role</th>
         <th>Action</th>
       </tr>
-      <tr v-for="user in users" :key="user._id">
+      <tr v-for="user in filteredUsersList" :key="user._id">
         <td>{{ user.name }}</td>
         <td>{{ user.lastName }}</td>
-        <td>{{ user.patronymic }}</td>
-        <td>{{ user.birth }}</td>
+        <td>{{ new Date(user.birth).toLocaleDateString('en-GB').split('/').reverse().join('-') }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.phone }}</td>
         <td>{{ user.gender }}</td>
         <td>{{ user.role }}</td>
-        <td><button @click="deleteUser(user._id)">DELETE</button></td>
+        <td><button class="button-delete" @click="deleteUser(user._id)">DELETE</button></td>
       </tr>
     </table>
+      </div>
   </div>
+  </section>
 </template>
 
 <script>
 import axios from "axios";
 import * as listURL from "../js/listURL";
+
 export default {
   data() {
     return {
+      emailFilter: "",
       email: "",
       users: [],
-      error: ""
-    }
+      error: "",
+      filteredUsersList: [] // Initialize filteredUsersList as an empty array
+    };
   },
   methods: {
-    async deleteUser(userID){
-      await listURL.requestDeleteUser(userID)
-      location.reload();
+    validateEmail() {
+      const re = /\S+@\S+\.\S+/;
+      this.invalidEmail = !re.test(this.emailLog);
+    },
+    async deleteUser(userID) {
+      await listURL.requestDeleteUser(userID);
+      await this.refreshUsers();
     },
 
-    async createCoach(){
+    async createCoach() {
       try {
-        await axios.post("http://localhost:8000/users/createCoach", {email: this.email});
-        location.reload()
-      }catch (err){
-        this.error = "This email already exist"
+        await axios.post("http://localhost:8000/users/createCoach", { email: this.email });
+        await this.refreshUsers();
+      } catch (err) {
+        this.error = "This email already exists";
       }
+    },
+
+    async refreshUsers() {
+      const userData = await listURL.requestUsersGet("/getAllUsers");
+      this.users = userData.users;
+      this.filterUsers();
+    },
+
+    filterUsers() {
+      this.filteredUsersList = this.users.filter(user => {
+        return user.email.toLowerCase().includes(this.emailFilter.toLowerCase());
+      });
     }
   },
   async mounted() {
-    const userData = await listURL.requestUsersGet("/getAllUsers");
-    this.users = userData.users
+    await this.refreshUsers();
+  },
+  watch: {
+    emailFilter() {
+      this.filterUsers();
+    }
   }
-}
+};
 </script>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
-*{
-  font-family: 'Montserrat', sans-serif;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  text-decoration: none;
-  outline: none;
-  border: none;
-  text-transform: capitalize;
-  transition: all .2s linear;
-}
+
+<style>
+
 
 body{
-  background: white;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
+  background-color: rgba(238,238,238,0.99);
+}
+
+.leftbox {
   display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
 }
 
-h3 {
-  font-style: italic;
-  font-weight: 1000;
-  font-size: 1rem;
-  text-transform: uppercase;
-  margin: 10px 0;
+.error-message {
+  position: absolute;
+  display: inline-block;
+  margin-left: 280px;
+  margin-top: 50px;
+  color: #383535;
 }
-
-.container {
-  margin: 20px auto;
-  width: 80%;
-  max-width: 1200px;
+.error-message-validate {
+  position: absolute;
+  display: inline-block;
+  margin-left: -345px;
+  margin-top: 40px;
+  color: #383535;
 }
 
 .email-input {
+  margin-top: 80px;
+  width: 90%;
+  margin-left: 150px;
+}
+.email-input input{
   margin-bottom: 20px;
-  display: flex;
-  align-items: center;
+  width: calc(100% - 180px);
+  box-sizing: border-box;
 }
 
-input[type="text"] {
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid black;
-  margin-right: 10px;
+.search-input {
+  position: relative;
+  margin-top: 80px;
+  width: calc(100% - 180px);
+  margin-left: 320px;
+  left: -280px;
+}
+.search-input input{
+  margin-bottom: 60px;
+  width: calc(100% - 180px);
+  box-sizing: border-box;
 }
 
-button {
-  padding: 8px 16px;
-  border-radius: 4px;
+.email-input input,
+.search-input input {
+  flex-grow: 1;
   border: none;
-  background-color: black;
-  color: white;
-  cursor: pointer;
+  border-bottom: 2px solid #ccc;
+  background-color: rgba(238,238,238,0.99);
+  padding: 5px 0;
+  font-size: 16px;
+  outline: none;
 }
+
+
+
+
+.email-input input:focus,
+.search-input input:focus {
+  border-bottom: 2px solid rgba(32, 32, 32, 0.99);
+}
+
+
+
+
+.table-container {
+  margin-top: 20px;
+  border-radius: 12px;
+  height: 480px;
+  overflow-y: auto;
+}
+
+
 
 table {
-  width: 100%;
   border-collapse: collapse;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
 }
-
-th, td {
-  border: 1px solid black;
-  padding: 8px;
-  text-align: left;
+.rightbox {
+  position: relative;
+  left: 730px;
+  width: 80%;
+  margin-top: -10px;
+  padding: 20px;
+  border: 1px solid white;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.76) 0px 10px 30px;
+  margin-left: -590px;
 }
 
+
+.custom-table {
+  width: 100%;
+  table-layout: auto;
+}
+
+
+td {
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+th,
+td {
+  text-align: center;
+  padding: 12px;
+}
+
+th:not(:last-child),
+td:not(:last-child) {
+  border-right: 1px solid #ddd;
+}
+
+
+h2,
 th {
-  background-color: black;
-  color: white;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+
 
 tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: #f9f9f9;
 }
-
-.button-container {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-}
-
-.button-container button {
-  margin: 0 5px;
-}
-
-button#deleteRows, button#duplicateRows {
-  padding: 8px 16px;
-  border-radius: 4px;
-  border: none;
-  background-color: black;
-  color: white;
+.button-delete {
+  background: #fff;
+  font-size: 10px;
+  border-radius: 26px;
+  border: 1px solid #D4D3E8;
+  text-transform: uppercase;
+  font-weight: 700;
+  height: 60px;
+  width: 60px;
+  color: black;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.76);
   cursor: pointer;
+  transition: .2s;
 }
 
-button#deleteRows:hover, button#duplicateRows:hover {
-  background-color: #333;
+
+.button-delete:active,
+.button-delete:focus,
+.button-delete:hover{
+  border-color: rgba(0, 0, 0, 0.76);
+  outline: none;
 }
-@media screen and (max-width: 768px) {
-  .email-input {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .email-input input[type="text"] {
-    margin-bottom: 10px;
-    margin-right: 0;
-  }
-
-  .email-input button {
-    width: 100%;
-  }
-
-  table {
-    font-size: 12px;
-  }
-
-  th, td {
-    padding: 6px;
-  }
-
-  .button-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .button-container button {
-    margin: 5px 0;
-  }
+.register-coach {
+  background: #fff;
+  font-size: 10px;
+  position: relative;
+  top: 0;
+  left: 10px;
+  border-radius: 26px;
+  border: 1px solid #D4D3E8;
+  text-transform: uppercase;
+  font-weight: 700;
+  height: 40px;
+  width: 100px;
+  color: black;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.76);
+  cursor: pointer;
+  transition: .2s;
 }
+
+
+
+
+
+
+
+
 </style>
