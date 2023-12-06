@@ -79,6 +79,7 @@ export default {
     async deleteSchedule(scheduleID){
       await this.findScheduleGroup()
       await listURL.requestDeleteSchedule(scheduleID);
+      await this.findScheduleGroup();
     },
 
     formatDate(date) {
@@ -91,7 +92,7 @@ export default {
 
 
     async createSchedule(){
-      await axios.post("http://localhost:8000/groups/schedule/createSchedule", {
+      await axios.post("http://localhost:8000/groups/schedules/createSchedule", {
         nameGroup: this.nameGroup,
         date: this.date,
         timeLesson: this.time,
