@@ -1,59 +1,107 @@
 <template>
-  <input type="text" v-model="name" placeholder="NAME">
-  <input type="text" v-model="lastName" placeholder="LASTNAME">
-  <input type="text" v-model="email" readonly placeholder="EMAIL">
-  <input type="date" v-model="birth" placeholder="BIRTH">
-  <input type="text" v-model="gender" placeholder="GENDER">
-  <input type="text" v-model="phone" placeholder="PHONE">
-  <button @click="sendDate">Update</button><br>
+  <div class="container">
+    <div class="leftbox">
+      <div class="input-row">
+        <div class="input-wrapper">
+          <h2>Name</h2>
+          <input type="text" v-model="name" placeholder="NAME">
 
-  <input type="text" v-model="password" placeholder="PASSWORD">
-  <button @click="setPassword">Change password</button>
+        </div>
+        <div class="input-wrapper">
+          <h2>Last Name</h2>
+          <input type="text" v-model="lastName" placeholder="LASTNAME">
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-wrapper">
+          <h2>Email</h2>
+          <input type="text" v-model="email" readonly placeholder="EMAIL">
+        </div>
+        <div class="input-wrapper">
+          <h2>Birth</h2>
+          <input type="date" v-model="birth" placeholder="BIRTH">
 
-  <h1>My groups</h1>
-  <table v-if="userRole === 'user'">
-    <tr>
-      <th>Name</th>
-      <th>Kind of sport</th>
-      <th>Coach</th>
-      <th>Limit members</th>
-      <th>Action</th>
-    </tr>
-    <tr v-for="group in groups" :key="group._id">
-      <th>{{group.name}}</th>
-      <th>{{group.kindSport}}</th>
-      <th @click="readMoreCoach(group.coachID._id)" style="color: cornflowerblue; cursor: pointer ">{{group.coachID.name + " " + group.coachID.lastName}}</th>
-      <th>{{group.limitMembers}}</th>
-      <th><button @click="leaveGroup(group._id)">Leave</button></th>
-    </tr>
-  </table>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-wrapper">
+          <h2>Gender</h2>
+          <div class="radio-buttons">
+            <label for="female" class="radio-label">
+              <input type="radio" id="female" value="female" v-model="gender">
+              <span class="radio-custom female"></span>
+              Female
+            </label>
+            <label for="male" class="radio-label">
+              <input type="radio" id="male" value="male" v-model="gender">
+              <span class="radio-custom male"></span>
+              Male
+            </label>
+          </div>
+        </div>
+        <div class="input-wrapper">
+          <h2>Phone</h2>
+          <input type="text" v-model="phone" ref="phone" placeholder="PHONE">
+        </div>
+      </div>
+      <button class="button-update" @click="sendDate">Update</button>
+      <div class="input-wrapper password-wrapper">
+        <h2>Password</h2>
+        <input type="text" v-model="password" placeholder="PASSWORD">
+      </div>
+      <button class="button-change" @click="setPassword">Change password</button>
+    </div>
+    <div class="rightbox">
+      <h1>My groups</h1>
+      <div class="table-container">
+      <table class="custom-table" v-if="userRole === 'user'">
+        <tr>
+          <th>Name</th>
+          <th>Kind of sport</th>
+          <th>Coach</th>
+          <th>Limit members</th>
+          <th>Action</th>
+        </tr>
+        <tr v-for="group in groups" :key="group._id">
+          <th>{{group.name}}</th>
+          <th>{{group.kindSport}}</th>
+          <th @click="readMoreCoach(group.coachID._id)" style="color: black; cursor: pointer ">{{group.coachID.name + " " + group.coachID.lastName}}</th>
+          <th>{{group.limitMembers}}</th>
+          <th><button class="button-table-coach" @click="leaveGroup(group._id)">Leave</button></th>
+        </tr>
+      </table>
+      </div>
+      <div class="table-container">
+        <table class="custom-table" v-if="userRole === 'coach'">
+          <tr>
+            <th>Name</th>
+            <th>Kind of sport</th>
+            <th>Limit members</th>
+            <th>Price</th>
+            <th>Discount</th>
+            <th>Action1</th>
+            <th>Action2</th>
+          </tr>
 
-  <table v-if="userRole === 'coach'">
-    <tr>
-      <th>Name</th>
-      <th>Kind of sport</th>
-      <th>Limit members</th>
-      <th>Price</th>
-      <th>Discount</th>
-      <th>Action1</th>
-      <th>Action2</th>
-    </tr>
-    <tr v-for="group in groups" :key="group._id">
-      <th>{{group.name}}</th>
-      <th>{{group.kindSport}}</th>
-      <th>{{group.limitMembers}}</th>
-      <th>{{group.priceID.price}}</th>
-      <th>{{group.priceID.discount}}</th>
-      <th><button @click="enterUpdateGroupPage(group._id)">UPDATE</button></th>
-      <th><button @click="deleteGroup(group._id)">DELETE</button></th>
-    </tr>
-  </table>
-
+          <tr v-for="group in groups" :key="group._id">
+            <th>{{group.name}}</th>
+            <th>{{group.kindSport}}</th>
+            <th>{{group.limitMembers}}</th>
+            <th>{{group.priceID.price}}</th>
+            <th>{{group.priceID.discount}}</th>
+            <th><button class="button-table-coach" @click="enterUpdateGroupPage(group._id)">UPDATE</button></th>
+            <th><button class="button-table-coach" @click="deleteGroup(group._id)">DELETE</button></th>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
 import * as listURL from "@/js/listURL";
+import inputMask from "@/js/initInputMask";
 export default {
   data() {
     return {
@@ -111,6 +159,7 @@ export default {
     }
   },
   async mounted() {
+    inputMask(this.$refs.phone);
     const userData = await listURL.getUserByToken(localStorage.getItem("token"));
     this.userID = userData.id
     this.userRole = userData.role;
@@ -141,6 +190,255 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+body{
+  background-color: rgba(238,238,238,0.99);
+}
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+h1 {
+  text-align: center;
+}
+.table-container {
+  margin-top: 20px;
+  border-radius: 12px;
+  height: 480px;
+  overflow-y: auto;
+}
+
+.custom-table {
+  border-radius: 20px;
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+
+
+ th,
+ td {
+   text-align: center;
+   padding: 12px;
+ }
+
+th:not(:last-child),
+td:not(:last-child) {
+  border-right: 1px solid #ddd;
+}
+
+
+h2,
+th {
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+td button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #ddd;
+  color: #333;
+  transition: background-color 0.3s ease;
+}
+
+td button:hover {
+  background-color: #ccc;
+}
+
+.leftbox {
+  width: 42%;
+  height: 600px;
+  padding: 20px;
+  border: 1px solid white;
+  border-radius: 8px;
+  margin-top: 70px;
+  margin-left: 60px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.76) 0px 10px 30px;
+}
+.rightbox {
+  width: 42%;
+  height: 600px;
+  padding: 20px;
+  border: 1px solid white;
+  border-radius: 8px;
+  margin-top: 70px;
+  margin-right: 70px;
+  margin-left: 60px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.76) 0px 10px 30px;
+}
+
+.input-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.input-wrapper {
+  width: 48%;
+}
+
+.input-wrapper h2 {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+input[type="text"],
+input[type="date"] {
+  border: none;
+  border-bottom: 1px solid black;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  padding-bottom: 5px;
+}
+.password-wrapper {
+  position: relative;
+  top: -125px;
+  right: -310px;
+  width: 280px;
+}
+
+
+
+.button-table-coach {
+  background: #fff;
+  font-size: 10px;
+  text-align: center;
+  border-radius: 26px;
+  border: 1px solid #D4D3E8;
+  text-transform: uppercase;
+  align-items: center;
+  height: 40px;
+  width: 55px;
+  color: black;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.76);
+  cursor: pointer;
+  transition: .2s;
+}
+
+
+.button-change {
+  background: #fff;
+  font-size: 14px;
+  margin-top: -160px;
+  padding: 16px 20px;
+  border-radius: 26px;
+  border: 1px solid #D4D3E8;
+  text-transform: uppercase;
+  font-weight: 700;
+  align-items: center;
+  height: 60px;
+  width: 220px;
+  color: black;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.76);
+  cursor: pointer;
+  transition: .2s;
+}
+.button-update {
+  background: #fff;
+  font-size: 14px;
+  margin-top: 70px;
+  padding: 16px 20px;
+  border-radius: 26px;
+  border: 1px solid #D4D3E8;
+  text-transform: uppercase;
+  font-weight: 700;
+  align-items: center;
+  height: 60px;
+  width: 220px;
+  color: black;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.76);
+  cursor: pointer;
+  transition: .2s;
+}
+
+.button-change:active,
+.button-change:focus,
+.button-change:hover,
+.button-update:active,
+.button-update:focus,
+.button-update:hover{
+  border-color: rgba(0, 0, 0, 0.76);
+  outline: none;
+}
+
+
+.radio-buttons {
+  display: flex;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.radio-custom {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  position: relative;
+  margin-right: 8px;
+}
+
+.radio-custom::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+}
+
+.female .radio-custom::before {
+  background-color: #ff9ee3;
+}
+
+.male .radio-custom::before {
+  background-color: #9ee3ff;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"]:checked + .radio-custom::before {
+  background-color: #000;
+}
 
 </style>
+
