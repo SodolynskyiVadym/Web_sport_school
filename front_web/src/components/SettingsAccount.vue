@@ -5,13 +5,13 @@
         <div class="input-wrapper">
           <h2>Name</h2>
           <input type="text" v-model="name" placeholder="NAME" @input="checkName">
-          <div v-if="invalidName" class="error-message">Name can consist only letters and '-' or '</div>
+          <div v-if="invalidName" class="error-message-validate">Name can consist only letters and '-' or '</div>
 
         </div>
         <div class="input-wrapper">
           <h2>Last Name</h2>
           <input type="text" v-model="lastName" placeholder="LASTNAME" @input="checkLastName">
-          <div v-if="invalidLastName" class="error-message">Last name can consist only letters and '-' or '</div>
+          <div v-if="invalidLastName" class="error-message-validate-right">Last name can consist only letters and '-' or '</div>
         </div>
       </div>
       <div class="input-row">
@@ -51,7 +51,7 @@
       <div class="input-wrapper password-wrapper">
         <h2>Password</h2>
         <input type="text" v-model="password" placeholder="PASSWORD" @input="checkPassword">
-        <div v-if="invalidPassword" class="error-message">Password must be more than 7 symbols and consist only letters and numbers</div>
+        <div v-if="invalidPassword" class="error-message-password">Password must be more than 7 symbols and consist only letters and numbers</div>
 
       </div>
       <button class="button-change" @click="setPassword">Change password</button>
@@ -223,6 +223,33 @@ body{
 .container {
   display: flex;
   justify-content: space-between;
+}
+.error-message-validate {
+  position: absolute;
+  display: inline-block;
+  margin-left: -270px;
+  z-index: 1;
+  margin-top: 30px;
+  font-size: 10px;
+  color: #383535;
+}
+.error-message-validate-right {
+  position: absolute;
+  display: inline-block;
+  margin-left: -270px;
+  z-index: 1;
+  margin-top: 30px;
+  font-size: 10px;
+  color: #383535;
+}
+.error-message-password {
+  position: absolute;
+  display: inline-block;
+  margin-left: -270px;
+  z-index: 1;
+  margin-top: 30px;
+  font-size: 10px;
+  color: #383535;
 }
 
 h1 {
@@ -472,14 +499,7 @@ input[type="radio"]:checked + .radio-custom::before {
   background-color: #000;
 }
 
-.error-message {
-  color: #be3838;
-  //font-size: 10px;
-  //margin-top: -7px;
-  //margin-bottom: -17px;
-  transition: opacity 0.5s;
-  text-align: center;
-}
+
 
 </style>
 

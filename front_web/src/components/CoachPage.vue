@@ -48,6 +48,9 @@ export default {
 </script>
 
 <style>
+body{
+  background-color: rgba(238,238,238,0.99);
+}
 .trainers {
   background-color: rgba(238,238,238,0.99);
   display: grid;

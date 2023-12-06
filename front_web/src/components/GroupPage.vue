@@ -56,6 +56,9 @@ export default {
 }
 </script>
 <style>
+body{
+  background-color: rgba(238,238,238,0.99);
+}
 .group-page{
   position: relative;
   width: 100%;

@@ -126,15 +126,9 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 
-body {
-  font-family: 'Montserrat', sans-serif;
+body{
+  background-color: rgba(238,238,238,0.99);
 }
 .forgot-password {
   margin-top: -10px;
