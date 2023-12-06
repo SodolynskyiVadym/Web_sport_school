@@ -2,6 +2,7 @@ const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const Group = require("../models/groupModel");
+const Review = require("../models/reviewModel");
 
 
 exports.getUser = catchAsync(async (req, res, next) => {
@@ -223,14 +224,18 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
 
     if (user.role === "user"){
         let groups = await Group.find({_id: user.groupsID});
+        console.log(groups);
 
-        groups = groups.filter(group => user.groupsID.includes(group._id));
+        // groups = groups.filter(group => user.groupsID.includes(group._id));
 
-        for (let group of groups){
-            group.currentMembers -= 1;
-            group.markModified("currentMembers");
-            group.save();
-        }
+        const reviews = await Review.find({userID: user._id});
+        await Review.deleteMany(reviews);
+
+        // for (let group of groups){
+        //     group.currentMembers -= 1;
+        //     group.markModified("currentMembers");
+        //     group.save();
+        // }
 
     }else if(user.role === "coach"){
         const groups = await Group.find({coachID: user._id});
@@ -239,14 +244,17 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
         for (let group of groups){
             groupsID.push(group._id)
         }
-        let users = await User.find();
 
+        let users = await User.find();
         for (let user of users){
             for (let groupID of groupsID){
                 await user.groupsID.pull(groupID)
             }
             await user.save();
         }
+
+        const reviews = await Review.find({coachID: user._id});
+        await Review.deleteMany(reviews);
 
         await Group.deleteMany(group => groups.includes(group));
     }

@@ -15,6 +15,7 @@ exports.getGroup = catchAsync(async (req, res, next) => {
             path: "priceID",
             select: "price discount -_id"
         });
+    console.log(group)
 
 
     if (!group) return next(new AppError("Group not found"), 400);

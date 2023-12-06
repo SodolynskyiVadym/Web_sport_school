@@ -4,35 +4,44 @@
       <div class="input-row">
         <div class="input-wrapper">
           <h2>Name</h2>
-          <input type="text" v-model="name" placeholder="NAME">
-
+          <input type="text" v-model="name" placeholder="NAME" @input="checkNameGroup">
+          <div v-if="invalidNameGroup" class="error-message">Name mist be more than 1 symbol and consist letters or number or '-'</div>
         </div>
       </div>
       <div class="input-row">
         <div class="input-wrapper">
           <h2>Description</h2>
-          <input type="text" v-model="description" placeholder="DESCRIPTION">
+          <input type="text" v-model="description" placeholder="DESCRIPTION" @input="checkDescription">
+          <div v-if="invalidDescription" class="error-message">Description must be more than 15 symbols</div>
         </div>
         <div class="input-wrapper">
           <h2>Limit members</h2>
-          <input type="number" class="styled-number-input" v-model="limitMembers">
-
+          <input type="number" class="styled-number-input" v-model="limitMembers" @input="checkPriceDiscountLimitMembers">
+          <div v-if="invalidLimitMembers" class="error-message">Limit members must be more than 0</div>
         </div>
       </div>
       <div class="input-row">
         <div class="input-wrapper">
           <h2>Kind of sport</h2>
-          <input type="text" v-model="kindSport" readonly>
+          <select v-model="kindSport">
+            <option>Football</option>
+            <option>Icehockey</option>
+            <option>Basketball</option>
+            <option>Volleyball</option>
+            <option>Athletics</option>
+          </select>
         </div>
         <div class="input-wrapper">
           <h2>Price</h2>
-          <input type="number" class="styled-number-input" v-model="price" min="0">
+          <input type="number" class="styled-number-input" v-model="price" min="0" @input="checkPriceDiscountLimitMembers">
+          <div v-if="invalidPrice" class="error-message">Price must be more than 0</div>
         </div>
       </div>
       <button class="button-update" @click="sendData">Update</button>
       <div class="input-wrapper password-wrapper">
         <h2>Discount</h2>
-        <input type="number" class="styled-number-input" v-model="discount" min="0" max="100">
+        <input type="number" class="styled-number-input" v-model="discount" min="0" max="100" @input="checkPriceDiscountLimitMembers">
+        <div v-if="invalidDiscount" class="error-message">Discount must be more than 0 and less than 100</div>
       </div>
     </div>
   </div>
@@ -52,18 +61,24 @@ export default {
       description: "",
       price: "",
       discount: "",
-      error: ""
+      error: "",
+      invalidNameGroup: false,
+      invalidDescription: false,
+      invalidLimitMembers: false,
+      invalidPrice: false,
+      invalidDiscount: false
     }
   },
 
   methods: {
     async sendData(){
+      if (this.invalidDiscount || this.invalidDescription || this.invalidPrice || this.invalidDescription || this.invalidNameGroup) return
       try {
         await axios.patch("http://localhost:8000/groups/updateGroup", {
           id: this.$route.params.groupID,
           name: this.name,
           description: this.description,
-          kindSport: this.kindSport,
+          kindSport: this.kindSport.toLowerCase(),
           limitMembers: this.limitMembers,
           price: this.price,
           discount: this.discount
@@ -74,14 +89,30 @@ export default {
       }catch (err){
         this.error = "Group with this name already exist"
       }
+    },
+
+    async checkNameGroup(){
+      const reg = /^[a-zA-Z0-9-]{2,}$/;
+      this.invalidNameGroup = !reg.test(this.name);
+    },
+
+    async checkDescription(){
+      this.invalidDescription = this.description.length < 15;
+    },
+
+    async checkPriceDiscountLimitMembers(){
+      this.invalidPrice = this.price < 0;
+      this.invalidLimitMembers = this.limitMembers < 1;
+      this.invalidDiscount = this.discount > 100 || this.discount < 0;
     }
   },
 
   async mounted() {
     const groupData = await listURL.requestGroupsGet(`/getGroup/${this.$route.params.groupID}`);
+    console.log(groupData)
     this.name = groupData.group.name;
     this.limitMembers = groupData.group.limitMembers;
-    this.kindSport = groupData.group.kindSport;
+    this.kindSport = groupData.group.kindSport.charAt(0).toUpperCase() + groupData.group.kindSport.slice(1);
     this.description = groupData.group.description;
     this.price = groupData.group.priceID.price;
     this.discount = groupData.group.priceID.discount;
@@ -154,7 +185,14 @@ input[type="date"] {
   width: 280px;
 }
 
-
+.error-message {
+  color: #be3838;
+//font-size: 10px;
+//margin-top: -7px;
+//margin-bottom: -17px;
+  transition: opacity 0.5s;
+  text-align: center;
+}
 
 .button-update {
   background: #fff;

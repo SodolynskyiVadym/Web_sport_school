@@ -4,12 +4,14 @@
       <div class="input-row">
         <div class="input-wrapper">
           <h2>Name</h2>
-          <input type="text" v-model="name" placeholder="NAME">
+          <input type="text" v-model="name" placeholder="NAME" @input="checkName">
+          <div v-if="invalidName" class="error-message">Name can consist only letters and '-' or '</div>
 
         </div>
         <div class="input-wrapper">
           <h2>Last Name</h2>
-          <input type="text" v-model="lastName" placeholder="LASTNAME">
+          <input type="text" v-model="lastName" placeholder="LASTNAME" @input="checkLastName">
+          <div v-if="invalidLastName" class="error-message">Last name can consist only letters and '-' or '</div>
         </div>
       </div>
       <div class="input-row">
@@ -19,7 +21,8 @@
         </div>
         <div class="input-wrapper">
           <h2>Birth</h2>
-          <input type="date" v-model="birth" placeholder="BIRTH">
+          <input type="date" v-model="birth" v-if="userRole==='user'" placeholder="BIRTH" min="2005-01-01" max="2017-01-01">
+          <input type="date" v-model="birth" v-else placeholder="BIRTH" min="1905-01-01" max="2005-01-01">
 
         </div>
       </div>
@@ -47,7 +50,9 @@
       <button class="button-update" @click="sendDate">Update</button>
       <div class="input-wrapper password-wrapper">
         <h2>Password</h2>
-        <input type="text" v-model="password" placeholder="PASSWORD">
+        <input type="text" v-model="password" placeholder="PASSWORD" @input="checkPassword">
+        <div v-if="invalidPassword" class="error-message">Password must be more than 7 symbols and consist only letters and numbers</div>
+
       </div>
       <button class="button-change" @click="setPassword">Change password</button>
     </div>
@@ -114,12 +119,17 @@ export default {
       birth: Date.now(),
       gender: "",
       phone: "",
-      groups: []
+      groups: [],
+      invalidName: false,
+      invalidLastName: false,
+      invalidPassword: false
     }
   },
 
   methods: {
     async sendDate(){
+      if (this.invalidName || this.invalidLastName) return
+
       await axios.post(`http://localhost:8000/users/updateUser/${this.userID}`, {
         name: this.name,
         lastName: this.lastName,
@@ -131,6 +141,7 @@ export default {
       })
     },
     async setPassword(){
+      if (this.invalidPassword) return
       await axios.post("http://localhost:8000/users/setPassword", {
         userID: this.userID,
         password: this.password,
@@ -151,11 +162,26 @@ export default {
         groupID: groupID,
         userID: this.userID
       });
-
       location.reload();
     },
+
     async readMoreCoach(coachID){
       this.$router.push(`/overviewCoach/${coachID}`);
+    },
+
+    async checkName(){
+      const reg = /[\d\s]/;
+      this.invalidName = reg.test(this.name);
+    },
+
+    async checkLastName(){
+      const reg = /[\d\s]/;
+      this.invalidLastName = reg.test(this.lastName);
+    },
+
+    async checkPassword(){
+      const reg = /^[a-zA-Z0-9]{8,}$/;
+      this.invalidPassword = !reg.test(this.password);
     }
   },
   async mounted() {
@@ -444,6 +470,15 @@ input[type="radio"] {
 
 input[type="radio"]:checked + .radio-custom::before {
   background-color: #000;
+}
+
+.error-message {
+  color: #be3838;
+  //font-size: 10px;
+  //margin-top: -7px;
+  //margin-bottom: -17px;
+  transition: opacity 0.5s;
+  text-align: center;
 }
 
 </style>
