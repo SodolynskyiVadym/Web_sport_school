@@ -71,7 +71,7 @@
         </tr>
       </table>
       </div>
-      <div class="table-container">
+      <div class="table-container-coach">
         <table class="custom-table" v-if="userRole === 'coach'">
           <tr>
             <th>Name</th>
@@ -204,6 +204,12 @@ h1 {
 }
 .table-container {
   margin-top: 20px;
+  border-radius: 12px;
+  height: 480px;
+  overflow-y: auto;
+}
+.table-container-coach {
+  margin-top: -500px;
   border-radius: 12px;
   height: 480px;
   overflow-y: auto;
