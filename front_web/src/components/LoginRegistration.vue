@@ -2,8 +2,6 @@
   <div v-if="error" role="alert">
     {{error}}
   </div>
-  <p style="cursor: pointer" @click="this.$router.push('/forgotPassword')">Forgot password</p>
-
   <div class="container">
     <div class="main">
       <input type="checkbox" id="chk" aria-hidden="true" v-model="showRegistrationForm">
@@ -14,8 +12,13 @@
           <input type="text" v-model="emailLog" placeholder="Email" class="input-field" @input="validateEmail">
           <div v-if="invalidEmail" class="error-message">Please enter a valid email address example@gmail.com</div>
           <input type="password" v-model="passwordLog" placeholder="Password" class="input-field" @input="validatePassword">
+          <div class="forgot-password">
+            <p style="font-size: 12px; color: #fff; cursor: pointer" @click="this.$router.push('/forgotPassword')"> Forgot password ?</p>
+          </div>
+
           <div v-if="invalidPassword" class="error-message">Password should be at least 8 characters long</div>
           <button v-else @click="sendDataLogin" class="btn-login">Log in</button>
+
 
 
           <div v-if="loggedIn" class="success-message">You have successfully logged in!</div>
@@ -133,6 +136,13 @@ export default {
 body {
   font-family: 'Montserrat', sans-serif;
 }
+.forgot-password {
+  margin-top: -10px;
+  text-align: right;
+  margin-right: 350px;
+}
+
+
 
 .container {
   width: 100%;
@@ -149,10 +159,10 @@ body {
   display: flex;
   flex-direction: column;
   background-color: black;
-  height: 600px;
+  height: 650px;
   width: 500px;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: 3%;
   box-shadow: rgba(0, 0, 0, 0.99) 0px 30px 90px;
 }
 
@@ -218,12 +228,17 @@ label {
 
 .register {
   background: #eee;
-  border-radius: 73% / 10%;
+  border-radius: 73% 73% 3% 3% / 10% 10% 3% 3%;
   transition: .8s ease-in-out;
   max-height: 247px;
   width: 500px;
-  padding: 7px;
+  overflow: hidden;
+  position: fixed;
+  padding: 17px;
+  margin-top: 402px;
 }
+
+
 
 .register input {
   width: auto;
@@ -243,7 +258,8 @@ label {
   color: black;
   transform: translateY(50%);
   transition: transform 0.5s, opacity 0.5s;
-  margin: 20px;
+  margin-top: -20px;
+
 }
 
 #chk:checked ~ .register {

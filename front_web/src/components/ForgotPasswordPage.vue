@@ -5,6 +5,7 @@
   <p v-if="isForgotPassword">An email with a password has been sent to you</p>
   <button v-if="!isForgotPassword" @click="sendNewPassword">Send new password</button>
   <button v-else @click="login">Login</button>
+
 </template>
 
 <script>
