@@ -120,6 +120,8 @@ exports.deleteGroup = catchAsync(async (req, res, next) => {
 
     const users = await User.find({ groupsID: group._id });
 
+    console.log(users)
+
     for (let user of users) {
         user.groupsID.pull(group._id);
         await user.save();
@@ -128,7 +130,7 @@ exports.deleteGroup = catchAsync(async (req, res, next) => {
     await Group.deleteOne(group);
 
     res.status(200).json({
-        success: true,
+        success: "success",
     });
 });
 

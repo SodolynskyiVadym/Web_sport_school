@@ -18,7 +18,7 @@
             <p style="font-size: 12px; color: #fff; cursor: pointer" @click="this.$router.push('/forgotPassword')"> Forgot password ?</p>
           </div>
 
-          <div v-if="invalidPassword" class="error-message">Password should be at least 8 characters long</div>
+          <div v-if="invalidPasswordLog" class="error-message">Password should be at least 8 characters long</div>
           <button v-else @click="sendDataLogin" class="btn-login">Log in</button>
           <div v-if="loggedIn" class="success-message">You have successfully logged in!</div>
         </div>
@@ -28,19 +28,18 @@
         <div class="form">
           <label for="chk" aria-hidden="true">Register</label>
           <input class="input" type="text" name="txt" v-model="name" placeholder="NAME" @input="validateName">
-          <div v-if="invalidName" class="error-message-name">Name can consist only letters and '-' or '</div>
+          <div v-if="invalidNameReg" class="error-message-name">Name can consist only letters and '-' or '</div>
           <input class="input" type="text" name="txt" v-model="lastName" placeholder="LASTNAME" @input="validateLastName">
-          <div v-if="invalidLastName" class="error-message-lastname">Last name can consist only letters and '-' or '</div>
+          <div v-if="invalidLastNameReg" class="error-message-lastname">Last name can consist only letters and '-' or '</div>
           <input class="input" type="password" name="pswd" v-model="passwordReg" placeholder="PASSWORD" @input="validationPassword">
-          <div v-if="invalidPasswordType" class="error-message-password">Password should be at least 8 characters long</div>
+          <div v-if="invalidPasswordReg" class="error-message-password">Password should be at least 8 characters long</div>
           <input class="input" type="email" name="email" v-model="emailReg" placeholder="EMAIL" @input="validationEmail">
-          <div v-if="invalidEmailAdress" class="error-message-email">Please enter a valid email address example@gmail.com</div>
-          <input class="input" type="date" name="date" v-model="birth" placeholder="BIRTH" ref="datePicker">
-          <div  class="error-message-date">Your age should be less than 18 and more than 7 years old</div>
+          <div v-if="invalidEmailReg" class="error-message-email">Please enter a valid email address example@gmail.com</div>
+          <input class="input" type="date" name="date" v-model="birth" placeholder="BIRTH" ref="datePicker" min="2005-01-01" max="2017-01-01">
 
 
           <input class="input" type="text" name="phone" v-model="phone" ref="phone" placeholder="PHONE" @input="checkPhone">
-          <div v-if="invalidPhone" class="error-message-phone">Please enter a valid phone number +38(0##)-###-##-##</div>
+          <div v-if="invalidPhoneReg" class="error-message-phone">Please enter a valid phone number +38(0##)-###-##-##</div>
           <div class="gender-options">
             <h2 style="font-size: 0.9rem;">GENDER:</h2>
             <div class="radio-buttons">
@@ -81,20 +80,28 @@ export default {
       passwordReg: "",
       emailLog: "",
       emailReg: "",
-      birth: Date.now(),
+      birth: "",
       gender: "",
       phone: "",
       token: "",
       invalidEmail: false,
-      invalidPassword: false,
+      invalidPasswordLog: false,
       loggedIn: false,
       showRegistrationForm: false,
       checkPassword: "",
-      error: ""
+      error: "",
+      invalidEmailReg: false,
+      invalidPasswordReg: false,
+      invalidLastNameReg: false,
+      invalidNameReg: false,
+      invalidPhoneReg: false,
     };
   },
   methods: {
     async sendDateRegistration() {
+      if (this.invalidPhoneReg || this.invalidEmailReg || this.invalidPasswordReg || this.invalidLastNameReg
+          || this.invalidNameReg || this.gender === "" || this.name === "" || this.lastName === "" || this.passwordReg === ""
+          || this.emailReg === "" || this.birth === "") return
       try {
         const response = await axios.post("http://localhost:8000/users/createUser", {
           name: this.name,
@@ -116,7 +123,7 @@ export default {
     },
 
     async sendDataLogin() {
-      if (this.invalidEmail || this.invalidPassword) {
+      if (this.invalidEmail || this.invalidPasswordLog) {
         return;
       }
 
@@ -141,26 +148,27 @@ export default {
       this.invalidEmail = !re.test(this.emailLog);
     },
     validatePassword() {
-      this.invalidPassword = this.passwordLog.length < 7;
+      this.invalidPasswordLog = this.passwordLog.length < 7;
     },
+
     validationPassword() {
-      this.invalidPasswordType = this.passwordReg.length < 7;
+      this.invalidPasswordReg = this.passwordReg.length < 7;
     },
     validationEmail() {
       const re = /\S+@\S+\.\S+/;
-      this.invalidEmailAdress = !re.test(this.emailReg);
+      this.invalidEmailReg = !re.test(this.emailReg);
     },
     async checkPhone() {
       const phoneRegex = /^\+\d{2}\(\d{3}\)-\d{3}-\d{2}-\d{2}$/;
-      this.invalidPhone = !phoneRegex.test(this.phone);
+      this.invalidPhoneReg = !phoneRegex.test(this.phone);
     },
     validateName() {
       const reg = /[\d\s]/;
-      this.invalidName = reg.test(this.name);
+      this.invalidNameReg = reg.test(this.name);
     },
     validateLastName() {
       const re = /[\d\s]/;
-      this.invalidLastName = re.test(this.lastName);
+      this.invalidLastNameReg = re.test(this.lastName);
     },
 
 

@@ -51,13 +51,15 @@ export default {
       email: "",
       users: [],
       error: "",
-      filteredUsersList: [] // Initialize filteredUsersList as an empty array
+      filteredUsersList: [],
+      invalidEmail: false
     };
   },
   methods: {
     validateEmail() {
       const re = /\S+@\S+\.\S+/;
-      this.invalidEmail = !re.test(this.emailLog);
+      this.invalidEmail = !re.test(this.email);
+      console.log()
     },
     async deleteUser(userID) {
       await listURL.requestDeleteUser(userID);
@@ -66,6 +68,7 @@ export default {
 
     async createCoach() {
       try {
+        if (this.email === "" || this.invalidEmail) return
         await axios.post("http://localhost:8000/users/createCoach", { email: this.email });
         await this.refreshUsers();
       } catch (err) {

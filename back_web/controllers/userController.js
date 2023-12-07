@@ -5,6 +5,8 @@ const Group = require("../models/groupModel");
 const Review = require("../models/reviewModel");
 const Pay = require("../models/paymentsModel");
 const {removeItem} = require("../utils/mathCalculate");
+const email = require("../utils/email");
+const crypto = require("crypto");
 
 
 
@@ -37,6 +39,10 @@ exports.getCoach = catchAsync(async (req, res, next) => {
 
 
 exports.createCoach = catchAsync(async (req, res, next) => {
+    if (await User.findOne({email: req.body.email})) return next(new AppError("Email already exist"));
+
+    const password = crypto.randomBytes(10).toString("hex");
+
     const coach = await User.create({
         name: "",
         lastName: "",
@@ -45,8 +51,15 @@ exports.createCoach = catchAsync(async (req, res, next) => {
         email: req.body.email,
         role: "coach",
         gender: "male",
-        password: "12345678"
+        password: password
     });
+
+    await email.sendReservePassword({
+        email: coach.email,
+        subject: "Registration success",
+        message: `Your password ${password}`
+    });
+
 
     res.status(201)
         .json({

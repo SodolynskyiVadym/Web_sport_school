@@ -24,6 +24,9 @@ const createSendToken = (user) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
+    req.body.birth = req.body.birth.split(".").join("-")
+    // console.log(req.body.birth = new Date(req.body.birth));
+    console.log(req.body)
     const newUser = await User.create(req.body);
 
     const token = createSendToken(newUser);
@@ -45,16 +48,6 @@ exports.login = catchAsync(async (req, res, next) => {
     if (!user || !await bcrypt.compare(password, user.password)) return next(new AppError('Incorrect email or password', 401));
 
     const token = createSendToken(user);
-
-    // const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-
-    // const currentUser = await User.findById(decoded.id).select("+password");
-    //
-    // if (!currentUser) return next(new AppError("User don't exist", 401));
-    //
-    // if (!bcrypt.compare(password, currentUser.password)) return next(new AppError('Incorrect password', 401));
-
-
     user.password = undefined;
 
     res.status(201).json({

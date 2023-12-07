@@ -16,7 +16,6 @@
         <div class="input-group">
           <label for="limitMembers">Limit Members:</label>
           <input type="number" id="limitMembers" v-model="limitMembers" @input="checkPriceDiscountLimitMembers">
-          <div v-if="invalidLimitMembers" class="error-message-validate">Limit members must be more than 0</div>
         </div>
         <div class="input-group">
           <label for="kindSport">Kind of Sport:</label>
@@ -28,17 +27,14 @@
             <option value="icehockey"></option>
             <option value="athletics"></option>
           </datalist>
-          <div v-if="invalidKindSport" class="error-message-validate">Kind of Sport is required</div>
         </div>
         <div class="input-group">
           <label for="price">Price:</label>
           <input type="number" id="price" v-model="price" min="0" @input="checkPriceDiscountLimitMembers">
-          <div v-if="invalidPrice" class="error-message-validate">Price must be more than 0</div>
         </div>
         <div class="input-group">
           <label for="discount">Discount:</label>
           <input type="number" id="discount" v-model="discount" min="0" max="100" @input="checkPriceDiscountLimitMembers">
-          <div v-if="invalidDiscount" class="error-message-validate">Discount must be more than 0 and less than 100</div>
         </div>
         <button class="button-update" @click="registerGroup">Create Group</button>
       </div>
@@ -46,11 +42,97 @@
   </section>
 </template>
 
+
+<script>
+import axios from "axios";
+import * as listURL from "../js/listURL";
+
+export default {
+  data() {
+    return {
+      name: "",
+      description: "",
+      limitMembers: "",
+      kindSport: "",
+      price: "",
+      discount: "",
+      coachID: "",
+      error: "",
+      invalidNameGroup: false,
+      invalidDescription: false
+    }
+  },
+  methods: {
+    async registerGroup() {
+      try {
+        if (this.invalidDescription || this.invalidNameGroup || this.name === "" || this.description === "" ||
+            this.price === "" || this.discount === "" || this.limitMembers === "") return
+        await axios.post('http://localhost:8000/groups/createGroup', {
+          name: this.name,
+          description: this.description,
+          limitMembers: this.limitMembers,
+          kindSport: this.kindSport,
+          price: this.price,
+          discount: this.discount,
+          coachID: this.coachID,
+        });
+
+        this.clearFields();
+
+      }catch (err){
+        this.error = "This group already exist"
+      }
+    },
+
+    async checkNameGroup(){
+      const reg = /^[a-zA-Z0-9-]{2,}$/;
+      this.invalidNameGroup = !reg.test(this.name);
+    },
+
+    async checkDescription(){
+      this.invalidDescription = this.description.length < 15;
+    },
+
+    checkPriceDiscountLimitMembers() {
+      // this.invalidPrice = this.price <= 0;
+      // this.invalidLimitMembers = this.limitMembers < 1;
+      // this.invalidDiscount = this.discount <= 0 || this.discount > 100;
+
+      if (this.price > 0) {
+        this.invalidPrice = false;
+      }
+      if (this.limitMembers >= 1) {
+        this.invalidLimitMembers = false;
+      }
+    },
+    checkKindSport() {
+      this.invalidKindSport = !this.kindSport.trim();
+    },
+
+
+
+    clearFields() {
+      this.name = "";
+      this.description = "";
+      this.limitMembers = "";
+      this.kindSport = "";
+      this.price = "";
+      this.discount = "";
+    }
+  },
+  async mounted() {
+    const userData = await listURL.getUserByToken(localStorage.getItem("token"));
+    this.coachID = userData.id
+  }
+}
+
+</script>
+
+
 <style>
 body {
   background-color: rgba(238,238,238,0.99); /* Колір фону, який вам подобається */
 }
-
 
 .box {
   background-color: white;
@@ -144,81 +226,3 @@ body {
 </style>
 
 
-<script>
-import axios from "axios";
-import * as listURL from "../js/listURL";
-
-export default {
-  data() {
-    return {
-      name: "",
-      description: "",
-      limitMembers: "",
-      kindSport: "",
-      price: "",
-      discount: "",
-      coachID: "",
-      error: ""
-    }
-  },
-  methods: {
-    async registerGroup() {
-      try {
-        await axios.post('http://localhost:8000/groups/createGroup', {
-          name: this.name,
-          description: this.description,
-          limitMembers: this.limitMembers,
-          kindSport: this.kindSport,
-          price: this.price,
-          discount: this.discount,
-          coachID: this.coachID,
-        });
-
-        this.clearFields();
-
-      }catch (err){
-        this.error = "This group already exist"
-      }
-    },
-    async checkNameGroup(){
-      const reg = /^[a-zA-Z0-9-]{2,}$/;
-      this.invalidNameGroup = !reg.test(this.name);
-    },
-
-    async checkDescription(){
-      this.invalidDescription = this.description.length < 15;
-    },
-    checkPriceDiscountLimitMembers() {
-      this.invalidPrice = this.price <= 0;
-      this.invalidLimitMembers = this.limitMembers < 1;
-      this.invalidDiscount = this.discount <= 0 || this.discount > 100;
-
-      if (this.price > 0) {
-        this.invalidPrice = false;
-      }
-      if (this.limitMembers >= 1) {
-        this.invalidLimitMembers = false;
-      }
-    },
-    checkKindSport() {
-      this.invalidKindSport = !this.kindSport.trim();
-    },
-
-
-
-    clearFields() {
-      this.name = "";
-      this.description = "";
-      this.limitMembers = "";
-      this.kindSport = "";
-      this.price = "";
-      this.discount = "";
-    }
-  },
-  async mounted() {
-    const userData = await listURL.getUserByToken(localStorage.getItem("token"));
-    this.coachID = userData.id
-  }
-}
-
-</script>

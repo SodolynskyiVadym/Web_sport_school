@@ -77,29 +77,37 @@ exports.getScheduleCoach = catchAsync(async (req, res, next) => {
 
     const groups = await Group.find({coachID: coach._id})
 
-    let groupsID = [];
-    for (let group of groups){
-        groupsID.push(group._id)
-    }
+    console.log(coach)
+    console.log(groups)
 
-    const schedules = await Schedule.find().populate({
-        path: "groupID",
-        select: "name _id"
-    });
+    const schedules  = await Schedule.find({coachID: coach._id});
 
+    // let groupsID = [];
+    // for (let group of groups){
+    //     groupsID.push(group._id)
+    // }
 
-    let scheduleTester = []
+    // const schedules = await Schedule.find().populate({
+    //     path: "groupID",
+    //     select: "name _id"
+    // });
+    //
+    // console.log(schedules)
+    //
+    //
+    // let scheduleTester = []
 
-    for (let schedule of schedules){
-        for (let groupID of groupsID){
-            if (schedule.groupID._id.toString() === groupID.toString()) scheduleTester.push(schedule)
-        }
-
-    }
+    // for (let schedule of schedules){
+    //     for (let groupID of groupsID){
+    //         if (schedule.groupID._id.toString() === groupID.toString()) scheduleTester.push(schedule)
+    //         if (schedule.groupID._id.toString() === groupID.toString()) console.log(true)
+    //     }
+    //
+    // }
 
     res.status(200).json({
         success: "success",
-        schedules: scheduleTester
+        schedules
     });
 });
 

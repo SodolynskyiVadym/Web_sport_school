@@ -85,6 +85,7 @@
             <th>Name</th>
             <th>Kind of sport</th>
             <th>Limit members</th>
+            <th>Current members</th>
             <th>Price</th>
             <th>Discount</th>
             <th>Action1</th>
@@ -95,6 +96,7 @@
             <th>{{group.name}}</th>
             <th>{{group.kindSport}}</th>
             <th>{{group.limitMembers}}</th>
+            <th>{{group.currentMembers}}</th>
             <th>{{group.priceID.price}}</th>
             <th>{{group.priceID.discount}}</th>
             <th><button class="button-table-coach" @click="enterUpdateGroupPage(group._id)">UPDATE</button></th>
@@ -118,7 +120,7 @@ export default {
       lastName: "",
       password: "",
       email: "",
-      birth: Date.now(),
+      birth: new Date(Date.now()).toISOString().split('T')[0],
       gender: "",
       phone: "",
       groups: [],
@@ -215,7 +217,7 @@ export default {
     this.lastName = userDataFull.user.lastName;
     this.password = userDataFull.user.password;
     this.email = userDataFull.user.email;
-    this.birth = userDataFull.user.birth;
+    this.birth = new Date(userDataFull.user.birth).toISOString().split('T')[0];
     this.gender = userDataFull.user.gender;
     this.phone = userDataFull.user.phone;
   }
