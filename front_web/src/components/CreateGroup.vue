@@ -155,10 +155,10 @@ body {
 .error-message-exist {
   position: absolute;
   display: inline-block;
-  margin-left: 170px;
+  margin-left: 720px;
   z-index: 1;
-  margin-top: 75px;
-  font-size: 10px;
+  margin-top: -25px;
+  font-size: 16px;
   color: #383535;
 }
 .form {
