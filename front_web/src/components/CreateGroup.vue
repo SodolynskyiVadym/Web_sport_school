@@ -1,43 +1,148 @@
 <template>
-  <h1>Create Group</h1>
-  <div v-if="error" role="alert">{{error}}</div>
-  <div class="container">
-    <div class="form">
-      <div class="input-group">
-        <label for="name">Name:</label>
-        <input type="text" id="name" v-model="name">
+  <section>
+    <div class="error-message-exist" v-if="error" role="alert">{{error}}</div>
+    <div class="box">
+      <div class="form">
+        <div class="input-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" v-model="name" placeholder="NAME" @input="checkNameGroup">
+          <div v-if="invalidNameGroup" class="error-message-validate">Name must be longer and consist letters or number or '-'</div>
+        </div>
+        <div class="input-group">
+          <label for="description">Description:</label>
+          <textarea id="description" v-model="description" placeholder="DESCRIPTION" @input="checkDescription"></textarea>
+          <div v-if="invalidDescription" class="error-message-validate">Description must be more than 15 symbols</div>
+        </div>
+        <div class="input-group">
+          <label for="limitMembers">Limit Members:</label>
+          <input type="number" id="limitMembers" v-model="limitMembers" @input="checkPriceDiscountLimitMembers">
+          <div v-if="invalidLimitMembers" class="error-message-validate">Limit members must be more than 0</div>
+        </div>
+        <div class="input-group">
+          <label for="kindSport">Kind of Sport:</label>
+          <input type="text" list="kind-sport" id="kindSport" v-model="kindSport" @input="checkKindSport">
+          <datalist id="kind-sport">
+            <option value="football"></option>
+            <option value="volleyball"></option>
+            <option value="basketball"></option>
+            <option value="icehockey"></option>
+            <option value="athletics"></option>
+          </datalist>
+          <div v-if="invalidKindSport" class="error-message-validate">Kind of Sport is required</div>
+        </div>
+        <div class="input-group">
+          <label for="price">Price:</label>
+          <input type="number" id="price" v-model="price" min="0" @input="checkPriceDiscountLimitMembers">
+          <div v-if="invalidPrice" class="error-message-validate">Price must be more than 0</div>
+        </div>
+        <div class="input-group">
+          <label for="discount">Discount:</label>
+          <input type="number" id="discount" v-model="discount" min="0" max="100" @input="checkPriceDiscountLimitMembers">
+          <div v-if="invalidDiscount" class="error-message-validate">Discount must be more than 0 and less than 100</div>
+        </div>
+        <button class="button-update" @click="registerGroup">Create Group</button>
       </div>
-      <div class="input-group">
-        <label for="description">Description:</label>
-        <textarea id="description" v-model="description"></textarea>
-      </div>
-      <div class="input-group">
-        <label for="limitMembers">Limit Members:</label>
-        <input type="number" id="limitMembers" v-model="limitMembers">
-      </div>
-      <div class="input-group">
-        <label for="kindSport">Kind of Sport:</label>
-        <input type="text" list="kind-sport" id="kindSport" v-model="kindSport">
-        <datalist id="kind-sport">
-          <option value="football"></option>
-          <option value="volleyball"></option>
-          <option value="basketball"></option>
-          <option value="hockey"></option>
-          <option value="athletics"></option>
-        </datalist>
-      </div>
-      <div class="input-group">
-        <label for="price">Price:</label>
-        <input type="number" id="price" v-model="price">
-      </div>
-      <div class="input-group">
-        <label for="discount">Discount:</label>
-        <input type="number" id="discount" v-model="discount">
-      </div>
-      <button @click="registerGroup">Create Group</button>
     </div>
-  </div>
+  </section>
 </template>
+
+<style>
+body {
+  background-color: rgba(238,238,238,0.99); /* Колір фону, який вам подобається */
+}
+
+
+.box {
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.76) 0px 10px 30px;
+  border-radius: 20px;
+  margin-left: 410px;
+  height: 700px;
+  width: 50%;
+  margin-top: 120px;
+}
+.error-message-validate {
+  position: absolute;
+  display: inline-block;
+  margin-left: 170px;
+  z-index: 1;
+  margin-top: 75px;
+  font-size: 10px;
+  color: #383535;
+}
+.error-message-exist {
+  position: absolute;
+  display: inline-block;
+  margin-left: 170px;
+  z-index: 1;
+  margin-top: 75px;
+  font-size: 10px;
+  color: #383535;
+}
+.form {
+  width: 80%;
+  margin-left: 80px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-top: 10px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.input-group input[type="text"],
+.input-group input[type="number"],
+.input-group textarea {
+  border: none;
+  border-bottom: 1px solid #000;
+  padding: 8px;
+  font-size: 16px;
+  color: #000;
+  transition: border-color 0.3s ease;
+  width: 100%;
+}
+
+.input-group input[type="text"]:focus,
+.input-group input[type="number"]:focus,
+.input-group textarea:focus {
+  outline: none;
+}
+
+
+.input-group label {
+  margin-bottom: 5px;
+}
+
+
+.button-update {
+  background: #fff;
+  font-size: 14px;
+  margin-top: -5px;
+  border-radius: 26px;
+  border: 1px solid #D4D3E8;
+  text-transform: uppercase;
+  font-weight: 700;
+  height: 60px;
+  width: 220px;
+  color: black;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.76);
+  cursor: pointer;
+  transition: .2s;
+  margin-left: calc(100% - 200px);
+}
+
+.button-update:active,
+.button-update:focus,
+.button-update:hover{
+  border-color: rgba(0, 0, 0, 0.76);
+  outline: none;
+}
+</style>
+
 
 <script>
 import axios from "axios";
@@ -75,6 +180,31 @@ export default {
         this.error = "This group already exist"
       }
     },
+    async checkNameGroup(){
+      const reg = /^[a-zA-Z0-9-]{2,}$/;
+      this.invalidNameGroup = !reg.test(this.name);
+    },
+
+    async checkDescription(){
+      this.invalidDescription = this.description.length < 15;
+    },
+    checkPriceDiscountLimitMembers() {
+      this.invalidPrice = this.price <= 0;
+      this.invalidLimitMembers = this.limitMembers < 1;
+      this.invalidDiscount = this.discount <= 0 || this.discount > 100;
+
+      if (this.price > 0) {
+        this.invalidPrice = false;
+      }
+      if (this.limitMembers >= 1) {
+        this.invalidLimitMembers = false;
+      }
+    },
+    checkKindSport() {
+      this.invalidKindSport = !this.kindSport.trim();
+    },
+
+
 
     clearFields() {
       this.name = "";
@@ -92,121 +222,3 @@ export default {
 }
 
 </script>
-
-<style scoped>
-*{
-  font-family: 'Montserrat', sans-serif;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  text-decoration: none;
-  outline: none;
-  border: none;
-  text-transform: capitalize;
-  transition: all .2s linear;
-}
-
-h1 {
-  font-style: italic;
-  font-weight: 1000;
-  font-size: 3rem;
-  text-transform: uppercase;
-  text-align: center;
-  margin: 20px;
-}
-h2 {
-  font-style: italic;
-  font-weight: 1000;
-  font-size: 2rem;
-  text-transform: uppercase;
-  text-align: center;
-  margin: 80px;
-}
-body{
-  background: white;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
-
-}
-.container {
-  margin: 0 auto;
-  width: 80%;
-  padding: 20px;
-  color: black;
-}
-
-h1 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-group {
-  margin-bottom: 15px;
-}
-
-label {
-  margin-bottom: 5px;
-  display: block;
-}
-
-input[type="text"],
-input[type="number"],
-textarea {
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #000;
-  width: 100%;
-  color: #000;
-}
-
-button {
-  padding: 10px;
-  border-radius: 4px;
-  background-color: #000;
-  color: #fff;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  border: 1px solid black;
-}
-
-button:hover {
-  background-color: #333;
-}
-input[type="text"],
-input[type="number"],
-textarea {
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #000;
-  width: 100%;
-  color: #000;
-  transition: border-color 0.3s ease;
-}
-
-
-input[type="text"]:focus,
-input[type="number"]:focus,
-textarea:focus {
-  border-color: #333;
-}
-@media (min-width: 768px) {
-  .container {
-    width: 60%;
-  }
-}
-
-@media (max-width: 767px) {
-  .container {
-    width: 90%;
-  }
-}
-</style>
