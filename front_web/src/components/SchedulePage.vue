@@ -171,11 +171,11 @@ body {
 .filter-select {
   padding: 8px;
   border: none;
-  border-bottom: 1px solid #ccc;
   background-color: rgba(238, 238, 238, 0.99);
+  outline: none;
   font-size: 14px;
   width: 80px;
-  height: 30px;
+  height: 70px;
   margin: 4px 8px;
 }
 
