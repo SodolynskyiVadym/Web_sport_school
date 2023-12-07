@@ -1,7 +1,8 @@
 <template>
+  <section>
   <div class="container">
-    <div class="leftbox">
-      <div class="input-row">
+    <div class="leftbox-setting">
+      <div class="input-row-setting">
         <div class="input-wrapper">
           <h2>Name</h2>
           <input type="text" v-model="name" placeholder="NAME" @input="checkName">
@@ -11,10 +12,10 @@
         <div class="input-wrapper">
           <h2>Last Name</h2>
           <input type="text" v-model="lastName" placeholder="LASTNAME" @input="checkLastName">
-          <div v-if="invalidLastName" class="error-message-validate-right">Last name can consist only letters and '-' or '</div>
+          <div v-if="invalidLastName" class="error-message-validate-right-setting">Last name can consist only letters and '-' or '</div>
         </div>
       </div>
-      <div class="input-row">
+      <div class="input-row-setting">
         <div class="input-wrapper">
           <h2>Email</h2>
           <input type="text" v-model="email" readonly placeholder="EMAIL">
@@ -23,10 +24,9 @@
           <h2>Birth</h2>
           <input type="date" v-model="birth" v-if="userRole==='user'" placeholder="BIRTH" min="2005-01-01" max="2017-01-01">
           <input type="date" v-model="birth" v-else placeholder="BIRTH" min="1905-01-01" max="2005-01-01">
-
         </div>
       </div>
-      <div class="input-row">
+      <div class="input-row-setting">
         <div class="input-wrapper">
           <h2>Gender</h2>
           <div class="radio-buttons">
@@ -44,7 +44,8 @@
         </div>
         <div class="input-wrapper">
           <h2>Phone</h2>
-          <input type="text" v-model="phone" ref="phone" placeholder="PHONE">
+          <input type="text" v-model="phone" ref="phone" placeholder="PHONE" @input="checkPhone">
+          <div v-if="invalidPhone" class="error-message-validate-right-setting">Please enter a valid phone number +38(0##)-###-##-##</div>
         </div>
       </div>
       <button class="button-update" @click="sendDate">Update</button>
@@ -56,7 +57,9 @@
       </div>
       <button class="button-change" @click="setPassword">Change password</button>
     </div>
-    <div class="rightbox">
+  </div>
+  </section>
+    <div class="rightbox-setting">
       <h1>My groups</h1>
       <div class="table-container">
       <table class="custom-table" v-if="userRole === 'user'">
@@ -100,7 +103,6 @@
         </table>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -178,6 +180,10 @@ export default {
       const reg = /[\d\s]/;
       this.invalidLastName = reg.test(this.lastName);
     },
+    async checkPhone() {
+      const phoneRegex = /^\+\d{2}\(\d{3}\)-\d{3}-\d{2}-\d{2}$/;
+      this.invalidPhone = !phoneRegex.test(this.phone);
+    },
 
     async checkPassword(){
       const reg = /^[a-zA-Z0-9]{8,}$/;
@@ -223,6 +229,7 @@ body{
 .container {
   display: flex;
   justify-content: space-between;
+  margin-right: 70px;
 }
 .error-message-validate {
   position: absolute;
@@ -233,7 +240,7 @@ body{
   font-size: 10px;
   color: #383535;
 }
-.error-message-validate-right {
+.error-message-validate-right-setting {
   position: absolute;
   display: inline-block;
   margin-left: -270px;
@@ -327,18 +334,22 @@ td button:hover {
   background-color: #ccc;
 }
 
-.leftbox {
+.leftbox-setting {
+  position: fixed;
+  left: 0;
   width: 42%;
   height: 600px;
   padding: 20px;
   border: 1px solid white;
   border-radius: 8px;
   margin-top: 70px;
-  margin-left: 60px;
+  margin-left: 40px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.76) 0px 10px 30px;
 }
-.rightbox {
+.rightbox-setting {
+  right: 0;
+  position:fixed;
   width: 42%;
   height: 600px;
   padding: 20px;
@@ -346,12 +357,12 @@ td button:hover {
   border-radius: 8px;
   margin-top: 70px;
   margin-right: 70px;
-  margin-left: 60px;
+  margin-left: 40px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.76) 0px 10px 30px;
 }
 
-.input-row {
+.input-row-setting {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;

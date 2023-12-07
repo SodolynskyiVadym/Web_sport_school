@@ -1,4 +1,5 @@
 <template>
+  <section>
   <div class="container"  v-if="limitMembers">
     <div class="leftbox">
       <div class="input-row">
@@ -38,14 +39,14 @@
         </div>
       </div>
       <button class="button-update" @click="sendData">Update</button>
-      <div class="input-wrapper password-wrapper">
+      <div class="input-wrapper discount-wrapper">
         <h2>Discount</h2>
         <input type="number" class="styled-number-input" v-model="discount" min="0" max="100" @input="checkPriceDiscountLimitMembers">
         <div v-if="invalidDiscount" class="error-message-validate">Discount must be more than 0 and less than 100</div>
       </div>
     </div>
   </div>
-
+  </section>
 </template>
 
 <script>
@@ -189,10 +190,10 @@ input[type="date"] {
   font-size: 14px;
   padding-bottom: 5px;
 }
-.password-wrapper {
+.discount-wrapper {
   position: relative;
   top: -125px;
-  right: -310px;
+  right: -300px;
   width: 280px;
 }
 .error-message-validate {

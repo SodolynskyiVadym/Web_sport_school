@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="leftbox">
+    <div class="leftbox-setting">
       <div class="email-input">
         <input type="text" v-model="email" placeholder="Enter email to register coach" @input="validateEmail">
         <div v-if="invalidEmail" class="error-message-validate">Please enter a valid email address example@gmail.com</div>
@@ -11,7 +11,7 @@
     </div>
     <div v-if="error" class="error-message" role="alert">{{error}}</div>
     </div>
-    <div class="rightbox">
+    <div class="rightbox-setting">
     <div class="table-container">
     <table id="tableUsers" class="custom-table">
       <tr>
@@ -105,7 +105,7 @@ body{
   background-color: rgba(238,238,238,0.99);
 }
 
-.leftbox {
+.leftbox-setting {
   display: flex;
 }
 
@@ -186,7 +186,7 @@ table {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
 }
-.rightbox {
+.rightbox-setting {
   position: relative;
   left: 730px;
   width: 80%;

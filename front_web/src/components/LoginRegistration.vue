@@ -1,4 +1,5 @@
 <template>
+  <section>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <div v-if="error" role="alert" class="error-message-exist">
     {{error}}
@@ -60,6 +61,7 @@
       </div>
     </div>
   </div>
+  </section>
 </template>
 
 <script>
