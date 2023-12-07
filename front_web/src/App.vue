@@ -7,7 +7,7 @@
       <li><a href="/createGroup" class="text" v-if="userRole === 'coach'">Create group</a></li>
       <li><a href="/createSchedule" class="text" v-if="userRole === 'coach'">Create schedule</a></li>
       <li><a href="/" class="text">Home</a></li>
-      <li v-if="userRole"><a href="/login"  class="text">Authentication</a></li>
+      <li v-if="isLogin"><a href="/login"  class="text">Authentication</a></li>
       <li v-else><a href="/" @click="logout" class="text">Log out</a></li>
     </ul>
 
