@@ -62,7 +62,7 @@ import * as listURL from "@/js/listURL";
 export default {
   data() {
     return {
-      date: Date.now(),
+      date: new Date(Date.now()).toISOString().split('T')[0],
       time: "",
       nameGroup: "",
       coachID: "",
@@ -92,16 +92,22 @@ export default {
 
 
     async createSchedule(){
-      await axios.post("http://localhost:8000/groups/schedules/createSchedule", {
-        nameGroup: this.nameGroup,
-        date: this.date,
-        timeLesson: this.time,
-        coachID: this.coachID
-      });
+      if (this.data === "" || this.time === "" || this.nameGroup === "") return
+      try {
+        await axios.post("http://localhost:8000/groups/schedules/createSchedule", {
+          nameGroup: this.nameGroup,
+          date: this.date,
+          timeLesson: this.time,
+          coachID: this.coachID
+        });
 
-      this.date = Date.now();
-      this.time = ""
-      await this.findScheduleGroup()
+        this.date = Date.now();
+        this.time = ""
+        await this.findScheduleGroup()
+      }catch (e) {
+        this.error = "You entered incorrect data"
+      }
+
     }
   },
   async mounted() {

@@ -2,12 +2,12 @@
   <header>
     <a class="logo">Sport school</a>
     <ul>
-      <li><a href="/admin" class="text">Admin Page</a></li>
-      <li><a href="/settingsAccount" class="text">Setting account</a></li>
-      <li><a href="/createGroup" class="text">Create group</a></li>
-      <li><a href="/createSchedule" class="text">Create schedule</a></li>
+      <li><a href="/admin" class="text" v-if="userRole === 'admin'">Admin Page</a></li>
+      <li><a href="/settingsAccount" class="text" v-if="userRole">Setting account</a></li>
+      <li><a href="/createGroup" class="text" v-if="userRole === 'coach'">Create group</a></li>
+      <li><a href="/createSchedule" class="text" v-if="userRole === 'coach'">Create schedule</a></li>
       <li><a href="/" class="text">Home</a></li>
-      <li v-if="isLogin"><a href="/login"  class="text">Authentication</a></li>
+      <li v-if="userRole"><a href="/login"  class="text">Authentication</a></li>
       <li v-else><a href="/" @click="logout" class="text">Log out</a></li>
     </ul>
 
@@ -18,16 +18,29 @@
   </div>
 </template>
 <script>
+import * as listURL from "@/js/listURL";
+
 export default {
   data() {
     return {
-      isLogin: !localStorage.getItem("token")
+      isLogin: !localStorage.getItem("token"),
+      userID: "",
+      userRole: ""
     }
   },
   methods: {
     async logout(){
       localStorage.removeItem("token");
     }
+  },
+
+  async mounted(){
+    if (localStorage.getItem("token")){
+      const userData = await listURL.getUserByToken(localStorage.getItem("token"));
+      this.userID = userData.id
+      this.userRole = userData.role;
+    }
+
   }
 }
 </script>
