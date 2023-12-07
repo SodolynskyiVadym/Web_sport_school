@@ -7,6 +7,7 @@ const Pay = require("../models/paymentsModel");
 const {removeItem} = require("../utils/mathCalculate");
 const email = require("../utils/email");
 const crypto = require("crypto");
+const Schedule = require("../models/scheduleModel");
 
 
 
@@ -133,8 +134,8 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
 
 
 exports.getScheduleUser = catchAsync(async (req, res, next) => {
-    const userSchedule = await User.findById(req.params.id)
-        .populate("groupsID");
+    const userSchedule = await User.findById(req.params.id).populate("groupsID");
+    const schedules = await Schedule.find();
 
     const group = userSchedule.groupsID[0];
 
@@ -262,8 +263,6 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
 
         const groups = await Group.find({coachID: user._id});
 
-        console.log(groups)
-
         let groupsID = []
         for (let group of groups){
             groupsID.push(group._id)
@@ -280,6 +279,8 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
 
 
         await Group.deleteMany({coachID: user._id});
+
+        await Schedule.deleteMany({coachID: user._id});
     }
 
     await User.deleteOne(user);

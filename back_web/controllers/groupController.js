@@ -3,6 +3,7 @@ const Price = require("../models/priceModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const User = require("../models/userModel");
+const Schedules = require("../models/scheduleModel");
 
 
 exports.getGroup = catchAsync(async (req, res, next) => {
@@ -120,14 +121,15 @@ exports.deleteGroup = catchAsync(async (req, res, next) => {
 
     const users = await User.find({ groupsID: group._id });
 
-    console.log(users)
 
     for (let user of users) {
         user.groupsID.pull(group._id);
         await user.save();
     }
 
+    await Schedules.deleteMany({groupID: group._id})
     await Group.deleteOne(group);
+
 
     res.status(200).json({
         success: "success",

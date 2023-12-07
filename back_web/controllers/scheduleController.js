@@ -46,11 +46,19 @@ exports.getScheduleUser = catchAsync(async (req, res, next) => {
         path: "groupID",
         select: "name _id"
     });
-    schedules = schedules.filter(schedule => user.groupsID.includes(schedule.groupID._id));
+
+    let schedulesArr = []
+
+    for (let schedule of schedules){
+        for (let groupID of user.groupsID){
+            if (schedule.groupID === null) continue
+            if (schedule.groupID._id.toString() === groupID.toString()) schedulesArr.push(schedule)
+        }
+    }
 
     res.status(200).json({
         success: "success",
-        schedules
+        schedules: schedulesArr
     });
 });
 
@@ -75,35 +83,10 @@ exports.getScheduleCoach = catchAsync(async (req, res, next) => {
 
     if (!coach) return next(new AppError("User not found"), 401);
 
-    const groups = await Group.find({coachID: coach._id})
-
-    console.log(coach)
-    console.log(groups)
-
-    const schedules  = await Schedule.find({coachID: coach._id});
-
-    // let groupsID = [];
-    // for (let group of groups){
-    //     groupsID.push(group._id)
-    // }
-
-    // const schedules = await Schedule.find().populate({
-    //     path: "groupID",
-    //     select: "name _id"
-    // });
-    //
-    // console.log(schedules)
-    //
-    //
-    // let scheduleTester = []
-
-    // for (let schedule of schedules){
-    //     for (let groupID of groupsID){
-    //         if (schedule.groupID._id.toString() === groupID.toString()) scheduleTester.push(schedule)
-    //         if (schedule.groupID._id.toString() === groupID.toString()) console.log(true)
-    //     }
-    //
-    // }
+    const schedules  = await Schedule.find({coachID: coach._id}).populate({
+        path: "groupID",
+        select: "_id name"
+    });
 
     res.status(200).json({
         success: "success",

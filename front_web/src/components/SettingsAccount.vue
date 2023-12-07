@@ -126,11 +126,27 @@ export default {
       groups: [],
       invalidName: false,
       invalidLastName: false,
-      invalidPassword: false
+      invalidPassword: false,
+      invalidPhone: false
     }
   },
 
   methods: {
+    async getData(){
+      if (this.userRole === "user"){
+        const userData = await listURL.requestUsersGet(`/getUserGroups/${this.userID}`);
+        this.groups = userData.groups
+      }
+
+      if (this.userRole === "coach"){
+        const userData = await listURL.requestUsersGet(`/getCoachGroups/${this.userID}`);
+        this.groups = userData.groups
+        await axios.get(`http://localhost:8000/users/getCoachGroups/${this.userID}`).then(res => {
+          this.groups = res.data.groups
+        });
+      }
+    },
+
     async sendDate(){
       if (this.invalidName || this.invalidLastName) return
 
@@ -159,6 +175,8 @@ export default {
 
     async deleteGroup(groupID){
       await listURL.requestDeleteGroup(groupID)
+      await this.getData()
+
     },
 
     async leaveGroup(groupID){
@@ -166,7 +184,7 @@ export default {
         groupID: groupID,
         userID: this.userID
       });
-      location.reload();
+      await this.getData()
     },
 
     async readMoreCoach(coachID){
@@ -193,24 +211,11 @@ export default {
     }
   },
   async mounted() {
+
     inputMask(this.$refs.phone);
     const userData = await listURL.getUserByToken(localStorage.getItem("token"));
     this.userID = userData.id
     this.userRole = userData.role;
-
-
-    if (this.userRole === "user"){
-      const userData = await listURL.requestUsersGet(`/getUserGroups/${this.userID}`);
-      this.groups = userData.groups
-    }
-
-    if (this.userRole === "coach"){
-      const userData = await listURL.requestUsersGet(`/getCoachGroups/${this.userID}`);
-      this.groups = userData.groups
-      await axios.get(`http://localhost:8000/users/getCoachGroups/${this.userID}`).then(res => {
-        this.groups = res.data.groups
-      });
-    }
 
     const userDataFull = await listURL.requestUsersGet(`/getUser/${this.userID}`);
     this.name = userDataFull.user.name;
@@ -220,6 +225,8 @@ export default {
     this.birth = new Date(userDataFull.user.birth).toISOString().split('T')[0];
     this.gender = userDataFull.user.gender;
     this.phone = userDataFull.user.phone;
+
+    await this.getData()
   }
 }
 </script>
