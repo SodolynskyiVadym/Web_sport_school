@@ -1,16 +1,16 @@
 <template>
-<table>
-  <tr>
-    <th>Group</th>
-    <th>Time</th>
-    <th>Date</th>
-  </tr>
-  <tr v-for="schedule in schedules" :key="schedule._id">
-    <td>{{schedule.groupID.name}}</td>
-    <td>{{schedule.time}}</td>
-    <td>{{schedule.date}}</td>
-  </tr>
-</table>
+  <table>
+    <tr>
+      <th>Group</th>
+      <th>Time</th>
+      <th>Date</th>
+    </tr>
+    <tr v-for="schedule in schedules" :key="schedule._id">
+      <td>{{schedule.groupID.name}}</td>
+      <td>{{schedule.time}}</td>
+      <td>{{schedule.date}}</td>
+    </tr>
+  </table>
 </template>
 
 <script>

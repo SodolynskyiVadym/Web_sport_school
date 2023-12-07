@@ -1,5 +1,6 @@
 <template>
-  <div v-if="error" role="alert">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <div v-if="error" role="alert" class="error-message-exist">
     {{error}}
   </div>
   <div class="container">
@@ -18,9 +19,6 @@
 
           <div v-if="invalidPassword" class="error-message">Password should be at least 8 characters long</div>
           <button v-else @click="sendDataLogin" class="btn-login">Log in</button>
-
-
-
           <div v-if="loggedIn" class="success-message">You have successfully logged in!</div>
         </div>
       </div>
@@ -28,14 +26,36 @@
       <div class="register" :class="{ 'hidden-form': !showRegistrationForm }">
         <div class="form">
           <label for="chk" aria-hidden="true">Register</label>
-          <input class="input" type="text" name="txt" v-model="name" placeholder="NAME">
-          <input class="input" type="text" name="txt" v-model="lastName" placeholder="LASTNAME">
-          <input class="input" type="password" name="pswd" v-model="passwordReg" placeholder="PASSWORD">
-          <input class="input" type="email" name="email" v-model="emailReg" placeholder="EMAIL">
-          <input class="input" type="date" name="date" v-model="birth" placeholder="BIRTH">
-          <input class="input" type="text" name="gender" v-model="gender" placeholder="GENDER">
-          <input class="input" type="text" name="phone" v-model="phone" ref="phone" placeholder="PHONE">
-          <button @click="sendDateRegistration">Register</button>
+          <input class="input" type="text" name="txt" v-model="name" placeholder="NAME" @input="validateName">
+          <div v-if="invalidName" class="error-message-name">Name can consist only letters and '-' or '</div>
+          <input class="input" type="text" name="txt" v-model="lastName" placeholder="LASTNAME" @input="validateLastName">
+          <div v-if="invalidLastName" class="error-message-lastname">Last name can consist only letters and '-' or '</div>
+          <input class="input" type="password" name="pswd" v-model="passwordReg" placeholder="PASSWORD" @input="validationPassword">
+          <div v-if="invalidPasswordType" class="error-message-password">Password should be at least 8 characters long</div>
+          <input class="input" type="email" name="email" v-model="emailReg" placeholder="EMAIL" @input="validationEmail">
+          <div v-if="invalidEmailAdress" class="error-message-email">Please enter a valid email address example@gmail.com</div>
+          <input class="input" type="date" name="date" v-model="birth" placeholder="BIRTH" ref="datePicker">
+          <div  class="error-message-date">Your age should be less than 18 and more than 7 years old</div>
+
+
+          <input class="input" type="text" name="phone" v-model="phone" ref="phone" placeholder="PHONE" @input="checkPhone">
+          <div v-if="invalidPhone" class="error-message-phone">Please enter a valid phone number +38(0##)-###-##-##</div>
+          <div class="gender-options">
+            <h2 style="font-size: 0.9rem;">GENDER:</h2>
+            <div class="radio-buttons">
+              <label for="female" class="radio-label" style="font-size: 0.9rem;">
+                <input type="radio" id="female" value="female" v-model="gender">
+                <span class="radio-custom female"></span>
+                Female
+              </label>
+              <label for="male" class="radio-label" style="font-size: 0.9rem;">
+                <input type="radio" id="male" value="male" v-model="gender">
+                <span class="radio-custom male"></span>
+                Male
+              </label>
+            </div>
+          </div>
+          <button class="button-register" @click="sendDateRegistration">Register</button>
         </div>
       </div>
     </div>
@@ -45,6 +65,10 @@
 <script>
 import axios from "axios";
 import inputMask from "@/js/initInputMask";
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+import { English } from "flatpickr/dist/l10n/default.js";
+
 
 export default {
   data() {
@@ -115,11 +139,39 @@ export default {
       this.invalidEmail = !re.test(this.emailLog);
     },
     validatePassword() {
-      this.invalidPassword = this.passwordLog.length < 8;
-    }
+      this.invalidPassword = this.passwordLog.length < 7;
+    },
+    validationPassword() {
+      this.invalidPasswordType = this.passwordReg.length < 7;
+    },
+    validationEmail() {
+      const re = /\S+@\S+\.\S+/;
+      this.invalidEmailAdress = !re.test(this.emailReg);
+    },
+    async checkPhone() {
+      const phoneRegex = /^\+\d{2}\(\d{3}\)-\d{3}-\d{2}-\d{2}$/;
+      this.invalidPhone = !phoneRegex.test(this.phone);
+    },
+    validateName() {
+      const reg = /[\d\s]/;
+      this.invalidName = reg.test(this.name);
+    },
+    validateLastName() {
+      const re = /[\d\s]/;
+      this.invalidLastName = re.test(this.lastName);
+    },
+
+
+
   },
   mounted() {
     inputMask(this.$refs.phone);
+    flatpickr(this.$refs.datePicker, {
+      dateFormat: 'd.m.Y',
+      locale: English,
+      minDate: new Date().fp_incr(-18 * 365),
+      maxDate: new Date().fp_incr(-7 * 365),
+    });
   }
 };
 
@@ -134,6 +186,135 @@ body{
   margin-top: -10px;
   text-align: right;
   margin-right: 350px;
+}
+.error-message-exist{
+  color: red;
+  position: absolute;
+  font-size: 16px;
+  margin-top: 35px;
+  margin-left: 650px;
+  transition: opacity 0.5s;
+  text-align: center;
+}
+.error-message-name {
+  color: black;
+  position: absolute;
+  font-size: 10px;
+  margin-top: 85px;
+  margin-bottom: -17px;
+  margin-left: 100px;
+  transition: opacity 0.5s;
+  text-align: center;
+}
+.error-message-date {
+  color: black;
+  position: absolute;
+  font-size: 10px;
+  margin-top: 325px;
+  margin-bottom: -17px;
+  margin-left: 130px;
+  transition: opacity 0.5s;
+  text-align: center;
+}
+.error-message-lastname {
+  color: black;
+  position: absolute;
+  font-size: 10px;
+  margin-top: 145px;
+  margin-bottom: -17px;
+  margin-left: 100px;
+  transition: opacity 0.5s;
+  text-align: center;
+}
+.error-message-phone {
+  color: black;
+  position: absolute;
+  font-size: 10px;
+  margin-top: 385px;
+  margin-bottom: -17px;
+  margin-left: 100px;
+  transition: opacity 0.5s;
+  text-align: center;
+}
+.error-message-password {
+  color: black;
+  position: absolute;
+  font-size: 10px;
+  margin-top: 205px;
+  margin-bottom: -17px;
+  margin-left: 100px;
+  transition: opacity 0.5s;
+  text-align: center;
+}
+.error-message-email {
+  color: black;
+  position: absolute;
+  font-size: 10px;
+  margin-top: 265px;
+  margin-bottom: -17px;
+  margin-left: 100px;
+  transition: opacity 0.5s;
+  text-align: center;
+}
+.gender-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 27px;
+}
+
+.gender-options h2 {
+  position: absolute;
+  font-size: 1.5rem;
+  margin-top: -26.5px;
+  margin-left: -350px;
+
+}
+
+.radio-buttons {
+  display: flex;
+  margin-left: -80px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.radio-custom {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  position: relative;
+  margin-right: 8px;
+}
+
+.radio-custom::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+}
+
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"]:checked + .radio-custom::before {
+  background-color: #000;
 }
 
 
@@ -291,14 +472,25 @@ label {
   background-color: darkgray;
 }
 .success-message {
-  color: green;
-  font-size: 20px;
-  margin-top: 40px;
+  color: white;
+  font-size: 12px;
+  margin-top: -50px;
+  margin-left: 130px;
+
 }
 .error-message {
   color: #ffffff;
   font-size: 10px;
   margin-top: -7px;
+  margin-bottom: -17px;
+  transition: opacity 0.5s;
+  text-align: center;
+}
+.error-message-password {
+  color: black;
+  position: absolute;
+  font-size: 10px;
+  margin-top: 205px;
   margin-bottom: -17px;
   transition: opacity 0.5s;
   text-align: center;
