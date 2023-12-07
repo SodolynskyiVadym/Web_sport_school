@@ -79,19 +79,27 @@ exports.getScheduleCoach = catchAsync(async (req, res, next) => {
 
     let groupsID = [];
     for (let group of groups){
-        groupsID.push(group._id.toString())
+        groupsID.push(group._id)
     }
 
-    let schedules = await Schedule.find().populate({
+    const schedules = await Schedule.find().populate({
         path: "groupID",
         select: "name _id"
     });
 
-    schedules = schedules.filter(schedule => groupsID.includes(schedule.groupID._id.toString()));
+
+    let scheduleTester = []
+
+    for (let schedule of schedules){
+        for (let groupID of groupsID){
+            if (schedule.groupID._id.toString() === groupID.toString()) scheduleTester.push(schedule)
+        }
+
+    }
 
     res.status(200).json({
         success: "success",
-        schedules
+        schedules: scheduleTester
     });
 });
 

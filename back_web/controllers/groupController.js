@@ -31,6 +31,7 @@ exports.getGroup = catchAsync(async (req, res, next) => {
 
 
 exports.createGroup =  catchAsync(async (req, res, next) => {
+    if (await Group.findOne({name: req.body.name})) return next(new AppError("Group already exist"))
     const price = await Price.create({
         price: req.body.price,
         discount: req.body.discount,
@@ -45,8 +46,6 @@ exports.createGroup =  catchAsync(async (req, res, next) => {
         coachID: req.body.coachID,
         priceID: price
     });
-
-
 
     res.status(201)
         .json({
