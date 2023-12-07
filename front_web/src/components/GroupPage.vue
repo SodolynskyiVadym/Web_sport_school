@@ -45,6 +45,7 @@ export default {
 
     const groupsData = await listURL.requestGroupsGet(`/getAllGroup`);
     this.groups = await groupsData.groups.filter(group => !this.userGroupsID.includes(group));
+    this.groups = this.groups.filter(group => group.limitMembers > group.currentMembers);
 
     await this.$nextTick();
 

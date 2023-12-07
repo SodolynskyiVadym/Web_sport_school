@@ -46,7 +46,7 @@
                   <p>
                     <span class="numit-overview"></span>
                   </p>
-                  <p class="info-overview-sport"><strong>Price:</strong> ${{ group.priceID.price }}</p>
+                  <p class="info-overview-sport"><strong>Price:</strong> ${{ group.priceID.price - group.priceID.price * group.priceID.discount * 0.01 }}</p>
                   <p class="info-overview-sport"><strong>Discount:</strong> {{ group.priceID.discount }}%</p>
                 </div>
                 <div class="item-overview" id="content-4">

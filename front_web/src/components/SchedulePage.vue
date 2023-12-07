@@ -90,9 +90,12 @@ export default {
       return `${day}-${month}-${year}`;
     },
     async fetchData() {
-      const userData = await listURL.getUserByToken(localStorage.getItem("token"));
-      this.userID = userData.id;
-      this.userRole = userData.role;
+      if (localStorage.getItem("token")){
+        const userData = await listURL.getUserByToken(localStorage.getItem("token"));
+        this.userID = userData.id;
+        this.userRole = userData.role;
+      }
+
 
       if (this.userRole === "user") {
         const scheduleData = await listURL.requestSchedulesGet(`/getScheduleUser/${this.userID}`);

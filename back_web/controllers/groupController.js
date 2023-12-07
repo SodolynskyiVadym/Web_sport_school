@@ -128,6 +128,8 @@ exports.deleteGroup = catchAsync(async (req, res, next) => {
     }
 
     await Schedules.deleteMany({groupID: group._id})
+    await Price.findByIdAndDelete(group._id);
+    await Price.deleteOne({groupID: group._id});
     await Group.deleteOne(group);
 
 
