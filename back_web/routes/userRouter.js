@@ -14,7 +14,7 @@ router
     .get("/getUserGroups/:userID", userController.getGroupsUser)
     .get("/getCoachGroups/:coachID", userController.getAllGroupsCoach)
     .get("/getRoleUser/:token", authController.getUserByName)
-    .post("/updateUser/:id", userController.updateUser)
+    // .post("/updateUser/:id", userController.updateUser)
     .post("/setPassword", userController.setPassword)
     .post("/joinGroup", userController.joinGroup)
     .post("/createUser", authController.signup)

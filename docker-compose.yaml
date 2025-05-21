@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  api:
+    image: node_server
+    container_name: server
+    build:
+      context: ./back_web
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+      - MONGO_DB_URL=mongodb://admin:password@mongo/mydatabase?authSource=admin
+    ports:
+      - "8000:8000"
+  
+
+  ui:
+    image: front_server
+    container_name: front
+    build:
+      context: ./front_web
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+      - VUE_APP_STRIPE_PUBLISHABLE_KEY=pk_test_51OIGBKKfdlsNCGTnyxFs1IzyDJ1Wfe4TKOpDgeDyyubqHixilJu2an4WBdktNWgAUqfPMV6fw8eLNjf6QumdqC9X00g6whFvLS
+      # - VUE_APP_API_URL=http://server:8000
+      - VUE_APP_API_URL=http://localhost:8000
+
+    ports:
+      - "8080:8080"
+
+
+
+  mongo:
+    image: mongo:6.0
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: mydatabase
+    volumes:
+      - mongo_data:/data/db
+
+  
+volumes:
+  mongo_data:

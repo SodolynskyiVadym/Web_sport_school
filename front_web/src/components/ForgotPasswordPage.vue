@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import * as postRequest from "@/js/postRequest";
 
 export default {
   data(){
@@ -35,7 +35,8 @@ export default {
   methods: {
     async sendNewPassword(){
       try {
-        await axios.post("http://localhost:8000/users/createReservePassword", {email: this.email})
+        await postRequest.requestUser("/createReservePassword", {email: this.email});
+        // await axios.post("http://localhost:8000/users/createReservePassword", {email: this.email})
         this.isForgotPassword = true;
       }catch (err) {
         console.log(err)
@@ -46,13 +47,21 @@ export default {
 
     async login(){
       try {
-        await axios.post("http://localhost:8000/users/loginViaReservePassword", {
+        const data = await postRequest.requestUser("/loginViaReservePassword", {
           email: this.email,
           reservePassword : this.password
-        }).then(res => {
-          localStorage.token = res.data.token;
-          this.$router.push("/");
-        })
+        });
+
+        localStorage.token = data.token;
+        this.$router.push("/");
+        
+        // await axios.post("http://localhost:8000/users/loginViaReservePassword", {
+        //   email: this.email,
+        //   reservePassword : this.password
+        // }).then(res => {
+        //   localStorage.token = res.data.token;
+        //   this.$router.push("/");
+        // })
       }catch (err){
         console.log(err)
         this.error = "Incorrect password";

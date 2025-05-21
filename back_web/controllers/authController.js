@@ -25,8 +25,6 @@ const createSendToken = (user) => {
 
 exports.signup = catchAsync(async (req, res, next) => {
     req.body.birth = req.body.birth.split(".").join("-")
-    // console.log(req.body.birth = new Date(req.body.birth));
-    console.log(req.body)
     const newUser = await User.create(req.body);
 
     const token = createSendToken(newUser);

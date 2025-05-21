@@ -56,8 +56,8 @@
                   </p>
                   <div v-if="userRole === 'user'">
                     <button class="button-overview join-button" v-if="!userGroupsID.includes(this.$route.params.id) && userID && userRole==='user'" @click="buy">Buy</button>
-                    <button class="button-overview join-button" v-else @click="login">Login</button>
                   </div>
+                  <button class="button-overview join-button" v-if="userRole == ''" @click="login">Login</button>
                 </div>
               </section>
             </div>
@@ -104,7 +104,13 @@ export default {
       this.userID = userData.id
       this.userRole = userData.role
       this.userGroupsID = userData.user.groupsID
+      console.log("token exist")
     }
+
+    console.log(this.userRole)
+    console.log(`User role is: ${this.userRole}`)
+    console.log(this.userRole == '')
+
 
     const groupData = await listURL.requestGroupsGet(`/getGroup/${this.$route.params.id}`);
     this.group = groupData.group

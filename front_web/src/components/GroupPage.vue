@@ -18,7 +18,6 @@
 </template>
 
 <script>
-// import axios from "axios";
 import * as listURL from "@/js/listURL";
 
 export default {

@@ -23,16 +23,6 @@ const routes = [
         component: () => import('./src/components/GroupPage.vue')
     },
     {
-        path: '/tester',
-        name: 'TesterPage',
-        component: () => import('./src/components/TesterPage.vue')
-    },
-    {
-        path: '/testing',
-        name: 'ReviewPage',
-        component: () => import('./src/components/TestingPage.vue')
-    },
-    {
         path: '/overviewGroup/:id',
         name: 'OverviewGroup',
         component: () => import('@/components/OverviewGroup.vue')

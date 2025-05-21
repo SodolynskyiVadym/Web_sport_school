@@ -64,11 +64,11 @@
 </template>
 
 <script>
-import axios from "axios";
 import inputMask from "@/js/initInputMask";
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import { English } from "flatpickr/dist/l10n/default.js";
+import * as postRequest from "@/js/postRequest";
 
 
 export default {
@@ -103,7 +103,7 @@ export default {
           || this.invalidNameReg || this.gender === "" || this.name === "" || this.lastName === "" || this.passwordReg === ""
           || this.emailReg === "" || this.birth === "") return
       try {
-        const response = await axios.post("http://localhost:8000/users/createUser", {
+        const data = {
           name: this.name,
           lastName: this.lastName,
           password: this.passwordReg,
@@ -112,9 +112,22 @@ export default {
           gender: this.gender,
           phone: this.phone,
           role: "user"
-        });
+        };
 
-        localStorage.token = response.data.token;
+        const response = await postRequest.requestUser("/createUser", data);
+
+        // const response = await axios.post("http://localhost:8000/users/createUser", {
+        //   name: this.name,
+        //   lastName: this.lastName,
+        //   password: this.passwordReg,
+        //   email: this.emailReg,
+        //   birth: this.birth,
+        //   gender: this.gender,
+        //   phone: this.phone,
+        //   role: "user"
+        // });
+
+        localStorage.token = response.token;
         this.$router.push("/")
 
       }catch (err){
@@ -128,12 +141,17 @@ export default {
       }
 
       try {
-        const response = await axios.post("http://localhost:8000/users/login", {
+        const response = await postRequest.requestUser("/login", {
           email: this.emailLog,
           password: this.passwordLog
         });
 
-        localStorage.token = response.data.token;
+        // const response = await axios.post("http://localhost:8000/users/login", {
+        //   email: this.emailLog,
+        //   password: this.passwordLog
+        // });
+
+        localStorage.token = response.token;
         this.emailLog = "";
         this.passwordLog = "";
         this.loggedIn = true;

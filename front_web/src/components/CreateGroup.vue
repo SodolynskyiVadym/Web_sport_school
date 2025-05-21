@@ -44,8 +44,8 @@
 
 
 <script>
-import axios from "axios";
 import * as listURL from "../js/listURL";
+import * as postRequest from "../js/postRequest";
 
 export default {
   data() {
@@ -67,7 +67,8 @@ export default {
       try {
         if (this.invalidDescription || this.invalidNameGroup || this.name === "" || this.description === "" ||
             this.price === "" || this.discount === "" || this.limitMembers === "") return
-        await axios.post('http://localhost:8000/groups/createGroup', {
+        
+        const data = {
           name: this.name,
           description: this.description,
           limitMembers: this.limitMembers,
@@ -75,7 +76,18 @@ export default {
           price: this.price,
           discount: this.discount,
           coachID: this.coachID,
-        });
+        }
+        
+        await postRequest.requestGroup("/createGroup", data);
+        // await axios.post('http://localhost:8000/groups/createGroup', {
+        //   name: this.name,
+        //   description: this.description,
+        //   limitMembers: this.limitMembers,
+        //   kindSport: this.kindSport,
+        //   price: this.price,
+        //   discount: this.discount,
+        //   coachID: this.coachID,
+        // });
 
         this.clearFields();
 
@@ -131,7 +143,7 @@ export default {
 
 <style>
 body {
-  background-color: rgba(238,238,238,0.99); /* Колір фону, який вам подобається */
+  background-color: rgba(238,238,238,0.99);
 }
 
 .box {

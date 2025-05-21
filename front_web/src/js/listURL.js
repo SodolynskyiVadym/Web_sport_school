@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const mainURL = "http://localhost:8000"
+// const mainURL = "http://localhost:8000"
+const mainURL = process.env.VUE_APP_API_URL
+
+
 
 export async function requestGroupsGet(url){
     return await axios.get(mainURL + "/groups" + url).then(res => res.data);
@@ -35,5 +38,17 @@ export async function requestDeleteSchedule(scheduleID){
 }
 
 export async function getUserByToken(token) {
+    console.log(mainURL + `/users/getUserByToken`)
+    console.log("Process is")
+    console.log(process.env)
     return await axios.get(mainURL + `/users/getRoleUser/${token}`).then(res => res.data);
+}
+
+export async function requestUser(url){
+    return await axios.get(mainURL + "/users" + url).then(res => res.data);
+}
+
+
+export async function requestGroup(url){
+    return await axios.get(mainURL + "/users" + url).then(res => res.data);
 }

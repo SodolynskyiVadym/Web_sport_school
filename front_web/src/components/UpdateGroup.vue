@@ -50,8 +50,8 @@
 </template>
 
 <script>
-import axios from "axios";
 import * as listURL from "@/js/listURL";
+import * as patchRequest from "@/js/patchRequest";
 
 export default {
   data(){
@@ -75,7 +75,7 @@ export default {
     async sendData(){
       if (this.invalidDiscount || this.invalidDescription || this.invalidPrice || this.invalidDescription || this.invalidNameGroup) return
       try {
-        await axios.patch("http://localhost:8000/groups/updateGroup", {
+        const data = {
           id: this.$route.params.groupID,
           name: this.name,
           description: this.description,
@@ -83,7 +83,19 @@ export default {
           limitMembers: this.limitMembers,
           price: this.price,
           discount: this.discount
-        });
+        }
+
+        await patchRequest.requestGroup("/updateGroup", data);
+
+        // await axios.patch("http://localhost:8000/groups/updateGroup", {
+        //   id: this.$route.params.groupID,
+        //   name: this.name,
+        //   description: this.description,
+        //   kindSport: this.kindSport.toLowerCase(),
+        //   limitMembers: this.limitMembers,
+        //   price: this.price,
+        //   discount: this.discount
+        // });
 
         this.$router.push("/settingsAccount");
 

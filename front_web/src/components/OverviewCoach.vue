@@ -77,8 +77,8 @@
           </div>
           <textarea class="textarea-review" v-model="myReview"></textarea>
           <button class="button-review" v-if="isReview" @click="updateReview">Update review</button>
-          <button class="button-review" v-else @click="writeReview">Write review</button>
-          <button class="button-review" @click="deleteReview">Delete review</button>
+          <button class="button-review" v-if="!isReview && myReview != '' && myRating != 0" @click="writeReview">Write review</button>
+          <button class="button-review" v-if="isReview" @click="deleteReview">Delete review</button>
         </div>
       </div>
       </div>
@@ -87,8 +87,9 @@
 </template>
 
 <script>
-import axios from "axios";
 import * as listURL from "@/js/listURL";
+import * as postRequest from "@/js/postRequest";
+import * as patchRequest from "@/js/patchRequest";
 
 export default {
   data() {
@@ -138,22 +139,38 @@ export default {
     },
 
     async updateReview(){
-      await axios.patch("http://localhost:8000/reviews/updateReview", {
+      const data = {
         coachID: this.$route.params.id,
         description: this.myReview,
         userID: this.userID,
         rating: this.myRating
-      });
+      }
+      await patchRequest.requestReview("/updateReview", data);
+
+      // await axios.patch("http://localhost:8000/reviews/updateReview", {
+      //   coachID: this.$route.params.id,
+      //   description: this.myReview,
+      //   userID: this.userID,
+      //   rating: this.myRating
+      // });
       await this.getReviews()
     },
 
     async writeReview(){
-      await axios.post("http://localhost:8000/reviews/createReview", {
+      const data = {
         coachID: this.$route.params.id,
         description: this.myReview,
         userID: this.userID,
         rating: this.myRating
-      });
+      }
+
+      await postRequest.requestReview("/createReview", data);
+      // await axios.post("http://localhost:8000/reviews/createReview", {
+      //   coachID: this.$route.params.id,
+      //   description: this.myReview,
+      //   userID: this.userID,
+      //   rating: this.myRating
+      // });
       this.isReview = true
       await this.getReviews()
     }
@@ -174,10 +191,13 @@ export default {
       }
     }
 
-    await axios.get(`http://localhost:8000/users/getCoach/${this.$route.params.id}`).then(res => {
-      this.coach = res.data.user;
-      this.groups = res.data.groups
-    });
+    const data = await listURL.requestUser(`/getCoach/${this.$route.params.id}`)
+    this.coach = data.user;
+    this.groups = data.groups;
+    // await axios.get(`http://localhost:8000/users/getCoach/${this.$route.params.id}`).then(res => {
+    //   this.coach = res.data.user;
+    //   this.groups = res.data.groups
+    // });
 
     await this.getReviews()
   }

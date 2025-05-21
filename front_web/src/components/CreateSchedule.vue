@@ -56,8 +56,8 @@
 <script>
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import axios from "axios";
 import * as listURL from "@/js/listURL";
+import * as postRequest from "@/js/postRequest";
 
 export default {
   data() {
@@ -94,12 +94,20 @@ export default {
     async createSchedule(){
       if (this.data === "" || this.time === "" || this.nameGroup === "") return
       try {
-        await axios.post("http://localhost:8000/groups/schedules/createSchedule", {
+        const data = {
           nameGroup: this.nameGroup,
           date: this.date,
           timeLesson: this.time,
           coachID: this.coachID
-        });
+        }
+
+        await postRequest.requestSchedule("/createSchedule", data);
+        // await axios.post("http://localhost:8000/groups/schedules/createSchedule", {
+        //   nameGroup: this.nameGroup,
+        //   date: this.date,
+        //   timeLesson: this.time,
+        //   coachID: this.coachID
+        // });
 
         this.date = Date.now();
         this.time = ""

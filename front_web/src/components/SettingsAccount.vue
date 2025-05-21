@@ -108,8 +108,9 @@
 </template>
 
 <script>
-import axios from "axios";
 import * as listURL from "@/js/listURL";
+import * as postRequest from "@/js/postRequest";
+import * as patchRequest from "@/js/patchRequest";
 import inputMask from "@/js/initInputMask";
 export default {
   data() {
@@ -139,18 +140,21 @@ export default {
       }
 
       if (this.userRole === "coach"){
-        const userData = await listURL.requestUsersGet(`/getCoachGroups/${this.userID}`);
-        this.groups = userData.groups
-        await axios.get(`http://localhost:8000/users/getCoachGroups/${this.userID}`).then(res => {
-          this.groups = res.data.groups
-        });
+        // const userData = await listURL.requestUsersGet(`/getCoachGroups/${this.userID}`);
+        // this.groups = userData.groups
+
+        const response = await listURL.requestUser(`/getCoachGroups/${this.userID}`);
+        this.groups = response.groups;
+
+        // await axios.get(`http://localhost:8000/users/getCoachGroups/${this.userID}`).then(res => {
+        //   this.groups = res.data.groups
+        // });
       }
     },
 
     async sendDate(){
       if (this.invalidName || this.invalidLastName) return
-
-      await axios.post(`http://localhost:8000/users/updateUser/${this.userID}`, {
+      var data = {
         name: this.name,
         lastName: this.lastName,
         password: this.password,
@@ -158,14 +162,42 @@ export default {
         birth: this.birth,
         gender: this.gender,
         phone: this.phone,
-      })
+      }
+
+      await patchRequest.requestUser(`/updateUser/${this.userID}`, data);
+
+      // data = {
+      //   name: this.name,
+      //   lastName: this.lastName,
+      //   password: this.password,
+      //   email: this.email,
+      //   birth: this.birth,
+      //   gender: this.gender,
+      //   phone: this.phone,
+      // }
+
+      // await patchRequest.requestUser(`/updateUser/${this.userID}`, data);
+      // await axios.patch(`http://localhost:8000/users/updateUser/${this.userID}`, {
+      //   name: this.name,
+      //   lastName: this.lastName,
+      //   password: this.password,
+      //   email: this.email,
+      //   birth: this.birth,
+      //   gender: this.gender,
+      //   phone: this.phone,
+      // })
     },
     async setPassword(){
       if (this.invalidPassword) return
-      await axios.post("http://localhost:8000/users/setPassword", {
+
+      await postRequest.requestUser("/setPassword", {
         userID: this.userID,
-        password: this.password,
+        password: this.password
       });
+      // await axios.post("http://localhost:8000/users/setPassword", {
+      //   userID: this.userID,
+      //   password: this.password,
+      // });
       this.password = "";
     },
 
@@ -180,10 +212,15 @@ export default {
     },
 
     async leaveGroup(groupID){
-      await axios.patch(`http://localhost:8000/users/leaveGroup`, {
+      await patchRequest.requestUser("/leaveGroup", {
         groupID: groupID,
         userID: this.userID
       });
+
+      // await axios.patch(`http://localhost:8000/users/leaveGroup`, {
+      //   groupID: groupID,
+      //   userID: this.userID
+      // });
       await this.getData()
     },
 

@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import axios from "axios";
 import * as listURL from "../js/listURL";
+import * as postRequest from "../js/postRequest";
 
 export default {
   data() {
@@ -69,7 +69,8 @@ export default {
     async createCoach() {
       try {
         if (this.email === "" || this.invalidEmail) return
-        await axios.post("http://localhost:8000/users/createCoach", { email: this.email });
+        await postRequest.requestUser("/createCoach", { email: this.email });
+        // await axios.post("http://localhost:8000/users/createCoach", { email: this.email });
         await this.refreshUsers();
       } catch (err) {
         this.error = "This email already exists";

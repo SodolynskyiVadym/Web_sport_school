@@ -5,7 +5,6 @@ const app = require("./app");
 
 dotenv.config({ path: './config.env' });
 
-// const urlTest = "mongodb+srv://vadym:3QMI9VE2gEDQ8nAS@cluster0.lcigfwu.mongodb.net/?retryWrites=true&w=majority"
 const url = process.env.MONGO_DB_URL
 const connParams = {
     useNewUrlParser: true,
